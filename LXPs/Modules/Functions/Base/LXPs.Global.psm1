@@ -134,20 +134,26 @@ Function Archive
 {
 	param
 	(
-		$SaveTo,
-		$filename
+		$Password,
+		$filename,
+		$to
 	)
 
 	Convert-Path $filename -ErrorAction SilentlyContinue | Out-Null
 
 	Write-Host "   $($filename)"
-	Write-Host "   $($lang.UpdateUnpacking)".PadRight(28) -NoNewline
+	Write-Host "   $($Lang_Update.UpdateUnpacking)".PadRight(28) -NoNewline
 	if (Compressing) {
-		$arguments = "e ""$filename"" ""-o$SaveTo"" License.xml -r"
+		if (([string]::IsNullOrEmpty($Password))) {
+			$arguments = "x ""-r"" ""-tzip"" ""$filename"" ""-o$to"" ""-y"""
+		} else {
+			$arguments = "x ""-p$Password"" ""-r"" ""-tzip"" ""$filename"" ""-o$to"" ""-y"""
+		}
 		Start-Process $Global:Zip "$arguments" -Wait -WindowStyle Minimized
 		Write-Host "$($lang.Done)`n" -ForegroundColor Green
 	} else {
-		Write-Host "$($lang.Failed)`n" -ForegroundColor Green
+		Expand-Archive -LiteralPath $filename -DestinationPath $to -force
+		Write-Host "$($lang.Done)`n" -ForegroundColor Green
 	}
 }
 
@@ -167,8 +173,8 @@ Function Compressing
 		return $true
 	}
 
-	if (Test-Path -Path "$(Get_Arch_Path -Path "$($PSScriptRoot)\..\AIO\7zPacker")\7z.exe" -PathType Leaf) {
-		$Global:Zip = "$(Get_Arch_Path -Path "$($PSScriptRoot)\..\AIO\7zPacker")\7z.exe"
+	if (Test-Path -Path "$(Get_Arch_Path -Path "$($PSScriptRoot)\..\..\..\AIO\7zPacker")\7z.exe" -PathType Leaf) {
+		$Global:Zip = "$(Get_Arch_Path -Path "$($PSScriptRoot)\..\..\..\AIO\7zPacker")\7z.exe"
 		return $true
 	}
 	return $false

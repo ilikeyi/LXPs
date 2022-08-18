@@ -374,24 +374,27 @@ Function Language_Select_GUI
 #>
 Function Language_Change
 {
-	param
-	(
+	param (
 		[string]$lang
 	)
 
-	if (Test-Path -Path "$($PSScriptRoot)\langpacks\$lang\lang.psd1" -PathType Leaf) {
+	if (Test-Path "$($PSScriptRoot)\langpacks\$($lang)" -PathType Container) {
 		$Global:IsLang = $lang
-		Import-LocalizedData -BindingVariable Global:Lang -UICulture $lang -FileName "lang.psd1" -BaseDirectory "$($PSScriptRoot)\langpacks\$lang"
+
+		Get-ChildItem –Path "$($PSScriptRoot)\langpacks\$($lang)" –Recurse -include "*.psd1" | ForEach-Object {
+			Import-LocalizedData -BindingVariable "Global:$($_.BaseName)" -UICulture $lang -FileName $_.BaseName -BaseDirectory $_.DirectoryName
+		}
 	} else {
-		if (Test-Path -Path "$($PSScriptRoot)\langpacks\en-US\lang.psd1" -PathType Leaf) {
+		if (Test-Path "$($PSScriptRoot)\langpacks\en-US" -PathType Container) {
 			$Global:IsLang = "en-US"
-			Import-LocalizedData -BindingVariable Global:Lang -UICulture $lang -FileName "lang.psd1" -BaseDirectory "$($PSScriptRoot)\langpacks\en-US"
+
+			Get-ChildItem –Path "$($PSScriptRoot)\langpacks\en-US" –Recurse -include "*.psd1" | ForEach-Object {
+				Import-LocalizedData -BindingVariable "Global:$($_.BaseName)" -UICulture $lang -FileName $_.BaseName -BaseDirectory $_.DirectoryName
+			}
 		} else {
 			Clear-Host
 			Write-Host "`n  There is no language pack locally, it will automatically exit after 6 seconds." -ForegroundColor Red
 			Start-Sleep -s 6
-			Modules_Import
-			$Global:Quit = $False
 			exit
 		}
 	}

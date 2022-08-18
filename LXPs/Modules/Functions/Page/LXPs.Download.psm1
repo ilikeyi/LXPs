@@ -5,7 +5,7 @@ $Global:OSCodename = @(
 	("Windows Server Preview Build",     "20344"),
 	("Windows Server 2022",              "20348"),
 	("Windows 11 23H2 Insider Build",    "23000"),
-	("Windows 11 22H2",                  "22614"),
+	("Windows 11 22H2",                  "22621"),
 	("Windows 11 21h2",                  "22000"),
 	("Windows 10 Insider Preview Build", "19645"),
 	("Windows 10 20H1 or later",         "19041"),
@@ -45,10 +45,10 @@ Function LXPs_Download
 				<#
 					.判断是否有已保存上次选择的目录
 				#>
-				if ([string]::IsNullOrEmpty($Global:InitalSaveToPath)) {
+				if ([string]::IsNullOrEmpty($Script:InitalSaveToPath)) {
 					$GUIISOSaveCustomizePath.Text = "$($GetCurrentDisk)Download\$($RandomGuid)"
 				} else {
-					$GUIISOSaveCustomizePath.Text = $Global:InitalSaveToPath
+					$GUIISOSaveCustomizePath.Text = $Script:InitalSaveToPath
 				}
 			}
 		}
@@ -64,46 +64,9 @@ Function LXPs_Download
 		}
 	}
 
-	Function Refresh_Select_LXPs_Download_Language
-	{
-		$GUILangChangeErrorMsg.Text = ""
-		$GUILangSelectShowPanel.controls.clear()
-
-		$WaitGetSelectLanguage = @()
-		$GUILangChangeShowGroupCLVersion.Controls | ForEach-Object {
-			if ($_ -is [System.Windows.Forms.CheckBox]) {
-				if ($_.Checked) {
-					$WaitGetSelectLanguage += $_.Tag
-				}
-			}
-		}
-
-		if ($WaitGetSelectLanguage.count -gt 0) {
-			foreach ($item in $WaitGetSelectLanguage) {
-				$CheckBox   = New-Object System.Windows.Forms.Label -Property @{
-					autoSize = 1
-					Text    = $item
-				}
-
-				$GUILangSelectShowPanel.controls.AddRange($CheckBox)
-			}
-		} else {
-			$CheckBox   = New-Object System.Windows.Forms.Label -Property @{
-				Height  = 30
-				Width   = 380
-				Text    = $lang.NoWork
-			}
-
-			$GUILangSelectShowPanel.controls.AddRange($CheckBox)
-		}
-	}
-
 	<#
-		.事件：选择语言
+		.事件：选择已知版本
 	#>
-	$GUILangSelectChangeClick = { $GUILangChangeShowGroupCL.Visible = 1 }
-	$GUILangChangeShowGroupCLCanelClick = { $GUILangChangeShowGroupCL.Visible = 0 }
-
 	$GUILangChangeSelectVersionClick = {
 		$GUILangChangeSelectVersion.Controls | ForEach-Object {
 			if ($_ -is [System.Windows.Forms.RadioButton]) {
@@ -127,7 +90,7 @@ Function LXPs_Download
 			.判断：1. 空值
 		#>
 		if ([string]::IsNullOrEmpty($GUILangChangeNumberShow.Text)) {
-			$GUILangChangeSelectErrorMsg.Text = "$($lang.SelectFromError -f $($lang.NoSetLabel))"
+			$GUILangChangeSelectErrorMsg.Text = "$($Upgrade_Package.SelectFromError -f $($Lang_Download.NoSetLabel))"
 			return
 		}
 
@@ -136,7 +99,7 @@ Function LXPs_Download
 			.判断：2. 前缀不能带空格
 		#>
 		if ($GUILangChangeNumberShow.Text -match '^\s') {
-			$GUILangChangeSelectErrorMsg.Text = "$($lang.SelectFromError -f $($lang.ISO9660TipsErrorSpace))"
+			$GUILangChangeSelectErrorMsg.Text = "$($Upgrade_Package.SelectFromError -f $($Lang_Download.ISO9660TipsErrorSpace))"
 			return
 		}
 
@@ -145,7 +108,7 @@ Function LXPs_Download
 			.判断：3. 后缀不能带空格
 		#>
 		if ($GUILangChangeNumberShow.Text -match '\s$') {
-			$GUILangChangeSelectErrorMsg.Text = "$($lang.SelectFromError -f $($lang.ISO9660TipsErrorSpace))"
+			$GUILangChangeSelectErrorMsg.Text = "$($Upgrade_Package.SelectFromError -f $($Lang_Download.ISO9660TipsErrorSpace))"
 			return
 		}
 
@@ -154,7 +117,7 @@ Function LXPs_Download
 			.判断：4. 后缀不能带多空格
 		#>
 		if ($GUILangChangeNumberShow.Text -match '\s{2,}$') {
-			$GUILangChangeSelectErrorMsg.Text = "$($lang.SelectFromError -f $($lang.ISO9660TipsErrorSpace))"
+			$GUILangChangeSelectErrorMsg.Text = "$($Upgrade_Package.SelectFromError -f $($Lang_Download.ISO9660TipsErrorSpace))"
 			return
 		}
 
@@ -163,7 +126,7 @@ Function LXPs_Download
 			.判断：5. 中间不能含有二个空格
 		#>
 		if ($GUILangChangeNumberShow.Text -match '\s{1,}') {
-			$GUILangChangeSelectErrorMsg.Text = "$($lang.SelectFromError -f $($lang.ISO9660TipsErrorSpace))"
+			$GUILangChangeSelectErrorMsg.Text = "$($Upgrade_Package.SelectFromError -f $($Lang_Download.ISO9660TipsErrorSpace))"
 			return
 		}
 
@@ -172,7 +135,7 @@ Function LXPs_Download
 			.判断：6. 不能包含：字母 A-Z
 		#>
 		if ($GUILangChangeNumberShow.Text -match '[A-Za-z]+') {
-			$GUILangChangeSelectErrorMsg.Text = "$($lang.SelectFromError -f $($lang.ISO9660TipsErrorAZ))"
+			$GUILangChangeSelectErrorMsg.Text = "$($Upgrade_Package.SelectFromError -f $($Lang_Download.ISO9660TipsErrorAZ))"
 			return
 		}
 
@@ -181,7 +144,7 @@ Function LXPs_Download
 			.判断：7, 不能包含：\\ / : * ? "" < > |
 		#>
 		if ($GUILangChangeNumberShow.Text -match '[~#$@!%&*{}<>?/|+".]') {
-			$GUILangChangeSelectErrorMsg.Text = "$($lang.SelectFromError -f $($lang.ISO9660TipsErrorOther))"
+			$GUILangChangeSelectErrorMsg.Text = "$($Upgrade_Package.SelectFromError -f $($Lang_Download.ISO9660TipsErrorOther))"
 			return
 		}
 
@@ -190,7 +153,7 @@ Function LXPs_Download
 			.判断：8. 不能小于 5 字符
 		#>
 		if ($GUILangChangeNumberShow.Text.length -lt 5) {
-			$GUILangChangeSelectErrorMsg.Text = "$($lang.SelectFromError -f $($lang.ISOShortError -f "5"))"
+			$GUILangChangeSelectErrorMsg.Text = "$($Upgrade_Package.SelectFromError -f $($Lang_Download.ISOShortError -f "5"))"
 			return
 		}
 
@@ -199,7 +162,7 @@ Function LXPs_Download
 			.判断：9. 不能大于 16 字符
 		#>
 		if ($GUILangChangeNumberShow.Text.length -gt 16) {
-			$GUILangChangeSelectErrorMsg.Text = "$($lang.SelectFromError -f $($lang.ISOLengthError -f "16"))"
+			$GUILangChangeSelectErrorMsg.Text = "$($Upgrade_Package.SelectFromError -f $($Lang_Download.ISOLengthError -f "16"))"
 			return
 		}
 		$GUILangChangeNumberGroupCL.Visible = 0
@@ -279,10 +242,8 @@ Function LXPs_Download
 					}
 				}
 			}
-
-			Refresh_Select_LXPs_Download_Language
 		} else {
-			$GUILangChangeErrorMsg.Text = $lang.MatchDownloadNoNewitem
+			$UI_Main_Error.Text = $Lang_Download.MatchDownloadNoNewitem
 		}
 	}
 
@@ -350,8 +311,8 @@ Function LXPs_Download
 		$RandomGuid = [guid]::NewGuid()
 
 		$FileBrowser = New-Object System.Windows.Forms.SaveFileDialog -Property @{ 
-			FileName         = "Report.$($RandomGuid).csv"
-			Filter           = "Export CSV Files (*.CSV;)|*.csv;"
+			FileName = "Report.$($RandomGuid).csv"
+			Filter   = "Export CSV Files (*.CSV;)|*.csv;"
 		}
 
 		if ($FileBrowser.ShowDialog() -eq "OK") {
@@ -360,6 +321,7 @@ Function LXPs_Download
 			$GUILangReportErrorMsg.Text = $($lang.UserCancel)
 		}
 	}
+
 	<#
 		.事件：复制路径
 	#>
@@ -374,17 +336,17 @@ Function LXPs_Download
 		$DesktopOldpath = [Environment]::GetFolderPath("Desktop")
 		$GUILangReportErrorMsg.Text = ""
 
-		$FolderBrowser   = New-Object System.Windows.Forms.FolderBrowserDialog -Property @{
-			RootFolder   = "MyComputer"
+		$FolderBrowser = New-Object System.Windows.Forms.FolderBrowserDialog -Property @{
+			RootFolder = "MyComputer"
 		}
 
 		if ($FolderBrowser.ShowDialog() -eq "OK") {
-			$InitalReportSources = $FolderBrowser.SelectedPath
+			$InitalReportSources = (Join_MainFolder -Path $FolderBrowser.SelectedPath)
 			$GUILangReportShowSourcesPath.Text = $InitalReportSources
 			
 			if (Test-Path -Path "$($InitalReportSources)" -PathType Container) {
 				if (Test_Available_Disk -Path $InitalReportSources) {
-					$GUILangChangeReportSaveToPath.Text = "$($InitalReportSources)\Report.$($RandomGuid).csv"
+					$GUILangChangeReportSaveToPath.Text = "$($InitalReportSources)Report.$($RandomGuid).csv"
 				} else {
 					$GUILangChangeReportSaveToPath.Text = "$($DesktopOldpath)\Report.$($RandomGuid).csv"
 				}
@@ -417,8 +379,23 @@ Function LXPs_Download
 		.事件：同步来源位置与下载到位置一致
 	#>#>
 	$GUILangReportShowSourcesSyncClick = {
-		if (-not [string]::IsNullOrEmpty($GUIISOSaveCustomizePath.Text)) {
-			$GUILangReportShowSourcesPath.Text = $GUIISOSaveCustomizePath.Text
+		$RandomGuid = [guid]::NewGuid()
+		$DesktopOldpath = [Environment]::GetFolderPath("Desktop")
+		$GUILangReportErrorMsg.Text = ""
+		$InitalReportSources = (Join_MainFolder -Path $GUIISOSaveCustomizePath.Text)
+
+		if (-not [string]::IsNullOrEmpty($InitalReportSources)) {
+			$GUILangReportShowSourcesPath.Text = $InitalReportSources
+
+			if (Test-Path -Path "$($InitalReportSources)" -PathType Container) {
+				if (Test_Available_Disk -Path $InitalReportSources) {
+					$GUILangChangeReportSaveToPath.Text = "$($InitalReportSources)Report.$($RandomGuid).csv"
+				} else {
+					$GUILangChangeReportSaveToPath.Text = "$($DesktopOldpath)\Report.$($RandomGuid).csv"
+				}
+			} else {
+				$GUILangChangeReportSaveToPath.Text = "$($DesktopOldpath)\Report.$($RandomGuid).csv"
+			}
 		}
 	}
 
@@ -439,33 +416,33 @@ Function LXPs_Download
 		.事件：自定义选择保存到目录
 	#>
 	$GUIISOSaveCustomizeSelectFolderClick = {
-		$GUILangChangeErrorMsg.Text = ""
+		$UI_Main_Error.Text = ""
 
 		$FolderBrowser   = New-Object System.Windows.Forms.FolderBrowserDialog -Property @{
 			RootFolder   = "MyComputer"
 		}
 
 		if ($FolderBrowser.ShowDialog() -eq "OK") {
-			$InitalReportSources = $FolderBrowser.SelectedPath
+			$InitalReportSources = (Join_MainFolder -Path $FolderBrowser.SelectedPath)
 			$GUILangReportShowSourcesPath.Text = $InitalReportSources
 			
 			if (Test-Path -Path "$($InitalReportSources)" -PathType Container) {
 				if (Test_Available_Disk -Path $InitalReportSources) {
 					$GUIISOSaveCustomizePath.Text = $InitalReportSources
-					$Global:InitalSaveToPath = $InitalReportSources
+					$Script:InitalSaveToPath = $InitalReportSources
 
 					<#
 						.更换成功后，关闭同步来源位置与下载位置一致，复选框
 					#>
 					$GUIISOSaveToSync.Checked = $False
 				} else {
-					$GUILangChangeErrorMsg.Text = "$($lang.Inoperable)"
+					$UI_Main_Error.Text = "$($lang.Inoperable)"
 				}
 			} else {
-				$GUILangChangeErrorMsg.Text = "$($lang.Inoperable)"
+				$UI_Main_Error.Text = "$($lang.Inoperable)"
 			}
 		} else {
-			$GUILangChangeErrorMsg.Text = "$($lang.UserCancel)"
+			$UI_Main_Error.Text = "$($lang.UserCancel)"
 		}
 	}
 
@@ -489,13 +466,23 @@ Function LXPs_Download
 		}
 	}
 
+	$GUILangChangeTipsDoNotClick = {
+		if ($GUILangChangeTipsDoNot.Checked) {
+			Save_Dynamic -regkey "LXPs" -name "LXPsTipsWarning" -value "True" -String
+		} else {
+			Save_Dynamic -regkey "LXPs" -name "LXPsTipsWarning" -value "False" -String
+		}
+	}
+	$GUILangChangeTipsViewClick = { $GUILangChangeTips.Visible = 1 }
+	$GUILangChangeTipsCanelClick = { $GUILangChangeTips.Visible = 0 }
+
 	<#
 		.Event: canceled
 		.事件：取消
 	#>
-	$GUILangChangeCanelClick = {
+	$UI_Main_Canel_Click = {
 		Write-Host "   $($lang.UserCancel)" -ForegroundColor Red
-		$Script:QueueLanguageChange = $False
+		$Script:Queue_Language_Download_Select = @()
 		$GUILangChange.Close()
 	}
 
@@ -503,46 +490,51 @@ Function LXPs_Download
 		.Event: Ok
 		.事件：确认
 	#>
-	$GUILangChangeOKClick = {
-		$Script:QueueLanguageChange = $False
-		$Script:QueueLanguageChangeSelect = @()
+	$UI_Main_OK_Click = {
+		$Script:Queue_Language_Download_Select = @()
 
-		$FlagCheckSelectLanguage = $False
 		$GUILangChangeShowGroupCLVersion.Controls | ForEach-Object {
 			if ($_ -is [System.Windows.Forms.CheckBox]) {
 				if ($_.Enabled) {
 					if ($_.Checked) {
-						$FlagCheckSelectLanguage = $True
-						$Script:QueueLanguageChangeSelect += $_.Tag
+						$Script:Queue_Language_Download_Select += $_.Tag
 					}
 				}
 			}
 		}
 
-		if ($FlagCheckSelectLanguage) {
-			$GUILangChange.Hide()
-			$Script:QueueLanguageChange = $True
-			$Script:Version = $GUILangChangeDownloadMatchSetting.Text
-			$Script:IsDownload = $False
-			$Script:IsRename = $False
-			$Script:IsLicence = $False
+		if ($Script:Queue_Language_Download_Select.count -gt 0) {
+			Save_Dynamic -regkey "LXPs" -name "Select_Download_Language" -value $Script:Queue_Language_Download_Select -Multi
+		} else {
+			$UI_Main_Error.Text = "$($Upgrade_Package.SelectFromError -f $($Lang_Download.Not_Select))"
+			return
+		}
 
-			if ($GUILangChangeDownloadAll.Checked) {
-				$Script:IsDownload = $True
-			} else {
-				if ($GUILangChangeRuleRename.Checked) {
-					$Script:IsRename = $True
-				}
+		if ([string]::IsNullOrEmpty($GUILangChangeDownloadMatchSetting.Text)) {
+			$UI_Main_Error.Text = "$($Upgrade_Package.SelectFromError -f $($Lang_Downloadr.OSVersion))"
+			return
+		}
 
-				if ($GUILangChangeLicence.Checked) {
-					$Script:IsLicence = $True
-				}
+		$GUILangChange.Hide()
+		$Script:Version = $GUILangChangeDownloadMatchSetting.Text
+		$Script:IsDownload = $False
+		$Script:IsRename = $False
+		$Script:IsLicence = $False
+
+		if ($GUILangChangeDownloadAll.Checked) {
+			$Script:IsDownload = $True
+		} else {
+			if ($GUILangChangeRuleRename.Checked) {
+				$Script:IsRename = $True
 			}
 
-			$GUILangChange.Close()
-		} else {
-			$GUILangChangeErrorMsg.Text = "$($lang.SelectFromError -f $($lang.OSVersion))"
+			if ($GUILangChangeLicence.Checked) {
+				$Script:IsLicence = $True
+			}
 		}
+
+		LXPs_Download_Process
+		$GUILangChange.Close()
 	}
 	$GUILangChange     = New-Object system.Windows.Forms.Form -Property @{
 		autoScaleMode  = 2
@@ -565,65 +557,20 @@ Function LXPs_Download
 	}
 
 	<#
-		.组：选择语言
-	#>
-	$GUILangChangeShowGroupCL = New-Object system.Windows.Forms.Panel -Property @{
-		BorderStyle    = 0
-		Height         = 678
-		Width          = 923
-		autoSizeMode   = 1
-		Padding        = "8,0,8,0"
-		Location       = '0,0'
-		Visible        = 0
-	}
-	$GUILangChangeShowGroupCLVersionTitle = New-Object system.Windows.Forms.Label -Property @{
-		Height         = 22
-		Width          = 280
-		Location       = "15,10"
-		Text           = $lang.OSVersion
-	}
-	$GUILangChangeShowGroupCLVersion = New-Object system.Windows.Forms.FlowLayoutPanel -Property @{
-		Height         = 640
-		Width          = 340
-		Padding        = "8,0,8,0"
-		Location       = "15,35"
-		BorderStyle    = 0
-		autoSizeMode   = 0
-		autoScroll     = $True
-	}
-	$GUILangChangeShowGroupCLCanel = New-Object system.Windows.Forms.Button -Property @{
-		UseVisualStyleBackColor = $True
-		Location       = "570,635"
-		Height         = 36
-		Width          = 280
-		add_Click      = $GUILangChangeShowGroupCLCanelClick
-		Text           = $lang.Cancel
-	}
-
-	<#
 		.可用语言
 	#>
 	$GUILangSelectAdvTips = New-Object system.Windows.Forms.Label -Property @{
 		Height         = 30
 		Width          = 340
-		Text           = $lang.LanguageSelectMark
+		Text           = $Lang_Download.AvailableLanguages
 	}
-	$GUILangSelectChange = New-Object system.Windows.Forms.LinkLabel -Property @{
-		Height         = 30
-		Width          = 475
-		Padding        = "15,0,0,0"
-		Text           = $lang.LanguageSelectChange
-		LinkColor      = "GREEN"
-		ActiveLinkColor = "RED"
-		LinkBehavior   = "NeverUnderline"
-		add_Click      = $GUILangSelectChangeClick
-	}
-	$GUILangSelectShowPanel = New-Object system.Windows.Forms.FlowLayoutPanel -Property @{
-		autoSize       = 1
-		autoSizeMode   = 1
-		Padding        = "15,0,0,0"
-		margin         = "0,0,0,25"
+	$GUILangChangeShowGroupCLVersion = New-Object system.Windows.Forms.FlowLayoutPanel -Property @{
 		BorderStyle    = 0
+		Height         = 200
+		Width          = 475
+		Padding        = "18,0,0,0"
+		margin         = "0,0,0,25"
+		autoSizeMode   = 0
 		autoScroll     = $True
 	}
 
@@ -643,7 +590,7 @@ Function LXPs_Download
 		Height         = 22
 		Width          = 240
 		Location       = "15,10"
-		Text           = $lang.OSVersion
+		Text           = $Lang_Download.OSVersion
 	}
 	$GUILangChangeSelectVersion = New-Object system.Windows.Forms.FlowLayoutPanel -Property @{
 		Height         = 640
@@ -659,7 +606,7 @@ Function LXPs_Download
 		Height         = 25
 		Width          = 400
 		Location       = "405,15"
-		Text           = $lang.LXPsFilter
+		Text           = $Lang_Download.LXPsFilter
 	}
 	$GUILangChangeNumberShow = New-Object System.Windows.Forms.TextBox -Property @{
 		Height         = 22
@@ -671,7 +618,7 @@ Function LXPs_Download
 		Height         = 150
 		Width          = 385
 		Location       = "425,80"
-		Text           = $lang.LXPsDownloadTips
+		Text           = $Lang_Download.LXPsDownloadTips
 	}
 
 	$GUILangChangeSelectErrorMsg = New-Object system.Windows.Forms.Label -Property @{
@@ -703,7 +650,7 @@ Function LXPs_Download
 	$GUILangChangeDownloadAll = New-Object System.Windows.Forms.CheckBox -Property @{
 		Height         = 25
 		Width          = 385
-		Text           = $lang.DownloadAll
+		Text           = $Lang_Download.DownloadAll
 		Checked        = $True
 		add_Click      = $GUILangChangeDownloadAllClick
 	}
@@ -718,7 +665,7 @@ Function LXPs_Download
 	$GUILangChangeDownloadMatch = New-Object system.Windows.Forms.Label -Property @{
 		Height         = 30
 		Width          = 395
-		Text           = $lang.LXPsFilter
+		Text           = $Lang_Download.LXPsFilter
 	}
 	$GUILangChangeDownloadMatchSetting = New-Object system.Windows.Forms.LinkLabel -Property @{
 		Height         = 30
@@ -734,7 +681,7 @@ Function LXPs_Download
 		Height         = 30
 		Width          = 395
 		Padding        = "16,0,0,0"
-		Text           = $lang.OSVersion
+		Text           = $Lang_Download.OSVersion
 		LinkColor      = "GREEN"
 		ActiveLinkColor = "RED"
 		LinkBehavior   = "NeverUnderline"
@@ -743,35 +690,35 @@ Function LXPs_Download
 	$GUILangChangeDownloadMatchTips = New-Object system.Windows.Forms.Label -Property @{
 		autoSize       = 1
 		Padding        = "16,0,15,5"
-		Text           = $lang.LXPsDownloadTips
+		Text           = $Lang_Download.LXPsDownloadTips
 	}
 
 	$GUILangChangeRuleRename = New-Object System.Windows.Forms.CheckBox -Property @{
 		Height         = 25
 		Width          = 385
 		margin         = "0,20,0,0"
-		Text           = $lang.LXPsRename
+		Text           = $Lang_Download.LXPsRename
 		Checked        = $True
 		add_Click      = $GUILangChangeDownloadAllClick
 	}
 	$GUILangChangeRuleRenameTips = New-Object system.Windows.Forms.Label -Property @{
 		autoSize       = 1
 		Padding        = "14,0,15,0"
-		Text           = $lang.LXPsRenameTips
+		Text           = $Lang_Download.LXPsRenameTips
 	}
 
 	$GUILangChangeLicence = New-Object System.Windows.Forms.CheckBox -Property @{
 		Height         = 25
 		Width          = 385
 		margin         = "0,20,0,0"
-		Text           = $lang.LicenseCreate
+		Text           = $Lang_Download.LicenseCreate
 		Checked        = $True
 		add_Click      = $GUILangChangeDownloadAllClick
 	}
 	$GUILangChangeLicenceTips = New-Object system.Windows.Forms.Label -Property @{
 		autoSize       = 1
 		Padding        = "14,0,15,0"
-		Text           = $lang.LicenseCreateTips
+		Text           = $Lang_Download.LicenseCreateTips
 	}
 
 	<#
@@ -780,7 +727,7 @@ Function LXPs_Download
 	$GUIISOSaveTo      = New-Object system.Windows.Forms.Label -Property @{
 		Height         = 25
 		Width          = 455
-		Text           = $lang.SaveTo
+		Text           = $Lang_Download.SaveTo
 	}
 	$GUIISOSaveCustomizePath = New-Object System.Windows.Forms.TextBox -Property @{
 		Height         = 22
@@ -793,7 +740,7 @@ Function LXPs_Download
 		Height         = 30
 		Width          = 455
 		margin         = "22,5,0,0"
-		Text           = $lang.SelectFolder
+		Text           = $Lang_Download.SelectFolder
 		LinkColor      = "GREEN"
 		ActiveLinkColor = "RED"
 		LinkBehavior   = "NeverUnderline"
@@ -803,7 +750,7 @@ Function LXPs_Download
 		autoSize       = 1
 		Padding        = "36,0,15,0"
 		margin         = "0,0,0,15"
-		Text           = $lang.SelectFolderTips
+		Text           = $Lang_Download.SelectFolderTips
 	}
 
 	$GUIISOSaveToSelectPanel = New-Object system.Windows.Forms.FlowLayoutPanel -Property @{
@@ -815,14 +762,14 @@ Function LXPs_Download
 	$GUIISOSaveToSync  = New-Object System.Windows.Forms.CheckBox -Property @{
 		Height         = 25
 		Width          = 455
-		Text           = $lang.SaveToSync
+		Text           = $Lang_Download.SaveToSync
 		add_Click      = $GUIISOSaveToSyncClick
 	}
 	$GUIISOSaveToSyncTips = New-Object system.Windows.Forms.Label -Property @{
 		autoSize       = 1
 		Padding        = "18,0,15,0"
 		margin         = "0,0,0,25"
-		Text           = $lang.SaveToSyncTips
+		Text           = $Lang_Download.SaveToSyncTips
 	}
 
 	$GUIISOSaveToPanel = New-Object system.Windows.Forms.FlowLayoutPanel -Property @{
@@ -838,7 +785,7 @@ Function LXPs_Download
 	$GUIISOAdvAppsLicense = New-Object system.Windows.Forms.LinkLabel -Property @{
 		Height         = 30
 		Width          = 455
-		Text           = $lang.LicenseCreate
+		Text           = $Lang_Download.LicenseCreate
 		LinkColor      = "GREEN"
 		ActiveLinkColor = "RED"
 		LinkBehavior   = "NeverUnderline"
@@ -848,12 +795,12 @@ Function LXPs_Download
 		autoSize       = 1
 		Padding        = "18,0,15,0"
 		margin         = "0,0,0,25"
-		Text           = $lang.LicenseCreateTips
+		Text           = $Lang_Download.LicenseCreateTips
 	}
 	$GUIISOSaveCustomizeOpenFolder = New-Object system.Windows.Forms.LinkLabel -Property @{
 		Height         = 30
 		Width          = 455
-		Text           = $lang.OpenFolder
+		Text           = $Lang_Download.OpenFolder
 		LinkColor      = "GREEN"
 		ActiveLinkColor = "RED"
 		LinkBehavior   = "NeverUnderline"
@@ -862,7 +809,7 @@ Function LXPs_Download
 	$GUIISOSaveCustomizePaste = New-Object system.Windows.Forms.LinkLabel -Property @{
 		Height         = 30
 		Width          = 455
-		Text           = $lang.Paste
+		Text           = $Lang_Download.Paste
 		LinkColor      = "GREEN"
 		ActiveLinkColor = "RED"
 		LinkBehavior   = "NeverUnderline"
@@ -875,7 +822,7 @@ Function LXPs_Download
 	$GUILangMatchNoDownloadItem = New-Object system.Windows.Forms.LinkLabel -Property @{
 		Height         = 30
 		Width          = 455
-		Text           = $lang.MatchNoDownloadItem
+		Text           = $Lang_Download.MatchNoDownloadItem
 		LinkColor      = "GREEN"
 		ActiveLinkColor = "RED"
 		LinkBehavior   = "NeverUnderline"
@@ -906,19 +853,19 @@ Function LXPs_Download
 	$GUILangReportShowTitle = New-Object System.Windows.Forms.Label -Property @{
 		Height         = 22
 		Width          = 300
-		Text           = $lang.AdvAppsDetailed
+		Text           = $Lang_Download.AdvAppsDetailed
 	}
 	$GUILangReportShowTitleTips = New-Object system.Windows.Forms.Label -Property @{
 		autoSize       = 1
 		Padding        = "16,0,0,0"
 		margin         = "0,0,0,20"
-		Text           = $lang.AdvAppsDetailedTips
+		Text           = $Lang_Download.AdvAppsDetailedTips
 	}
 
 	$GUILangReportShowSelectSources = New-Object System.Windows.Forms.Label -Property @{
 		Height         = 22
 		Width          = 400
-		Text           = $lang.ProcessSources
+		Text           = $Lang_Download.ProcessSources
 	}
 	$GUILangReportShowSourcesPath = New-Object System.Windows.Forms.TextBox -Property @{
 		Height         = 22
@@ -931,7 +878,7 @@ Function LXPs_Download
 		Height         = 30
 		Width          = 425
 		Padding        = "16,0,0,0"
-		Text           = $lang.SelectFolder
+		Text           = $Lang_Download.SelectFolder
 		LinkColor      = "GREEN"
 		ActiveLinkColor = "RED"
 		LinkBehavior   = "NeverUnderline"
@@ -941,7 +888,7 @@ Function LXPs_Download
 		Height         = 30
 		Width          = 425
 		Padding        = "16,0,0,0"
-		Text           = $lang.OpenFolder
+		Text           = $Lang_Download.OpenFolder
 		LinkColor      = "GREEN"
 		ActiveLinkColor = "RED"
 		LinkBehavior   = "NeverUnderline"
@@ -951,7 +898,7 @@ Function LXPs_Download
 		Height         = 30
 		Width          = 425
 		Padding        = "16,0,0,0"
-		Text           = $lang.Paste
+		Text           = $Lang_Download.Paste
 		LinkColor      = "GREEN"
 		ActiveLinkColor = "RED"
 		LinkBehavior   = "NeverUnderline"
@@ -961,7 +908,7 @@ Function LXPs_Download
 		Height         = 30
 		Width          = 425
 		Padding        = "16,0,0,0"
-		Text           = $lang.SaveToSync
+		Text           = $Lang_Download.SaveToSync
 		LinkColor      = "GREEN"
 		ActiveLinkColor = "RED"
 		LinkBehavior   = "NeverUnderline"
@@ -975,7 +922,7 @@ Function LXPs_Download
 		Height         = 22
 		Width          = 400
 		margin         = "0,30,0,0"
-		Text           = $lang.SaveTo
+		Text           = $Lang_Download.SaveTo
 	}
 	$GUILangChangeReportSaveToPath = New-Object System.Windows.Forms.TextBox -Property @{
 		Height         = 22
@@ -988,7 +935,7 @@ Function LXPs_Download
 		Height         = 30
 		Width          = 425
 		Padding        = "16,0,0,0"
-		Text           = $lang.SelectFolder
+		Text           = $Lang_Download.SelectFolder
 		LinkColor      = "GREEN"
 		ActiveLinkColor = "RED"
 		LinkBehavior   = "NeverUnderline"
@@ -998,13 +945,12 @@ Function LXPs_Download
 		Height         = 30
 		Width          = 425
 		Padding        = "16,0,0,0"
-		Text           = $lang.Paste
+		Text           = $Lang_Download.Paste
 		LinkColor      = "GREEN"
 		ActiveLinkColor = "RED"
 		LinkBehavior   = "NeverUnderline"
 		add_Click      = $GUILangChangeReportSaveToPathPasteClick
 	}
-
 	$GUILangReportErrorMsg = New-Object system.Windows.Forms.Label -Property @{
 		Location       = "570,565"
 		Height         = 22
@@ -1027,50 +973,99 @@ Function LXPs_Download
 		add_Click      = $GUILangReportCanelClick
 		Text           = $lang.Cancel
 	}
+
+	<#
+		.显示提示蒙层
+	#>
+	$GUILangChangeTips   = New-Object system.Windows.Forms.Panel -Property @{
+		BorderStyle    = 0
+		Height         = 760
+		Width          = 898
+		autoSizeMode   = 1
+		Padding        = "8,0,8,0"
+		Location       = '0,0'
+		Visible        = 0
+	}
+	$GUILangChangeTipsMsg = New-Object System.Windows.Forms.RichTextBox -Property @{
+		Height         = 580
+		Width          = 845
+		BorderStyle    = 0
+		Location       = "15,15"
+		Text           = $Lang_Download.LXPsGetSNTips
+		BackColor      = "#FFFFFF"
+		ReadOnly       = $True
+	}
+	$GUILangChangeTipsDoNot = New-Object System.Windows.Forms.CheckBox -Property @{
+		Location       = "20,635"
+		Height         = 25
+		Width          = 440
+		Text           = $Lang_Download.LXPsAddDelTips
+		add_Click      = $GUILangChangeTipsDoNotClick
+	}
+	$GUILangChangeTipsCanel = New-Object system.Windows.Forms.Button -Property @{
+		UseVisualStyleBackColor = $True
+		Location       = "570,635"
+		Height         = 36
+		Width          = 280
+		add_Click      = $GUILangChangeTipsCanelClick
+		Text           = $lang.Cancel
+	}
+	$GUILangChangeTipsView = New-Object system.Windows.Forms.LinkLabel -Property @{
+		Height         = 22
+		Width          = 280
+		Text           = $Lang_Download.LXPsAddDelTipsView
+		Location       = "570,520"
+		LinkColor      = "GREEN"
+		ActiveLinkColor = "RED"
+		LinkBehavior   = "NeverUnderline"
+		add_Click      = $GUILangChangeTipsViewClick
+	}
+
 	$GUILangReportCreate = New-Object system.Windows.Forms.Button -Property @{
 		UseVisualStyleBackColor = $True
 		Location       = "570,10"
 		Height         = 36
 		Width          = 280
 		add_Click      = $GUILangReportCreateClick
-		Text           = $lang.AdvAppsDetailed
+		Text           = $Lang_Download.AdvAppsDetailed
 	}
-	$GUILangChangeErrorMsg = New-Object system.Windows.Forms.Label -Property @{
+	$UI_Main_Error     = New-Object system.Windows.Forms.Label -Property @{
 		Location       = "570,568"
 		Height         = 22
 		Width          = 280
 		Text           = ""
 	}
-	$GUILangChangeOK   = New-Object system.Windows.Forms.Button -Property @{
+	$UI_Main_OK        = New-Object system.Windows.Forms.Button -Property @{
 		UseVisualStyleBackColor = $True
 		Location       = "570,595"
 		Height         = 36
 		Width          = 280
-		add_Click      = $GUILangChangeOKClick
+		add_Click      = $UI_Main_OK_Click
 		Text           = $lang.StartVerify
 	}
-	$GUILangChangeCanel = New-Object system.Windows.Forms.Button -Property @{
+	$UI_Main_Canel = New-Object system.Windows.Forms.Button -Property @{
 		UseVisualStyleBackColor = $True
 		Location       = "570,635"
 		Height         = 36
 		Width          = 280
-		add_Click      = $GUILangChangeCanelClick
+		add_Click      = $UI_Main_Canel_Click
 		Text           = $lang.Cancel
 	}
 	$GUILangChange.controls.AddRange((
-		$GUILangChangeShowGroupCL,
+		$GUILangChangeTips,
 		$GUILangReportPanel,
 		$GUILangChangeNumberGroupCL,
 		$GUILangChangeSelect,
-		$GUILangChangeErrorMsg,
 		$GUILangReportCreate,
-		$GUILangChangeOK,
-		$GUILangChangeCanel
+		$GUILangChangeTipsView,
+		$UI_Main_Error,
+		$UI_Main_OK,
+		$UI_Main_Canel
 	))
-	$GUILangChangeShowGroupCL.controls.AddRange((
-		$GUILangChangeShowGroupCLVersionTitle,
-		$GUILangChangeShowGroupCLVersion,
-		$GUILangChangeShowGroupCLCanel
+	$GUILangChangeTips.controls.AddRange((
+		$GUILangChangeTipsMsg,
+		$GUILangChangeTipsDoNot,
+		$GUILangChangeTipsCanel
 	))
 	$GUILangReportPanel.controls.AddRange((
 		$GUILangReportShow,
@@ -1084,6 +1079,8 @@ Function LXPs_Download
 		$GUILangReportShowSelectSources,
 		$GUILangReportShowSourcesPath,
 		$GUILangReportShowSourcesSelectFolder,
+
+
 		$GUILangReportShowSourcesOpen,
 		$GUILangReportShowSourcesPaste,
 		$GUILangReportShowSourcesSync,
@@ -1094,8 +1091,7 @@ Function LXPs_Download
 	))
 	$GUILangChangeSelect.controls.AddRange((
 		$GUILangSelectAdvTips,
-		$GUILangSelectChange,
-		$GUILangSelectShowPanel,
+		$GUILangChangeShowGroupCLVersion,
 
 		$GUILangChangeDownloadAll,
 		$GUILangChangeDownloadPanel,
@@ -1104,6 +1100,8 @@ Function LXPs_Download
 		$GUIISOSaveCustomizePath,
 		$GUIISOSaveCustomizeSelectFolder,
 		$GUIISOSaveCustomizeSelectFolderTips,
+#		$GUIISOSaveCustomizeOpenFolder,
+#		$GUIISOSaveCustomizePaste,
 
 		$GUIISOSaveToSelectPanel,
 		$GUIISOSaveToPanel
@@ -1112,7 +1110,6 @@ Function LXPs_Download
 		$GUIISOSaveToSync,
 		$GUIISOSaveToSyncTips
 	))
-
 	$GUIISOSaveToPanel.controls.AddRange((
 		$GUIISOAdvAppsLicense,
 		$GUIISOAdvAppsLicenseTips,
@@ -1120,7 +1117,6 @@ Function LXPs_Download
 		$GUIISOSaveCustomizePaste,
 		$GUILangMatchNoDownloadItem
 	))
-
 	$GUILangChangeDownloadPanel.controls.AddRange((
 		$GUILangChangeDownloadMatch,
 		$GUILangChangeDownloadMatchSetting,
@@ -1142,29 +1138,45 @@ Function LXPs_Download
 		$GUIImageSourceGroupCLCanel
 	))
 
-	for ($i=0; $i -lt $Global:AvailableLanguages.Count; $i++) {
-		$CheckBox     = New-Object System.Windows.Forms.CheckBox -Property @{
-			Height    = 45
-			Width     = 310
-			Text      = "$($Global:AvailableLanguages[$i][4])`n$($Global:AvailableLanguages[$i][2])"
-			Tag       = $($Global:AvailableLanguages[$i][2])
-			add_Click = { Refresh_Select_LXPs_Download_Language }
-		}
-
-		if ($Global:MainImageLang -eq $Global:AvailableLanguages[$i][2]) {
-			$CheckBox.Checked = $True
-		} else {
-			$CheckBox.Checked = $False
-		}
-
-		$GUILangChangeShowGroupCLVersion.controls.AddRange($CheckBox)
+	<#
+		.获取语言列表并初始化选择
+	#>
+	if (-not (Get-ItemProperty -Path  "HKCU:\SOFTWARE\$($Global:UniqueID)\LXPs" -Name 'Select_Download_Language' -ErrorAction SilentlyContinue)) {
+		Save_Dynamic -regkey "LXPs" -name "Select_Download_Language" -value "" -Multi
 	}
+	$GetSelectLXPsLanguageRemove = Get-ItemPropertyValue -Path "HKCU:\SOFTWARE\$($Global:UniqueID)\LXPs" -Name "Select_Download_Language"
+
+	$SelectLXPsLanguageRemove = @()
+	foreach ($item in $GetSelectLXPsLanguageRemove) {
+		$SelectLXPsLanguageRemove += $item
+	}
+
+	for ($i=0; $i -lt $Global:AvailableLanguages.Count; $i++) {
+		if ($Global:AvailableLanguages[$i][0] -eq "1") {
+			$CheckBox   = New-Object System.Windows.Forms.CheckBox -Property @{
+				Height  = 28
+				Width   = 430
+				Text    = "$($Global:AvailableLanguages[$i][2].PadRight(45)) $($Global:AvailableLanguages[$i][4])"
+				Tag     = $($Global:AvailableLanguages[$i][2])
+			}
+
+			if ($SelectLXPsLanguageRemove -eq $Global:AvailableLanguages[$i][2]) {
+				$CheckBox.Checked = $True
+			} else {
+				$CheckBox.Checked = $False
+			}
+
+			$GUILangChangeShowGroupCLVersion.controls.AddRange($CheckBox)
+		}
+	}
+
+
 	if (Get-ItemProperty -Path "HKCU:\SOFTWARE\$($Global:UniqueID)\LXPs" -Name "LXPsSelect" -ErrorAction SilentlyContinue) {
 		$GetLXPsSelect = Get-ItemPropertyValue -Path "HKCU:\SOFTWARE\$($Global:UniqueID)\LXPs" -Name "LXPsSelect" -ErrorAction SilentlyContinue
 		$GUILangChangeDownloadMatchSetting.Text = $GetLXPsSelect
 		$GUILangChangeNumberShow.Text = $GetLXPsSelect
 	} else {
-		$GUILangChangeDownloadMatchSetting.Text = $lang.MatchDownloadNoNewitem
+		$GUILangChangeDownloadMatchSetting.Text = $Lang_Download.MatchDownloadNoNewitem
 	}
 
 	for ($i=0; $i -lt $Global:OSCodename.Count; $i++) {
@@ -1178,7 +1190,6 @@ Function LXPs_Download
 
 		$GUILangChangeSelectVersion.controls.AddRange($CheckBox)
 	}
-	Refresh_Select_LXPs_Download_Language
 
 	if (Get-ItemProperty -Path "HKCU:\SOFTWARE\$($Global:UniqueID)\LXPs" -Name "IsSyncSaveTo" -ErrorAction SilentlyContinue) {
 		switch (Get-ItemPropertyValue -Path "HKCU:\SOFTWARE\$($Global:UniqueID)\LXPs" -Name "IsSyncSaveTo" -ErrorAction SilentlyContinue) {
@@ -1193,7 +1204,7 @@ Function LXPs_Download
 		$GUIISOSaveToSync.Checked = $True
 	}
 
-	$GetCurrentDisk = Convert-Path -Path "$($PSScriptRoot)\..\..\" -ErrorAction SilentlyContinue
+	$GetCurrentDisk = Convert-Path -Path "$($PSScriptRoot)\..\..\..\" -ErrorAction SilentlyContinue
 	if (Get-ItemProperty -Path "HKCU:\SOFTWARE\$($Global:UniqueID)\LXPs" -Name "IsDownloadAll" -ErrorAction SilentlyContinue) {
 		switch (Get-ItemPropertyValue -Path "HKCU:\SOFTWARE\$($Global:UniqueID)\LXPs" -Name "IsDownloadAll" -ErrorAction SilentlyContinue) {
 			"True" {
@@ -1218,6 +1229,22 @@ Function LXPs_Download
 
 	Refresh_Download_Sources_To
 
+	if (Get-ItemProperty -Path "HKCU:\SOFTWARE\$($Global:UniqueID)\LXPs" -Name "LXPsTipsWarning" -ErrorAction SilentlyContinue) {
+		switch (Get-ItemPropertyValue -Path "HKCU:\SOFTWARE\$($Global:UniqueID)\LXPs" -Name "LXPsTipsWarning" -ErrorAction SilentlyContinue) {
+			"True" {
+				$GUILangChangeTips.Visible = 0
+				$GUILangChangeTipsDoNot.Checked = $True
+			}
+			"False" {
+				$GUILangChangeTips.Visible = 1
+				$GUILangChangeTipsDoNot.Checked = $False
+			}
+		}
+	} else {
+		$GUILangChangeTips.Visible = 1
+		$GUILangChangeTipsDoNot.Checked = $False
+	}
+
 	<#
 		.Add right-click menu: select all, clear button
 		.添加右键菜单：全选、清除按钮
@@ -1226,15 +1253,11 @@ Function LXPs_Download
 		$GUILangChangeShowGroupCLVersion.Controls | ForEach-Object {
 			if ($_ -is [System.Windows.Forms.CheckBox]) { $_.Checked = $true }
 		}
-
-		Refresh_Select_LXPs_Download_Language
 	}
 	$GUIImageSelectFunctionAllClearClick = {
 		$GUILangChangeShowGroupCLVersion.Controls | ForEach-Object {
 			if ($_ -is [System.Windows.Forms.CheckBox]) { $_.Checked = $false }
 		}
-
-		Refresh_Select_LXPs_Download_Language
 	}
 	$GUIImageSelectFunctionSelectMenu = New-Object System.Windows.Forms.ContextMenuStrip
 	$GUIImageSelectFunctionSelectMenu.Items.Add($lang.AllSel).add_Click($GUIImageSelectFunctionSelClick)
@@ -1377,7 +1400,7 @@ Function LXPs_Download_Report_Process
 		$FolderDirect = (Join_MainFolder -Path $Path)
 	}
 
-	write-host "`n   $($lang.AdvAppsDetailed)"
+	write-host "`n   $($Lang_Download.AdvAppsDetailed)"
 	$QueueSelectLXPsReport = @()
 	$RandomGuid = [guid]::NewGuid()
 	$ISOTestFolderMain = "$($env:userprofile)\AppData\Local\Temp\$($RandomGuid)"
@@ -1441,7 +1464,7 @@ Function LXPs_Download_Licence_Process
 		$FolderDirect = (Join_MainFolder -Path $Path)
 	}
 
-	write-host "`n   $($lang.LicenseCreate)"
+	write-host "`n   $($Lang_Download.LicenseCreate)"
 	$QueueLXPsLicenceSelect = @()
 	for ($i=0; $i -lt $Global:AvailableLanguages.Count; $i++) {
 		$TempNewFileFolderPath = "$($FolderDirect)$($Global:AvailableLanguages[$i][2])"
@@ -1457,18 +1480,18 @@ Function LXPs_Download_Licence_Process
 	}
 
 	if ($QueueLXPsLicenceSelect.count -gt 0) {
-		Write-Host "   $($lang.YesWork)" -ForegroundColor Green
+		Write-Host "   $($Lang_Download.YesWork)" -ForegroundColor Green
 
-		Write-host "`n   $($lang.ProcessSources)`n   ---------------------------------------------------"
+		Write-host "`n   $($Lang_Download.ProcessSources)`n   ---------------------------------------------------"
 		write-host "   $($Path)"
 
-		Write-Host "`n   $($lang.AddSources)`n   ---------------------------------------------------"
+		Write-Host "`n   $($Lang_Download.AddSources)`n   ---------------------------------------------------"
 		foreach ($item in $QueueLXPsLicenceSelect) {
 			Write-Host "   $($item.Language)".PadRight(28) -NoNewline
 			write-host " $($item.FileName)"
 		}
 
-		Write-Host "`n   $($lang.AddQueue)`n   ---------------------------------------------------"
+		Write-Host "`n   $($Lang_Download.AddQueue)`n   ---------------------------------------------------"
 		foreach ($item in $QueueLXPsLicenceSelect) {
 			$TempNewFileFullPath = "$($item.OrgPath)\$($item.FileName)"
 
@@ -1477,7 +1500,9 @@ Function LXPs_Download_Licence_Process
 				Remove-Item -Path "$($item.OrgPath)\License.xml" -ErrorAction SilentlyContinue
 
 				$zipFile = [IO.Compression.ZipFile]::OpenRead($TempNewFileFullPath)
-				$zipFile.Entries | where { $_.Name -like 'License.xml' } | foreach { [System.IO.Compression.ZipFileExtensions]::ExtractToFile($_, "$($item.OrgPath)\$($_.Name)", $true) }
+				$zipFile.Entries | where { $_.Name -like 'License.xml' } | foreach {
+					[System.IO.Compression.ZipFileExtensions]::ExtractToFile($_, "$($item.OrgPath)\$($_.Name)", $true)
+				}
 				$zipFile.Dispose()
 
 				if (Test-Path -Path "$($item.OrgPath)\License.xml" -PathType Leaf) {
@@ -1488,30 +1513,42 @@ Function LXPs_Download_Licence_Process
 			}
 		}
 	} else {
-		Write-Host "   $($lang.NoWork)" -ForegroundColor Red
+		Write-Host "   $($Lang_Download.NoWork)" -ForegroundColor Red
 	}
 }
 
 Function LXPs_Download_Process
 {
-	for ($i=0; $i -lt $Global:AvailableLanguages.Count; $i++) {
-		if (($Script:QueueLanguageChangeSelect) -Contains $($Global:AvailableLanguages[$i][2])) {
-			$NewStoreURL = "https://www.microsoft.com/store/productId/$($Global:AvailableLanguages[$i][6])"
-			$NewFolder   = "$($PSScriptRoot)\..\..\Download\$($Script:Version)\LocalExperiencePack\$($Global:AvailableLanguages[$i][2])"
-			$NewFilename = "LanguageExperiencePack.$($Global:AvailableLanguages[$i][2]).Neutral.appx"
+	Write-Host "   $($Lang_Download.YesWork)" -ForegroundColor Green
 
-			Check_Folder -chkpath $NewFolder
-			$NewFolder = Convert-Path -Path $NewFolder -ErrorAction SilentlyContinue
+	write-host "   待下载的语言"
+	if ($Script:Queue_Language_Download_Select.Count -gt 0) {
+		foreach ($item in $Script:Queue_Language_Download_Select) {
+			write-host "   $($item)"
+		}
 
-			write-host "   $($NewFolder)\$($NewFilename)" -ForegroundColor Green
+		Write-hsot "`n    正在下载："
+		for ($i=0; $i -lt $Global:AvailableLanguages.Count; $i++) {
+			if (($Script:Queue_Language_Download_Select) -Contains $($Global:AvailableLanguages[$i][2])) {
+				$NewStoreURL = "https://www.microsoft.com/store/productId/$($Global:AvailableLanguages[$i][6])"
+				$NewFolder   = "$($PSScriptRoot)\..\..\..\Download\$($Script:Version)\LocalExperiencePack\$($Global:AvailableLanguages[$i][2])"
+				$NewFilename = "LanguageExperiencePack.$($Global:AvailableLanguages[$i][2]).Neutral.appx"
 
-			if (Test-Path -Path "$($NewFolder)\$($NewFilename)" -PathType Leaf) {
-				write-host "   Local presence: $($NewFolder)\$($NewFilename)`n" -ForegroundColor Green
-			} else {
-				write-host "   Sources: $($NewStoreURL)"
+				Check_Folder -chkpath $NewFolder
+				$NewFolder = Convert-Path -Path $NewFolder -ErrorAction SilentlyContinue
 
-				MicrosoftToDo -Lang $Global:AvailableLanguages[$i][2] -StoreURL $NewStoreURL -SaveTo $NewFolder
+				write-host "   $($NewFolder)\$($NewFilename)" -ForegroundColor Green
+
+				if (Test-Path -Path "$($NewFolder)\$($NewFilename)" -PathType Leaf) {
+					write-host "   Local presence: $($NewFolder)\$($NewFilename)`n" -ForegroundColor Green
+				} else {
+					write-host "   Sources: $($NewStoreURL)"
+
+					MicrosoftToDo -Lang $Global:AvailableLanguages[$i][2] -StoreURL $NewStoreURL -SaveTo $NewFolder
+				}
 			}
 		}
+	} else {
+		Write-Host "   $($Lang_Download.NoWork)" -ForegroundColor Red
 	}
 }

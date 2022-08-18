@@ -41,7 +41,6 @@ Function Mainpage
 		}
 		"2" {
 			LXPs_Download
-			LXPs_Download_Process
 			ToMainpage -wait 2
 		}
 		"l" {
