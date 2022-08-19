@@ -4,6 +4,7 @@
 	Update                    = ソリューション ツールボックス
 	AddTo                     = 追加
 	Done                      = 実施する
+	Failed                    = 失敗
 	StartVerify               = ダウンロードタスクを確認する
 	OK                        = 決定する
 	Cancel                    = キャンセル

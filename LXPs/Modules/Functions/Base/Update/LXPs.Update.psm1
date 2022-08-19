@@ -78,47 +78,47 @@ Function Update_Setting_UI
 	Add-Type -AssemblyName System.Drawing
 	[System.Windows.Forms.Application]::EnableVisualStyles()
 
-	$GUIUpdateAutoClick = {
-		if ($GUIUpdateAuto.Checked) {
-			$GUIUpdatePanel.Enabled = $False
+	$UI_Main_Auto_Select_Click = {
+		if ($UI_Main_Auto_Select.Checked) {
+			$UI_Main_Menu.Enabled = $False
 		} else {
-			$GUIUpdatePanel.Enabled = $True
+			$UI_Main_Menu.Enabled = $True
 		}
 	}
-	$GUIUpdateCanelClick = {
-		$GUIUpdate.Hide()
+	$UI_Main_Canel_Click = {
+		$UI_Main.Hide()
 		$Global:ServerList = @()
 		$Global:UpdateAvailableSilent = $False
 		$Global:UpdateAvailableReset = $False
 
 		Write-Host "   $($lang.UserCancel)" -ForegroundColor Red
-		$GUIUpdate.Close()
+		$UI_Main.Close()
 	}
-	$GUIUpdateOKClick = {
+	$UI_Main_OK_Click = {
 		$Global:ServerList = @()
 
-		if ($GUIUpdateSilent.Checked) {
+		if ($UI_Main_Silent.Checked) {
 			$Global:UpdateAvailableSilent = $True
 		} else {
 			$Global:UpdateAvailableSilent = $False
 		}
 
-		if ($GUIUpdateReset.Checked) {
+		if ($UI_Main_Reset.Checked) {
 			$Global:UpdateAvailableReset = $True
 		} else {
 			$Global:UpdateAvailableReset = $False
 		}
 
-		if ($GUIUpdateAuto.Checked) {
-			$GUIUpdate.Hide()
+		if ($UI_Main_Auto_Select.Checked) {
+			$UI_Main.Hide()
 			foreach ($item in $PreServerList | Sort-Object { Get-Random } ) {
 				$Global:ServerList += $item[0] + $item[1]
 			}
 			Update_Process
-			$GUIUpdate.Close()
+			$UI_Main.Close()
 		} else {
 			$FlagsVerifyServerlist = $False
-			$GUIUpdatePanel.Controls | ForEach-Object {
+			$UI_Main_Menu.Controls | ForEach-Object {
 				if ($_ -is [System.Windows.Forms.CheckBox]) {
 					if ($_.Checked) {
 						$FlagsVerifyServerlist = $true
@@ -128,15 +128,15 @@ Function Update_Setting_UI
 			}
 
 			if ($FlagsVerifyServerlist) {
-				$GUIUpdate.Hide()
+				$UI_Main.Hide()
 				Update_Process
-				$GUIUpdate.Close()
+				$UI_Main.Close()
 			} else {
-				$GUIUpdateErrorMsg.Text = "$($Lang_Update.UpdateServerNoSelect)"
+				$UI_Main_Error.Text = "$($Lang_Update.UpdateServerNoSelect)"
 			}
 		}
 	}
-	$GUIUpdate         = New-Object system.Windows.Forms.Form -Property @{
+	$UI_Main         = New-Object system.Windows.Forms.Form -Property @{
 		autoScaleMode  = 2
 		Height         = 720
 		Width          = 550
@@ -147,15 +147,15 @@ Function Update_Setting_UI
 		ControlBox     = $False
 		BackColor      = "#ffffff"
 	}
-	$GUIUpdateAuto     = New-Object System.Windows.Forms.CheckBox -Property @{
+	$UI_Main_Auto_Select = New-Object System.Windows.Forms.CheckBox -Property @{
 		Height         = 22
 		Width          = 505
 		Text           = $Lang_Update.UpdateServerSelect
 		Location       = '10,6'
-		add_Click      = $GUIUpdateAutoClick
+		add_Click      = $UI_Main_Auto_Select_Click
 		Checked        = $True
 	}
-	$GUIUpdatePanel    = New-Object system.Windows.Forms.FlowLayoutPanel -Property @{
+	$UI_Main_Menu    = New-Object system.Windows.Forms.FlowLayoutPanel -Property @{
 		Height         = 415
 		Width          = 530
 		BorderStyle    = 0
@@ -166,56 +166,56 @@ Function Update_Setting_UI
 		Location       = "0,28"
 		Enabled        = $False
 	}
-	$GUIUpdateSilent   = New-Object System.Windows.Forms.CheckBox -Property @{
+	$UI_Main_Silent    = New-Object System.Windows.Forms.CheckBox -Property @{
 		Height         = 22
 		Width          = 505
 		Text           = $Lang_Update.UpdateSilent
 		Location       = '12,465'
 		Checked        = $True
 	}
-	$GUIUpdateReset    = New-Object System.Windows.Forms.CheckBox -Property @{
+	$UI_Main_Reset     = New-Object System.Windows.Forms.CheckBox -Property @{
 		Height         = 22
 		Width          = 505
 		Text           = $Lang_Update.UpdateReset
 		Location       = '12,493'
 	}
-	$GUIUpdateResetTips = New-Object system.Windows.Forms.Label -Property @{
+	$UI_Main_Reset_Tips = New-Object system.Windows.Forms.Label -Property @{
 		Location       = "28,518"
 		Height         = 36
 		Width          = 490
 		Text           = $Lang_Update.UpdateResetTips
 	}
-	$GUIUpdateErrorMsg = New-Object system.Windows.Forms.Label -Property @{
+	$UI_Main_Error     = New-Object system.Windows.Forms.Label -Property @{
 		Location       = "10,570"
 		Height         = 22
 		Width          = 490
 		Text           = ""
 	}
-	$GUIUpdateOK       = New-Object system.Windows.Forms.Button -Property @{
+	$UI_Main_OK        = New-Object system.Windows.Forms.Button -Property @{
 		UseVisualStyleBackColor = $True
 		Location       = "8,595"
 		Height         = 36
 		Width          = 515
-		add_Click      = $GUIUpdateOKClick
+		add_Click      = $UI_Main_OK_Click
 		Text           = $lang.OK
 	}
-	$GUIUpdateCanel    = New-Object system.Windows.Forms.Button -Property @{
+	$UI_Main_Canel     = New-Object system.Windows.Forms.Button -Property @{
 		UseVisualStyleBackColor = $True
 		Location       = "8,635"
 		Height         = 36
 		Width          = 515
-		add_Click      = $GUIUpdateCanelClick
+		add_Click      = $UI_Main_Canel_Click
 		Text           = $lang.Cancel
 	}
-	$GUIUpdate.controls.AddRange((
-		$GUIUpdateAuto,
-		$GUIUpdatePanel,
-		$GUIUpdateSilent,
-		$GUIUpdateReset,
-		$GUIUpdateResetTips,
-		$GUIUpdateErrorMsg,
-		$GUIUpdateOK,
-		$GUIUpdateCanel
+	$UI_Main.controls.AddRange((
+		$UI_Main_Auto_Select,
+		$UI_Main_Menu,
+		$UI_Main_Silent,
+		$UI_Main_Reset,
+		$UI_Main_Reset_Tips,
+		$UI_Main_Error,
+		$UI_Main_OK,
+		$UI_Main_Canel
 	))
 
 	foreach ($list in $PreServerList) {
@@ -227,15 +227,15 @@ Function Update_Setting_UI
 			Tag     = $fullurl
 			Checked = $true
 		}
-		$GUIUpdatePanel.controls.AddRange($CheckBox)
+		$UI_Main_Menu.controls.AddRange($CheckBox)
 	}
 
 	<#
 		.Add right-click menu: select all, clear button
 		.添加右键菜单：全选、清除按钮
 	#>
-	$GUIUpdateAllSelClick = {
-		$GUIUpdatePanel.Controls | ForEach-Object {
+	$UI_Main_Menu_Select_All_Select_Click = {
+		$UI_Main_Menu.Controls | ForEach-Object {
 			if ($_ -is [System.Windows.Forms.CheckBox]) {
 				if ($_.Enabled) {
 					$_.Checked = $true
@@ -243,8 +243,8 @@ Function Update_Setting_UI
 			}
 		}
 	}
-	$GUIUpdateAllClearClick = {
-		$GUIUpdatePanel.Controls | ForEach-Object {
+	$UI_Main_Menu_Select_Clear_Click = {
+		$UI_Main_Menu.Controls | ForEach-Object {
 			if ($_ -is [System.Windows.Forms.CheckBox]) {
 				if ($_.Enabled) {
 					$_.Checked = $false
@@ -252,22 +252,22 @@ Function Update_Setting_UI
 			}
 		}
 	}
-	$GUIUpdateMenu = New-Object System.Windows.Forms.ContextMenuStrip
-	$GUIUpdateMenu.Items.Add($lang.AllSel).add_Click($GUIUpdateAllSelClick)
-	$GUIUpdateMenu.Items.Add($lang.AllClear).add_Click($GUIUpdateAllClearClick)
-	$GUIUpdatePanel.ContextMenuStrip = $GUIUpdateMenu
+	$UI_Main_Menu_Select = New-Object System.Windows.Forms.ContextMenuStrip
+	$UI_Main_Menu_Select.Items.Add($lang.AllSel).add_Click($UI_Main_Menu_Select_All_Select_Click)
+	$UI_Main_Menu_Select.Items.Add($lang.AllClear).add_Click($UI_Main_Menu_Select_Clear_Click)
+	$UI_Main_Menu.ContextMenuStrip = $UI_Main_Menu_Select
 
 	switch ($Global:IsLang) {
 		"zh-CN" {
-			$GUIUpdate.Font = New-Object System.Drawing.Font("Microsoft YaHei", 9, [System.Drawing.FontStyle]::Regular)
+			$UI_Main.Font = New-Object System.Drawing.Font("Microsoft YaHei", 9, [System.Drawing.FontStyle]::Regular)
 		}
 		Default {
-			$GUIUpdate.Font = New-Object System.Drawing.Font("Segoe UI", 9, [System.Drawing.FontStyle]::Regular)
+			$UI_Main.Font = New-Object System.Drawing.Font("Segoe UI", 9, [System.Drawing.FontStyle]::Regular)
 		}
 	}
 
-	$GUIUpdate.FormBorderStyle = 'Fixed3D'
-	$GUIUpdate.ShowDialog() | Out-Null
+	$UI_Main.FormBorderStyle = 'Fixed3D'
+	$UI_Main.ShowDialog() | Out-Null
 }
 
 <#

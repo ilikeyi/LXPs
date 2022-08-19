@@ -32,7 +32,10 @@
 	Not_Select                = 사용 가능한 언어가 선택되지 않았습니다
 	MatchDownloadNoNewitem    = 일치하지 않음
 	MatchNoDownloadItem       = 다운로드하지 않은 항목 일치
-	Get_Link_Failed           = 无法获取链接，请检查商店网址。
+	Get_Link_Failed           = 링크를 가져올 수 없습니다.
+	AlreadyExists             = 다운로드되었습니다
+	DownloadNow               = 다운로드 중입니다
+	DownloadFailed            = 다운로드에 실패했습니다
 
 	LXPsAddDelTipsView        = 지금 볼 수있는 새로운 팁이 있습니다
 	LXPsAddDelTips            = 더 이상 메시지가 표시되지 않습니다

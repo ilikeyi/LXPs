@@ -33,38 +33,38 @@ Function LXPs_Download
 		if ($UI_Main_Download.Checked) {
 			$UI_Main_Sync_Some_Location.Enabled = $False
 			$UI_Main_Sync_Some_Location_Tips.Enabled = $False
-			$GUIISOSaveCustomizeSelectFolder.Enabled = $False
-			$GUIISOSaveCustomizeSelectFolderTips.Enabled = $False
-			$GUIISOSaveCustomizePath.Text = "$($GetCurrentDisk)Download\Default"
+			$UI_Main_Select_Folder.Enabled = $False
+			$UI_Main_Select_Folder_Tips.Enabled = $False
+			$UI_Main_Save_To.Text = "$($GetCurrentDisk)Download\Default"
 		} else {
 			$UI_Main_Sync_Some_Location.Enabled = $True
 			$UI_Main_Sync_Some_Location_Tips.Enabled = $True
 			if ($UI_Main_Sync_Some_Location.Checked) {
 				if ([string]::IsNullOrEmpty($UI_Main_Download_Match_Version_Select.Text)) {
-					$GUIISOSaveCustomizePath.Text = "$($GetCurrentDisk)Download\$($RandomGuid)"
+					$UI_Main_Save_To.Text = "$($GetCurrentDisk)Download\$($RandomGuid)"
 				} else {
-					$GUIISOSaveCustomizePath.Text = "$($GetCurrentDisk)Download\$($UI_Main_Download_Match_Version_Select.Text)"
+					$UI_Main_Save_To.Text = "$($GetCurrentDisk)Download\$($UI_Main_Download_Match_Version_Select.Text)"
 				}
 			} else {
 				<#
 					.判断是否有已保存上次选择的目录
 				#>
 				if ([string]::IsNullOrEmpty($Script:InitalSaveToPath)) {
-					$GUIISOSaveCustomizePath.Text = "$($GetCurrentDisk)Download\$($RandomGuid)"
+					$UI_Main_Save_To.Text = "$($GetCurrentDisk)Download\$($RandomGuid)"
 				} else {
-					$GUIISOSaveCustomizePath.Text = $Script:InitalSaveToPath
+					$UI_Main_Save_To.Text = $Script:InitalSaveToPath
 				}
 			}
 		}
 
-		if ([string]::IsNullOrEmpty($GUIISOSaveCustomizePath.Text)) {
+		if ([string]::IsNullOrEmpty($UI_Main_Save_To.Text)) {
 			$UI_Main_Save_To_License.Enabled = $False
 			$UI_Main_Save_To_License_Tips.Enabled = $False
 			$UI_Main_Save_To_Open_Folder.Enabled = $False
 			$UI_Main_Save_To_Paste.Enabled = $False
 			$UI_Main_Match_No_Select_Item.Enabled = $False
 		} else {
-			if (Test-Path $GUIISOSaveCustomizePath.Text -PathType Container) {
+			if (Test-Path $UI_Main_Save_To.Text -PathType Container) {
 				$UI_Main_Save_To_License.Enabled = $True
 				$UI_Main_Save_To_License_Tips.Enabled = $True
 				$UI_Main_Save_To_Open_Folder.Enabled = $True
@@ -246,7 +246,7 @@ Function LXPs_Download
 		事件：匹配未下载项
 	#>
 	$UI_Main_Match_No_Select_Item_Click = {
-		$InitalReportSources = $GUIISOSaveCustomizePath.Text
+		$InitalReportSources = $UI_Main_Save_To.Text
 		$QueueLXPsMatchNoItemSelect = @()
 
 		if (Test-Path -Path "$($InitalReportSources)\LocalExperiencePack" -PathType Container) {
@@ -285,7 +285,7 @@ Function LXPs_Download
 	#>
 	$UI_Main_Save_To_License_Click = {
 		$UI_Main.Hide()
-		LXPs_Download_Licence_Process -Path $GUIISOSaveCustomizePath.Text
+		LXPs_Download_Licence_Process -Path $UI_Main_Save_To.Text
 		$UI_Main.Close()
 	}
 
@@ -336,7 +336,7 @@ Function LXPs_Download
 	
 	$UI_Main_Report_Click = {
 		$UI_Main_Mask_Report_Error.Text = ""
-		$InitalReportSources = $GUIISOSaveCustomizePath.Text
+		$InitalReportSources = $UI_Main_Save_To.Text
 
 		$RandomGuid = [guid]::NewGuid()
 		$UI_Main_Mask_Report_Error.Text = ""
@@ -434,7 +434,7 @@ Function LXPs_Download
 		$RandomGuid = [guid]::NewGuid()
 		$DesktopOldpath = [Environment]::GetFolderPath("Desktop")
 		$UI_Main_Mask_Report_Error.Text = ""
-		$InitalReportSources = (Join_MainFolder -Path $GUIISOSaveCustomizePath.Text)
+		$InitalReportSources = (Join_MainFolder -Path $UI_Main_Save_To.Text)
 
 		if (-not [string]::IsNullOrEmpty($InitalReportSources)) {
 			$UI_Main_Mask_Report_Sources_Path.Text = $InitalReportSources
@@ -469,7 +469,7 @@ Function LXPs_Download
 	<#
 		.事件：自定义选择保存到目录
 	#>
-	$GUIISOSaveCustomizeSelectFolderClick = {
+	$UI_Main_Select_Folder_Click = {
 		$UI_Main_Error.Text = ""
 
 		$FolderBrowser   = New-Object System.Windows.Forms.FolderBrowserDialog -Property @{
@@ -482,7 +482,7 @@ Function LXPs_Download
 			
 			if (Test-Path -Path "$($InitalReportSources)" -PathType Container) {
 				if (Test_Available_Disk -Path $InitalReportSources) {
-					$GUIISOSaveCustomizePath.Text = $InitalReportSources
+					$UI_Main_Save_To.Text = $InitalReportSources
 					$Script:InitalSaveToPath = $InitalReportSources
 
 					<#
@@ -506,9 +506,9 @@ Function LXPs_Download
 		.事件：打开目录
 	#>
 	$UI_Main_Save_To_Open_Folder_Click = {
-		if (-not [string]::IsNullOrEmpty($GUIISOSaveCustomizePath.Text)) {
-			if (Test-Path $GUIISOSaveCustomizePath.Text -PathType Container) {
-				Start-Process $GUIISOSaveCustomizePath.Text
+		if (-not [string]::IsNullOrEmpty($UI_Main_Save_To.Text)) {
+			if (Test-Path $UI_Main_Save_To.Text -PathType Container) {
+				Start-Process $UI_Main_Save_To.Text
 			}
 		}
 	}
@@ -517,8 +517,8 @@ Function LXPs_Download
 		.事件：复制路径
 	#>
 	$UI_Main_Save_To_Paste_Click = {
-		if (-not [string]::IsNullOrEmpty($GUIISOSaveCustomizePath.Text)) {
-			Set-Clipboard -Value $GUIISOSaveCustomizePath.Text
+		if (-not [string]::IsNullOrEmpty($UI_Main_Save_To.Text)) {
+			Set-Clipboard -Value $UI_Main_Save_To.Text
 		}
 	}
 
@@ -826,19 +826,19 @@ Function LXPs_Download
 	<#
 		.保存到
 	#>
-	$GUIISOSaveTo      = New-Object system.Windows.Forms.Label -Property @{
+	$UI_Main_Save_To_Name      = New-Object system.Windows.Forms.Label -Property @{
 		Height         = 25
 		Width          = 455
 		Text           = $Lang_Download.SaveTo
 	}
-	$GUIISOSaveCustomizePath = New-Object System.Windows.Forms.TextBox -Property @{
+	$UI_Main_Save_To = New-Object System.Windows.Forms.TextBox -Property @{
 		Height         = 22
 		Width          = 435
 		margin         = "24,5,0,15"
 		ReadOnly       = $True
 		Text           = ""
 	}
-	$GUIISOSaveCustomizeSelectFolder = New-Object system.Windows.Forms.LinkLabel -Property @{
+	$UI_Main_Select_Folder = New-Object system.Windows.Forms.LinkLabel -Property @{
 		Height         = 30
 		Width          = 455
 		margin         = "22,5,0,0"
@@ -846,9 +846,9 @@ Function LXPs_Download
 		LinkColor      = "GREEN"
 		ActiveLinkColor = "RED"
 		LinkBehavior   = "NeverUnderline"
-		add_Click      = $GUIISOSaveCustomizeSelectFolderClick
+		add_Click      = $UI_Main_Select_Folder_Click
 	}
-	$GUIISOSaveCustomizeSelectFolderTips = New-Object system.Windows.Forms.Label -Property @{
+	$UI_Main_Select_Folder_Tips = New-Object system.Windows.Forms.Label -Property @{
 		autoSize       = 1
 		Padding        = "36,0,15,0"
 		margin         = "0,0,0,15"
@@ -928,7 +928,7 @@ Function LXPs_Download
 		.显示更改区域设置蒙层
 	#>
 	$UI_Main_Mask_Report = New-Object system.Windows.Forms.Panel -Property @{
-		BorderStyle    = 1
+		BorderStyle    = 0
 		Height         = 760
 		Width          = 1025
 		autoSizeMode   = 1
@@ -941,7 +941,7 @@ Function LXPs_Download
 		Width          = 530
 		Padding        = "8,0,8,0"
 		Location       = "15,10"
-		BorderStyle    = 1
+		BorderStyle    = 0
 		autoSizeMode   = 0
 		autoScroll     = $True
 	}
@@ -1216,8 +1216,8 @@ Function LXPs_Download
 		<#
 			.保存到
 		#>
-		$GUIISOSaveTo,
-		$GUIISOSaveCustomizePath,
+		$UI_Main_Save_To_Name,
+		$UI_Main_Save_To,
 
 		<#
 			.打开目录
@@ -1232,8 +1232,8 @@ Function LXPs_Download
 		<#
 			.选择目录
 		#>
-		$GUIISOSaveCustomizeSelectFolder,
-		$GUIISOSaveCustomizeSelectFolderTips,
+		$UI_Main_Select_Folder,
+		$UI_Main_Select_Folder_Tips,
 
 		<#
 			.同步目录与版本号相同

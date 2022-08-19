@@ -4,6 +4,7 @@
 	Update                    = 업데이트 확인
 	AddTo                     = 에 추가
 	Done                      = 수행하다
+	Failed                    = 실패했습니다
 	StartVerify               = 다운로드 작업 확인
 	OK                        = 결정
 	Cancel                    = 취소
