@@ -378,14 +378,14 @@ Function Language_Change
 		[string]$lang
 	)
 
-	if (Test-Path "$($PSScriptRoot)\langpacks\$($lang)" -PathType Container) {
+	if (Test-Path "$($PSScriptRoot)\langpacks\$($lang)\Lang.psd1" -PathType Leaf) {
 		$Global:IsLang = $lang
 
 		Get-ChildItem –Path "$($PSScriptRoot)\langpacks\$($lang)" –Recurse -include "*.psd1" | ForEach-Object {
 			Import-LocalizedData -BindingVariable "Global:$($_.BaseName)" -UICulture $lang -FileName $_.BaseName -BaseDirectory $_.DirectoryName
 		}
 	} else {
-		if (Test-Path "$($PSScriptRoot)\langpacks\en-US" -PathType Container) {
+		if (Test-Path "$($PSScriptRoot)\langpacks\en-US\Lang.psd1" -PathType Leaf) {
 			$Global:IsLang = "en-US"
 
 			Get-ChildItem –Path "$($PSScriptRoot)\langpacks\en-US" –Recurse -include "*.psd1" | ForEach-Object {

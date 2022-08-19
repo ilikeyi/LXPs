@@ -4,6 +4,7 @@
 	Update                    = 检查更新
 	AddTo                     = 添加
 	Done                      = 完成
+	Failed                    = 失败
 	StartVerify               = 验证下载任务
 	OK                        = 确定
 	Cancel                    = 取消
@@ -19,4 +20,5 @@
 	ToMsg                     = \n   {0} 秒后自动返回到主菜单。
 	ToQuit                    = \n   {0} 秒后退出主菜单。
 	UserCancel                = 用户已取消操作。
+	Detailed                  = 详细
 '@

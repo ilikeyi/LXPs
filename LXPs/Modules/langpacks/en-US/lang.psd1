@@ -4,6 +4,7 @@
 	Update                    = Check for updates
 	AddTo                     = Add
 	Done                      = Complete
+	Failed                    = Failed
 	StartVerify               = Verify download task
 	OK                        = OK
 	Cancel                    = Cancel
@@ -19,4 +20,5 @@
 	ToMsg                     = \n   Automatically return to the main menu after {0} seconds.
 	ToQuit                    = \n   Exit the main menu in {0} seconds.
 	UserCancel                = The user has cancelled the operation.
+	Detailed                  = Detailed
 '@

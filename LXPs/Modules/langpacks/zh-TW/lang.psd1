@@ -19,4 +19,5 @@
 	ToMsg                     = \n   {0} 秒後自動返回到主菜單。
 	ToQuit                    = \n   {0} 秒後退出主菜單。
 	UserCancel                = 用戶已取消操作。
+	Detailed                  = 詳細
 '@

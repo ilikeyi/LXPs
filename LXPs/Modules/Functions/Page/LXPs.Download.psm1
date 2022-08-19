@@ -26,20 +26,24 @@ Function LXPs_Download
 	Add-Type -AssemblyName System.Drawing
 	[System.Windows.Forms.Application]::EnableVisualStyles()
 
-	Function Refresh_Download_Sources_To
+	Function LXPs_Refresh_Sources_To_Event
 	{
 		$RandomGuid = [guid]::NewGuid()
 
-		if ($GUILangChangeDownloadAll.Checked) {
-			$GUIISOSaveToSelectPanel.Enabled = $False
+		if ($UI_Main_Download.Checked) {
+			$UI_Main_Sync_Some_Location.Enabled = $False
+			$UI_Main_Sync_Some_Location_Tips.Enabled = $False
+			$GUIISOSaveCustomizeSelectFolder.Enabled = $False
+			$GUIISOSaveCustomizeSelectFolderTips.Enabled = $False
 			$GUIISOSaveCustomizePath.Text = "$($GetCurrentDisk)Download\Default"
 		} else {
-			$GUIISOSaveToSelectPanel.Enabled = $True
-			if ($GUIISOSaveToSync.Checked) {
-				if ([string]::IsNullOrEmpty($GUILangChangeNumberShow.Text)) {
+			$UI_Main_Sync_Some_Location.Enabled = $True
+			$UI_Main_Sync_Some_Location_Tips.Enabled = $True
+			if ($UI_Main_Sync_Some_Location.Checked) {
+				if ([string]::IsNullOrEmpty($UI_Main_Download_Match_Version_Select.Text)) {
 					$GUIISOSaveCustomizePath.Text = "$($GetCurrentDisk)Download\$($RandomGuid)"
 				} else {
-					$GUIISOSaveCustomizePath.Text = "$($GetCurrentDisk)Download\$($GUILangChangeNumberShow.Text)"
+					$GUIISOSaveCustomizePath.Text = "$($GetCurrentDisk)Download\$($UI_Main_Download_Match_Version_Select.Text)"
 				}
 			} else {
 				<#
@@ -54,24 +58,50 @@ Function LXPs_Download
 		}
 
 		if ([string]::IsNullOrEmpty($GUIISOSaveCustomizePath.Text)) {
-			$GUIISOSaveToPanel.Enabled = $False
+			$UI_Main_Save_To_License.Enabled = $False
+			$UI_Main_Save_To_License_Tips.Enabled = $False
+			$UI_Main_Save_To_Open_Folder.Enabled = $False
+			$UI_Main_Save_To_Paste.Enabled = $False
+			$UI_Main_Match_No_Select_Item.Enabled = $False
 		} else {
 			if (Test-Path $GUIISOSaveCustomizePath.Text -PathType Container) {
-				$GUIISOSaveToPanel.Enabled = $True
+				$UI_Main_Save_To_License.Enabled = $True
+				$UI_Main_Save_To_License_Tips.Enabled = $True
+				$UI_Main_Save_To_Open_Folder.Enabled = $True
+				$UI_Main_Save_To_Paste.Enabled = $True
+				$UI_Main_Match_No_Select_Item.Enabled = $True
 			} else {
-				$GUIISOSaveToPanel.Enabled = $False
+				$UI_Main_Save_To_License.Enabled = $False
+				$UI_Main_Save_To_License_Tips.Enabled = $False
+				$UI_Main_Save_To_Open_Folder.Enabled = $False
+				$UI_Main_Save_To_Paste.Enabled = $False
+				$UI_Main_Match_No_Select_Item.Enabled = $False
 			}
 		}
+	}
+
+	<#
+		.事件：显示规则详细
+	#>
+	$UI_Main_Languages_Detailed_View_Click = {
+		$UI_Main_Languages_Detailed_View_Mask.Visible = $True
+	}
+
+	<#
+		.事件：隐藏显示规则详细
+	#>
+	$UI_Main_Languages_Detailed_View_Mask_Canel_Click = {
+		$UI_Main_Languages_Detailed_View_Mask.Visible = $False
 	}
 
 	<#
 		.事件：选择已知版本
 	#>
 	$GUILangChangeSelectVersionClick = {
-		$GUILangChangeSelectVersion.Controls | ForEach-Object {
+		$UI_Main_Download_Match_Version.Controls | ForEach-Object {
 			if ($_ -is [System.Windows.Forms.RadioButton]) {
 				if ($_.Checked) {
-					$GUILangChangeNumberShow.Text = $_.Tag
+					$UI_Main_Download_Match_Version_Select.Text = $_.Tag
 				}
 			}
 		}
@@ -81,7 +111,7 @@ Function LXPs_Download
 		.Event: Download all
 		.事件：显示更改已知版本
 	#>
-	$GUILangChangeSelectOKClick = {
+	$UI_Main_Download_Match_Version_OK_Click = {
 		<#
 			.验证自定义 ISO 默认保存到目录名
 		#>
@@ -89,8 +119,8 @@ Function LXPs_Download
 			.Judgment: 1. Null value
 			.判断：1. 空值
 		#>
-		if ([string]::IsNullOrEmpty($GUILangChangeNumberShow.Text)) {
-			$GUILangChangeSelectErrorMsg.Text = "$($Upgrade_Package.SelectFromError -f $($Lang_Download.NoSetLabel))"
+		if ([string]::IsNullOrEmpty($UI_Main_Download_Match_Version_Select.Text)) {
+			$UI_Main_Download_Match_Version_Error.Text = "$($Upgrade_Package.SelectFromError -f $($Lang_Download.NoSetLabel))"
 			return
 		}
 
@@ -98,8 +128,8 @@ Function LXPs_Download
 			.Judgment: 2. The prefix cannot contain spaces
 			.判断：2. 前缀不能带空格
 		#>
-		if ($GUILangChangeNumberShow.Text -match '^\s') {
-			$GUILangChangeSelectErrorMsg.Text = "$($Upgrade_Package.SelectFromError -f $($Lang_Download.ISO9660TipsErrorSpace))"
+		if ($UI_Main_Download_Match_Version_Select.Text -match '^\s') {
+			$UI_Main_Download_Match_Version_Error.Text = "$($Upgrade_Package.SelectFromError -f $($Lang_Download.ISO9660TipsErrorSpace))"
 			return
 		}
 
@@ -107,8 +137,8 @@ Function LXPs_Download
 			.Judgment: 3. Suffix cannot contain spaces
 			.判断：3. 后缀不能带空格
 		#>
-		if ($GUILangChangeNumberShow.Text -match '\s$') {
-			$GUILangChangeSelectErrorMsg.Text = "$($Upgrade_Package.SelectFromError -f $($Lang_Download.ISO9660TipsErrorSpace))"
+		if ($UI_Main_Download_Match_Version_Select.Text -match '\s$') {
+			$UI_Main_Download_Match_Version_Error.Text = "$($Upgrade_Package.SelectFromError -f $($Lang_Download.ISO9660TipsErrorSpace))"
 			return
 		}
 
@@ -116,8 +146,8 @@ Function LXPs_Download
 			.Judgment: 4. The suffix cannot contain multiple spaces
 			.判断：4. 后缀不能带多空格
 		#>
-		if ($GUILangChangeNumberShow.Text -match '\s{2,}$') {
-			$GUILangChangeSelectErrorMsg.Text = "$($Upgrade_Package.SelectFromError -f $($Lang_Download.ISO9660TipsErrorSpace))"
+		if ($UI_Main_Download_Match_Version_Select.Text -match '\s{2,}$') {
+			$UI_Main_Download_Match_Version_Error.Text = "$($Upgrade_Package.SelectFromError -f $($Lang_Download.ISO9660TipsErrorSpace))"
 			return
 		}
 
@@ -125,8 +155,8 @@ Function LXPs_Download
 			.Judgment: 5. There can be no two spaces in between
 			.判断：5. 中间不能含有二个空格
 		#>
-		if ($GUILangChangeNumberShow.Text -match '\s{1,}') {
-			$GUILangChangeSelectErrorMsg.Text = "$($Upgrade_Package.SelectFromError -f $($Lang_Download.ISO9660TipsErrorSpace))"
+		if ($UI_Main_Download_Match_Version_Select.Text -match '\s{1,}') {
+			$UI_Main_Download_Match_Version_Error.Text = "$($Upgrade_Package.SelectFromError -f $($Lang_Download.ISO9660TipsErrorSpace))"
 			return
 		}
 
@@ -134,8 +164,8 @@ Function LXPs_Download
 			.Judgment: 6. Cannot contain: A-Z
 			.判断：6. 不能包含：字母 A-Z
 		#>
-		if ($GUILangChangeNumberShow.Text -match '[A-Za-z]+') {
-			$GUILangChangeSelectErrorMsg.Text = "$($Upgrade_Package.SelectFromError -f $($Lang_Download.ISO9660TipsErrorAZ))"
+		if ($UI_Main_Download_Match_Version_Select.Text -match '[A-Za-z]+') {
+			$UI_Main_Download_Match_Version_Error.Text = "$($Upgrade_Package.SelectFromError -f $($Lang_Download.ISO9660TipsErrorAZ))"
 			return
 		}
 
@@ -143,8 +173,8 @@ Function LXPs_Download
 			.Judgment: 7. Cannot contain: \\ /: *? "" <> |
 			.判断：7, 不能包含：\\ / : * ? "" < > |
 		#>
-		if ($GUILangChangeNumberShow.Text -match '[~#$@!%&*{}<>?/|+".]') {
-			$GUILangChangeSelectErrorMsg.Text = "$($Upgrade_Package.SelectFromError -f $($Lang_Download.ISO9660TipsErrorOther))"
+		if ($UI_Main_Download_Match_Version_Select.Text -match '[~#$@!%&*{}<>?/|+".]') {
+			$UI_Main_Download_Match_Version_Error.Text = "$($Upgrade_Package.SelectFromError -f $($Lang_Download.ISO9660TipsErrorOther))"
 			return
 		}
 
@@ -152,8 +182,8 @@ Function LXPs_Download
 			.Judgment: 8. Can't be less than 5 characters
 			.判断：8. 不能小于 5 字符
 		#>
-		if ($GUILangChangeNumberShow.Text.length -lt 5) {
-			$GUILangChangeSelectErrorMsg.Text = "$($Upgrade_Package.SelectFromError -f $($Lang_Download.ISOShortError -f "5"))"
+		if ($UI_Main_Download_Match_Version_Select.Text.length -lt 5) {
+			$UI_Main_Download_Match_Version_Error.Text = "$($Upgrade_Package.SelectFromError -f $($Lang_Download.ISOShortError -f "5"))"
 			return
 		}
 
@@ -161,58 +191,61 @@ Function LXPs_Download
 			.Judgment: 9. No more than 16 characters
 			.判断：9. 不能大于 16 字符
 		#>
-		if ($GUILangChangeNumberShow.Text.length -gt 16) {
-			$GUILangChangeSelectErrorMsg.Text = "$($Upgrade_Package.SelectFromError -f $($Lang_Download.ISOLengthError -f "16"))"
+		if ($UI_Main_Download_Match_Version_Select.Text.length -gt 16) {
+			$UI_Main_Download_Match_Version_Error.Text = "$($Upgrade_Package.SelectFromError -f $($Lang_Download.ISOLengthError -f "16"))"
 			return
 		}
-		$GUILangChangeNumberGroupCL.Visible = 0
+
+		$UI_Main_Download_Match_Version_Menu.Visible = 0
 
 		<#
 			.验证自定义 ISO 默认保存到目录名，结束并保存新路径
 		#>
-		Save_Dynamic -regkey "LXPs" -name "LXPsSelect" -value $GUILangChangeNumberShow.Text -String
-		$GUILangChangeDownloadMatchSetting.Text = $GUILangChangeNumberShow.Text
+		Save_Dynamic -regkey "LXPs" -name "LXPsSelect" -value $UI_Main_Download_Match_Version_Select.Text -String
+		$UI_Main_Download_Match_Filter_Results.Text = $UI_Main_Download_Match_Version_Select.Text
 
-		Refresh_Download_Sources_To
+		LXPs_Refresh_Sources_To_Event
 	}
-	$GUIImageSourceGroupCLCanelClick = {
-		$GUILangChangeSelectVersion.Controls | ForEach-Object {
+	$UI_Main_Download_Match_Version_Canel_Click = {
+		$UI_Main_Download_Match_Version.Controls | ForEach-Object {
 			if ($_ -is [System.Windows.Forms.RadioButton]) { $_.Checked = $false }
 		}
-		$GUILangChangeNumberGroupCL.Visible = 0
+		$UI_Main_Download_Match_Version_Menu.Visible = 0
 	}
-	$GUILangChangeNewClick = {
-		$GUILangChangeSelectVersion.Controls | ForEach-Object {
+	$UI_Main_Download_Match_Filter_Setting_Click = {
+		$UI_Main_Download_Match_Version.Controls | ForEach-Object {
 			if ($_ -is [System.Windows.Forms.RadioButton]) { $_.Checked = $false }
 		}
-		$GUILangChangeSelectErrorMsg.Text = ""
-		$GUILangChangeNumberGroupCL.Visible = 1
+		$UI_Main_Download_Match_Version_Error.Text = ""
+		$UI_Main_Download_Match_Version_Menu.Visible = 1
 	}
 
 	<#
 		.Event: Download all
 		.事件：下载全部
 	#>
-	$GUILangChangeDownloadAllClick = {
-		if ($GUILangChangeDownloadAll.Checked) {
+	$UI_Main_Download_Click = {
+		if ($UI_Main_Download.Checked) {
 			Save_Dynamic -regkey "LXPs" -name "IsDownloadAll" -value "True" -String
-			$GUILangChangeDownloadPanel.Enabled = $False
-			$GUILangChangeSelectVersion.Enabled = $False
-			$GUIISOSaveToSelectPanel.Enabled = $False
+			$UI_Main_Download_Menu.Enabled = $False
+			$UI_Main_Download_Match_Version.Enabled = $False
+			$UI_Main_Sync_Some_Location.Enabled = $False
+			$UI_Main_Sync_Some_Location_Tips.Enabled = $False
 		} else {
 			Save_Dynamic -regkey "LXPs" -name "IsDownloadAll" -value "False" -String
-			$GUILangChangeDownloadPanel.Enabled = $True
-			$GUILangChangeSelectVersion.Enabled = $True
-			$GUIISOSaveToSelectPanel.Enabled = $True
+			$UI_Main_Download_Menu.Enabled = $True
+			$UI_Main_Download_Match_Version.Enabled = $True
+			$UI_Main_Sync_Some_Location.Enabled = $True
+			$UI_Main_Sync_Some_Location_Tips.Enabled = $True
 		}
 
-		Refresh_Download_Sources_To
+		LXPs_Refresh_Sources_To_Event
 	}
 
 	<#
 		事件：匹配未下载项
 	#>
-	$GUILangMatchNoDownloadItemClick = {
+	$UI_Main_Match_No_Select_Item_Click = {
 		$InitalReportSources = $GUIISOSaveCustomizePath.Text
 		$QueueLXPsMatchNoItemSelect = @()
 
@@ -233,7 +266,7 @@ Function LXPs_Download
 		}
 
 		if ($QueueLXPsMatchNoItemSelect.count -gt 0) {
-			$GUILangChangeShowGroupCLVersion.Controls | ForEach-Object {
+			$UI_Main_Available_Languages_Select.Controls | ForEach-Object {
 				if ($_ -is [System.Windows.Forms.CheckBox]) {
 					if ($($QueueLXPsMatchNoItemSelect) -contains $_.Tag) {
 						$_.Checked = $True
@@ -250,18 +283,18 @@ Function LXPs_Download
 	<#
 		.事件：生成 License.xml
 	#>
-	$GUIISOAdvAppsLicenseClick = {
-		$GUILangChange.Hide()
+	$UI_Main_Save_To_License_Click = {
+		$UI_Main.Hide()
 		LXPs_Download_Licence_Process -Path $GUIISOSaveCustomizePath.Text
-		$GUILangChange.Close()
+		$UI_Main.Close()
 	}
 
 	<#
 		.事件：生成报告
 	#>
-	$GUILangReportOKClick = {
+	$UI_Main_Mask_Report_OK_Click = {
 		$MarkVerifyWrite = $False
-		$InitalReportSources = $GUILangReportShowSourcesPath.Text
+		$InitalReportSources = $UI_Main_Mask_Report_Sources_Path.Text
 		if (-not [string]::IsNullOrEmpty($InitalReportSources)) {
 			if (Test-Path -Path "$($InitalReportSources)" -PathType Container) {
 				$MarkVerifyWrite = $True
@@ -269,45 +302,62 @@ Function LXPs_Download
 		}
 
 		if ($MarkVerifyWrite) {
-			$GUILangChange.Hide()
-			LXPs_Download_Report_Process -Path $GUILangReportShowSourcesPath.Text -SaveTo $GUILangChangeReportSaveToPath.Text
-			$GUILangChange.Close()
+			$UI_Main.Hide()
+			LXPs_Download_Report_Process -Path $UI_Main_Mask_Report_Sources_Path.Text -SaveTo $UI_Main_Mask_Report_Save_To.Text
+			$UI_Main.Close()
 		} else {
-			$GUILangReportErrorMsg.Text = $($lang.Inoperable)
+			$UI_Main_Mask_Report_Error.Text = $($lang.Inoperable)
 		}
 	}
 	
-	$GUILangReportCreateClick = {
+	Function LXPs_Refresh_Sources_To_Status
+	{
+		$UI_Main_Mask_Report_Error.Text = ""
 		$RandomGuid = [guid]::NewGuid()
+		$InitalReportSources = $UI_Main_Mask_Report_Sources_Path.Text
 		$DesktopOldpath = [Environment]::GetFolderPath("Desktop")
+
+		if (Test-Path -Path "$($InitalReportSources)" -PathType Container) {
+			if (Test_Available_Disk -Path $InitalReportSources) {
+				$UI_Main_Mask_Report_Sources_Open_Folder.Enabled = $True
+				$UI_Main_Mask_Report_Sources_Paste.Enabled = $True
+				$UI_Main_Mask_Report_Save_To.Text = "$($InitalReportSources)\Report.$($RandomGuid).csv"
+			} else {
+				$UI_Main_Mask_Report_Sources_Open_Folder.Enabled = $False
+				$UI_Main_Mask_Report_Sources_Paste.Enabled = $False
+				$UI_Main_Mask_Report_Save_To.Text = "$($DesktopOldpath)\Report.$($RandomGuid).csv"
+			}
+		} else {
+			$UI_Main_Mask_Report_Sources_Open_Folder.Enabled = $False
+			$UI_Main_Mask_Report_Sources_Paste.Enabled = $False
+			$UI_Main_Mask_Report_Save_To.Text = "$($DesktopOldpath)\Report.$($RandomGuid).csv"
+		}
+	}
+	
+	$UI_Main_Report_Click = {
+		$UI_Main_Mask_Report_Error.Text = ""
 		$InitalReportSources = $GUIISOSaveCustomizePath.Text
-		$GUILangReportErrorMsg.Text = ""
+
+		$RandomGuid = [guid]::NewGuid()
+		$UI_Main_Mask_Report_Error.Text = ""
+
 		<#
 			.判断保存到是否为空，如果不为空则随机生成新的保存路径
 		#>
 		if ([string]::IsNullOrEmpty($InitalReportSources)) {
-			$GUILangChangeReportSaveToPath.Text = "$($InitalReportSources)\Report.$($RandomGuid).csv"
+			$UI_Main_Mask_Report_Save_To.Text = "$($InitalReportSources)\Report.$($RandomGuid).csv"
 		} else {
-			$GUILangReportShowSourcesPath.Text = $InitalReportSources
-
-			if (Test-Path -Path "$($InitalReportSources)" -PathType Container) {
-				if (Test_Available_Disk -Path $InitalReportSources) {
-					$GUILangChangeReportSaveToPath.Text = "$($InitalReportSources)\Report.$($RandomGuid).csv"
-				} else {
-					$GUILangChangeReportSaveToPath.Text = "$($DesktopOldpath)\Report.$($RandomGuid).csv"
-				}
-			} else {
-				$GUILangChangeReportSaveToPath.Text = "$($DesktopOldpath)\Report.$($RandomGuid).csv"
-			}
+			$UI_Main_Mask_Report_Sources_Path.Text = $InitalReportSources
 		}
 
-		$GUILangReportPanel.visible = $True
+		LXPs_Refresh_Sources_To_Status
+		$UI_Main_Mask_Report.visible = $True
 	}
-	$GUILangReportCanelClick = {
-		$GUILangReportPanel.visible = $False
+	$UI_Main_Mask_Report_Canel_Click = {
+		$UI_Main_Mask_Report.visible = $False
 	}
 
-	$GUILangChangeReportSaveToSelectFolderClick = {
+	$UI_Main_Mask_Report_Select_Folder_Click = {
 		$RandomGuid = [guid]::NewGuid()
 
 		$FileBrowser = New-Object System.Windows.Forms.SaveFileDialog -Property @{ 
@@ -316,25 +366,25 @@ Function LXPs_Download
 		}
 
 		if ($FileBrowser.ShowDialog() -eq "OK") {
-			$GUILangChangeReportSaveToPath.Text = $FileBrowser.FileName
+			$UI_Main_Mask_Report_Save_To.Text = $FileBrowser.FileName
 		} else {
-			$GUILangReportErrorMsg.Text = $($lang.UserCancel)
+			$UI_Main_Mask_Report_Error.Text = $($lang.UserCancel)
 		}
 	}
 
 	<#
 		.事件：复制路径
 	#>
-	$GUILangChangeReportSaveToPathPasteClick = {
-		if (-not [string]::IsNullOrEmpty($GUILangChangeReportSaveToPath.Text)) {
-			Set-Clipboard -Value $GUILangChangeReportSaveToPath.Text
+	$UI_Main_Mask_Report_Paste_Click = {
+		if (-not [string]::IsNullOrEmpty($UI_Main_Mask_Report_Save_To.Text)) {
+			Set-Clipboard -Value $UI_Main_Mask_Report_Save_To.Text
 		}
 	}
 
-	$GUILangReportShowSourcesSelectFolderClick = {
+	$UI_Main_Mask_Report_Sources_Select_Folder_Click = {
 		$RandomGuid = [guid]::NewGuid()
 		$DesktopOldpath = [Environment]::GetFolderPath("Desktop")
-		$GUILangReportErrorMsg.Text = ""
+		$UI_Main_Mask_Report_Error.Text = ""
 
 		$FolderBrowser = New-Object System.Windows.Forms.FolderBrowserDialog -Property @{
 			RootFolder = "MyComputer"
@@ -342,74 +392,78 @@ Function LXPs_Download
 
 		if ($FolderBrowser.ShowDialog() -eq "OK") {
 			$InitalReportSources = (Join_MainFolder -Path $FolderBrowser.SelectedPath)
-			$GUILangReportShowSourcesPath.Text = $InitalReportSources
+			$UI_Main_Mask_Report_Sources_Path.Text = $InitalReportSources
 			
 			if (Test-Path -Path "$($InitalReportSources)" -PathType Container) {
 				if (Test_Available_Disk -Path $InitalReportSources) {
-					$GUILangChangeReportSaveToPath.Text = "$($InitalReportSources)Report.$($RandomGuid).csv"
+					$UI_Main_Mask_Report_Save_To.Text = "$($InitalReportSources)Report.$($RandomGuid).csv"
 				} else {
-					$GUILangChangeReportSaveToPath.Text = "$($DesktopOldpath)\Report.$($RandomGuid).csv"
+					$UI_Main_Mask_Report_Save_To.Text = "$($DesktopOldpath)\Report.$($RandomGuid).csv"
 				}
+
+				LXPs_Refresh_Sources_To_Status
 			} else {
-				$GUILangChangeReportSaveToPath.Text = "$($DesktopOldpath)\Report.$($RandomGuid).csv"
+				$UI_Main_Mask_Report_Save_To.Text = "$($DesktopOldpath)\Report.$($RandomGuid).csv"
 			}
 		} else {
-			$GUILangReportErrorMsg.Text = "$($lang.UserCancel)"
+			$UI_Main_Mask_Report_Error.Text = "$($lang.UserCancel)"
 		}
 	}
 	<#
 		.事件：打开目录
 	#>
-	$GUILangReportShowSourcesOpenClick = {
-		if (-not [string]::IsNullOrEmpty($GUILangReportShowSourcesPath.Text)) {
-			if (Test-Path $GUILangReportShowSourcesPath.Text -PathType Container) {
-				Start-Process $GUILangReportShowSourcesPath.Text
+	$UI_Main_Mask_Report_Sources_Open_Folder_Click = {
+		if (-not [string]::IsNullOrEmpty($UI_Main_Mask_Report_Sources_Path.Text)) {
+			if (Test-Path $UI_Main_Mask_Report_Sources_Path.Text -PathType Container) {
+				Start-Process $UI_Main_Mask_Report_Sources_Path.Text
 			}
 		}
 	}
 	<#
 		.事件：复制路径
 	#>
-	$GUILangReportShowSourcesPasteClick = {
-		if (-not [string]::IsNullOrEmpty($GUILangReportShowSourcesPath.Text)) {
-			Set-Clipboard -Value $GUILangReportShowSourcesPath.Text
+	$UI_Main_Mask_Report_Sources_Paste_Click = {
+		if (-not [string]::IsNullOrEmpty($UI_Main_Mask_Report_Sources_Path.Text)) {
+			Set-Clipboard -Value $UI_Main_Mask_Report_Sources_Path.Text
 		}
 	}
 	<#
 		.事件：同步来源位置与下载到位置一致
 	#>#>
-	$GUILangReportShowSourcesSyncClick = {
+	$UI_Main_Mask_Report_Sources_Sync_Click = {
 		$RandomGuid = [guid]::NewGuid()
 		$DesktopOldpath = [Environment]::GetFolderPath("Desktop")
-		$GUILangReportErrorMsg.Text = ""
+		$UI_Main_Mask_Report_Error.Text = ""
 		$InitalReportSources = (Join_MainFolder -Path $GUIISOSaveCustomizePath.Text)
 
 		if (-not [string]::IsNullOrEmpty($InitalReportSources)) {
-			$GUILangReportShowSourcesPath.Text = $InitalReportSources
+			$UI_Main_Mask_Report_Sources_Path.Text = $InitalReportSources
 
 			if (Test-Path -Path "$($InitalReportSources)" -PathType Container) {
 				if (Test_Available_Disk -Path $InitalReportSources) {
-					$GUILangChangeReportSaveToPath.Text = "$($InitalReportSources)Report.$($RandomGuid).csv"
+					$UI_Main_Mask_Report_Save_To.Text = "$($InitalReportSources)Report.$($RandomGuid).csv"
 				} else {
-					$GUILangChangeReportSaveToPath.Text = "$($DesktopOldpath)\Report.$($RandomGuid).csv"
+					$UI_Main_Mask_Report_Save_To.Text = "$($DesktopOldpath)\Report.$($RandomGuid).csv"
 				}
 			} else {
-				$GUILangChangeReportSaveToPath.Text = "$($DesktopOldpath)\Report.$($RandomGuid).csv"
+				$UI_Main_Mask_Report_Save_To.Text = "$($DesktopOldpath)\Report.$($RandomGuid).csv"
 			}
 		}
+
+		LXPs_Refresh_Sources_To_Status
 	}
 
 	<#
 		.事件：保存目录位置与筛选版本号同步
 	#>
-	$GUIISOSaveToSyncClick = {
-		if ($GUIISOSaveToSync.Checked) {
+	$UI_Main_Sync_Some_Location_Click = {
+		if ($UI_Main_Sync_Some_Location.Checked) {
 			Save_Dynamic -regkey "LXPs" -name "IsSyncSaveTo" -value "True" -String
 		} else {
 			Save_Dynamic -regkey "LXPs" -name "IsSyncSaveTo" -value "False" -String
 		}
 
-		Refresh_Download_Sources_To
+		LXPs_Refresh_Sources_To_Event
 	}
 
 	<#
@@ -424,7 +478,7 @@ Function LXPs_Download
 
 		if ($FolderBrowser.ShowDialog() -eq "OK") {
 			$InitalReportSources = (Join_MainFolder -Path $FolderBrowser.SelectedPath)
-			$GUILangReportShowSourcesPath.Text = $InitalReportSources
+			$UI_Main_Mask_Report_Sources_Path.Text = $InitalReportSources
 			
 			if (Test-Path -Path "$($InitalReportSources)" -PathType Container) {
 				if (Test_Available_Disk -Path $InitalReportSources) {
@@ -434,7 +488,7 @@ Function LXPs_Download
 					<#
 						.更换成功后，关闭同步来源位置与下载位置一致，复选框
 					#>
-					$GUIISOSaveToSync.Checked = $False
+					$UI_Main_Sync_Some_Location.Checked = $False
 				} else {
 					$UI_Main_Error.Text = "$($lang.Inoperable)"
 				}
@@ -444,12 +498,14 @@ Function LXPs_Download
 		} else {
 			$UI_Main_Error.Text = "$($lang.UserCancel)"
 		}
+
+		LXPs_Refresh_Sources_To_Event
 	}
 
 	<#
 		.事件：打开目录
 	#>
-	$GUIISOSaveCustomizeOpenFolderClick = {
+	$UI_Main_Save_To_Open_Folder_Click = {
 		if (-not [string]::IsNullOrEmpty($GUIISOSaveCustomizePath.Text)) {
 			if (Test-Path $GUIISOSaveCustomizePath.Text -PathType Container) {
 				Start-Process $GUIISOSaveCustomizePath.Text
@@ -460,21 +516,21 @@ Function LXPs_Download
 	<#
 		.事件：复制路径
 	#>
-	$GUIISOSaveCustomizePasteClick = {
+	$UI_Main_Save_To_Paste_Click = {
 		if (-not [string]::IsNullOrEmpty($GUIISOSaveCustomizePath.Text)) {
 			Set-Clipboard -Value $GUIISOSaveCustomizePath.Text
 		}
 	}
 
-	$GUILangChangeTipsDoNotClick = {
-		if ($GUILangChangeTipsDoNot.Checked) {
+	$UI_Main_Tips_Mask_DoNot_Click = {
+		if ($UI_Main_Tips_Mask_DoNot.Checked) {
 			Save_Dynamic -regkey "LXPs" -name "LXPsTipsWarning" -value "True" -String
 		} else {
 			Save_Dynamic -regkey "LXPs" -name "LXPsTipsWarning" -value "False" -String
 		}
 	}
-	$GUILangChangeTipsViewClick = { $GUILangChangeTips.Visible = 1 }
-	$GUILangChangeTipsCanelClick = { $GUILangChangeTips.Visible = 0 }
+	$UI_Main_Tips_Mask_View_Click = { $UI_Main_Tips_Mask.Visible = 1 }
+	$UI_Main_Tips_Mask_Canel_Click = { $UI_Main_Tips_Mask.Visible = 0 }
 
 	<#
 		.Event: canceled
@@ -483,7 +539,7 @@ Function LXPs_Download
 	$UI_Main_Canel_Click = {
 		Write-Host "   $($lang.UserCancel)" -ForegroundColor Red
 		$Script:Queue_Language_Download_Select = @()
-		$GUILangChange.Close()
+		$UI_Main.Close()
 	}
 
 	<#
@@ -493,7 +549,7 @@ Function LXPs_Download
 	$UI_Main_OK_Click = {
 		$Script:Queue_Language_Download_Select = @()
 
-		$GUILangChangeShowGroupCLVersion.Controls | ForEach-Object {
+		$UI_Main_Available_Languages_Select.Controls | ForEach-Object {
 			if ($_ -is [System.Windows.Forms.CheckBox]) {
 				if ($_.Enabled) {
 					if ($_.Checked) {
@@ -510,36 +566,36 @@ Function LXPs_Download
 			return
 		}
 
-		if ([string]::IsNullOrEmpty($GUILangChangeDownloadMatchSetting.Text)) {
+		if ([string]::IsNullOrEmpty($UI_Main_Download_Match_Filter_Results.Text)) {
 			$UI_Main_Error.Text = "$($Upgrade_Package.SelectFromError -f $($Lang_Downloadr.OSVersion))"
 			return
 		}
 
-		$GUILangChange.Hide()
-		$Script:Version = $GUILangChangeDownloadMatchSetting.Text
+		$UI_Main.Hide()
+		$Script:Version = $UI_Main_Download_Match_Filter_Results.Text
 		$Script:IsDownload = $False
 		$Script:IsRename = $False
 		$Script:IsLicence = $False
 
-		if ($GUILangChangeDownloadAll.Checked) {
+		if ($UI_Main_Download.Checked) {
 			$Script:IsDownload = $True
 		} else {
-			if ($GUILangChangeRuleRename.Checked) {
+			if ($UI_Main_Download_Rename.Checked) {
 				$Script:IsRename = $True
 			}
 
-			if ($GUILangChangeLicence.Checked) {
+			if ($UI_Main_Download_Licence.Checked) {
 				$Script:IsLicence = $True
 			}
 		}
 
 		LXPs_Download_Process
-		$GUILangChange.Close()
+		$UI_Main.Close()
 	}
-	$GUILangChange     = New-Object system.Windows.Forms.Form -Property @{
+	$UI_Main           = New-Object system.Windows.Forms.Form -Property @{
 		autoScaleMode  = 2
 		Height         = 720
-		Width          = 878
+		Width          = 928
 		Text           = $lang.LXPs
 		StartPosition  = "CenterScreen"
 		MaximizeBox    = $False
@@ -548,10 +604,11 @@ Function LXPs_Download
 		BackColor      = "#ffffff"
 	}
 
-	$GUILangChangeSelect = New-Object system.Windows.Forms.FlowLayoutPanel -Property @{
+	$UI_Main_Menu      = New-Object system.Windows.Forms.FlowLayoutPanel -Property @{
 		Height         = 665
-		Width          = 500
+		Width          = 530
 		Location       = "10,10"
+		Padding        = "10,0,0,0"
 		BorderStyle    = 0
 		autoScroll     = $True
 	}
@@ -559,25 +616,35 @@ Function LXPs_Download
 	<#
 		.可用语言
 	#>
-	$GUILangSelectAdvTips = New-Object system.Windows.Forms.Label -Property @{
+	$UI_Main_Available_Languages_Name = New-Object system.Windows.Forms.Label -Property @{
 		Height         = 30
 		Width          = 340
 		Text           = $Lang_Download.AvailableLanguages
 	}
-	$GUILangChangeShowGroupCLVersion = New-Object system.Windows.Forms.FlowLayoutPanel -Property @{
+	$UI_Main_Available_Languages_Select = New-Object system.Windows.Forms.FlowLayoutPanel -Property @{
 		BorderStyle    = 0
-		Height         = 200
-		Width          = 475
+		Height         = 225
+		Width          = 495
 		Padding        = "18,0,0,0"
-		margin         = "0,0,0,25"
+		margin         = "0,0,0,20"
 		autoSizeMode   = 0
 		autoScroll     = $True
 	}
+	$UI_Main_Languages_Detailed_View = New-Object system.Windows.Forms.LinkLabel -Property @{
+		Height         = 28
+		Width          = 495
+		Padding        = "16,0,0,0"
+		Text           = $lang.Detailed
+		LinkColor      = "GREEN"
+		ActiveLinkColor = "RED"
+		LinkBehavior   = "NeverUnderline"
+		add_Click      = $UI_Main_Languages_Detailed_View_Click
+	}
 
 	<#
-		.组：选择已知版本号
+		.蒙板：显示规则详细信息
 	#>
-	$GUILangChangeNumberGroupCL = New-Object system.Windows.Forms.Panel -Property @{
+	$UI_Main_Languages_Detailed_View_Mask = New-Object system.Windows.Forms.Panel -Property @{
 		BorderStyle    = 0
 		Height         = 678
 		Width          = 923
@@ -586,13 +653,47 @@ Function LXPs_Download
 		Location       = '0,0'
 		Visible        = 0
 	}
-	$GUILangChangeSelectVersionTitle = New-Object system.Windows.Forms.Label -Property @{
+	$UI_Main_Languages_Detailed_View_Mask_Results = New-Object System.Windows.Forms.RichTextBox -Property @{
+		Height         = 580
+		Width          = 880
+		BorderStyle    = 0
+		Location       = "15,15"
+		Text           = ""
+		BackColor      = "#FFFFFF"
+		ReadOnly       = $True
+	}
+
+	<#
+		.事件，隐藏显示规则详细
+	#>
+	$UI_Main_Languages_Detailed_View_Mask_Canel = New-Object system.Windows.Forms.Button -Property @{
+		UseVisualStyleBackColor = $True
+		Location       = "620,635"
+		Height         = 36
+		Width          = 280
+		add_Click      = $UI_Main_Languages_Detailed_View_Mask_Canel_Click
+		Text           = $lang.Cancel
+	}
+
+	<#
+		.组：选择已知版本号
+	#>
+	$UI_Main_Download_Match_Version_Menu = New-Object system.Windows.Forms.Panel -Property @{
+		BorderStyle    = 0
+		Height         = 678
+		Width          = 923
+		autoSizeMode   = 1
+		Padding        = "8,0,8,0"
+		Location       = '0,0'
+		Visible        = 0
+	}
+	$UI_Main_Download_Match_Version_Name = New-Object system.Windows.Forms.Label -Property @{
 		Height         = 22
 		Width          = 240
 		Location       = "15,10"
 		Text           = $Lang_Download.OSVersion
 	}
-	$GUILangChangeSelectVersion = New-Object system.Windows.Forms.FlowLayoutPanel -Property @{
+	$UI_Main_Download_Match_Version = New-Object system.Windows.Forms.FlowLayoutPanel -Property @{
 		Height         = 640
 		Width          = 340
 		Padding        = "8,0,8,0"
@@ -602,72 +703,73 @@ Function LXPs_Download
 		autoScroll     = $True
 	}
 
-	$GUILangChangeNumberGroupCLShowTitle = New-Object system.Windows.Forms.Label -Property @{
+	$UI_Main_Download_Match_Version_Select_Name = New-Object system.Windows.Forms.Label -Property @{
 		Height         = 25
 		Width          = 400
 		Location       = "405,15"
 		Text           = $Lang_Download.LXPsFilter
 	}
-	$GUILangChangeNumberShow = New-Object System.Windows.Forms.TextBox -Property @{
+	$UI_Main_Download_Match_Version_Select = New-Object System.Windows.Forms.TextBox -Property @{
 		Height         = 22
 		Width          = 385
 		Location       = "426,45"
 		Text           = ""
 	}
-	$GUILangChangeNumberShowTips = New-Object system.Windows.Forms.Label -Property @{
+	$UI_Main_Download_Match_Version_Select_Tips = New-Object system.Windows.Forms.Label -Property @{
 		Height         = 150
 		Width          = 385
 		Location       = "425,80"
 		Text           = $Lang_Download.LXPsDownloadTips
 	}
 
-	$GUILangChangeSelectErrorMsg = New-Object system.Windows.Forms.Label -Property @{
+	$UI_Main_Download_Match_Version_Error = New-Object system.Windows.Forms.Label -Property @{
 		Location       = "405,565"
 		Height         = 22
 		Width          = 445
 		Text           = ""
 	}
-	$GUILangChangeSelectOK = New-Object system.Windows.Forms.Button -Property @{
+	$UI_Main_Download_Match_Version_OK = New-Object system.Windows.Forms.Button -Property @{
 		UseVisualStyleBackColor = $True
-		Location       = "570,595"
+		Location       = "620,595"
 		Height         = 36
 		Width          = 280
-		add_Click      = $GUILangChangeSelectOKClick
+		add_Click      = $UI_Main_Download_Match_Version_OK_Click
 		Text           = $lang.OK
 	}
-	$GUIImageSourceGroupCLCanel = New-Object system.Windows.Forms.Button -Property @{
+	$UI_Main_Download_Match_Version_Canel = New-Object system.Windows.Forms.Button -Property @{
 		UseVisualStyleBackColor = $True
-		Location       = "570,635"
+		Location       = "620,635"
 		Height         = 36
 		Width          = 280
-		add_Click      = $GUIImageSourceGroupCLCanelClick
+		add_Click      = $UI_Main_Download_Match_Version_Canel_Click
 		Text           = $lang.Cancel
 	}
 
 	<#
 		.下载全部
 	#>
-	$GUILangChangeDownloadAll = New-Object System.Windows.Forms.CheckBox -Property @{
+	$UI_Main_Download = New-Object System.Windows.Forms.CheckBox -Property @{
 		Height         = 25
 		Width          = 385
+		margin         = "0,25,0,0"
 		Text           = $Lang_Download.DownloadAll
 		Checked        = $True
-		add_Click      = $GUILangChangeDownloadAllClick
+		add_Click      = $UI_Main_Download_Click
 	}
 
-	$GUILangChangeDownloadPanel = New-Object system.Windows.Forms.FlowLayoutPanel -Property @{
+	$UI_Main_Download_Menu = New-Object system.Windows.Forms.FlowLayoutPanel -Property @{
 		Padding        = "16,0,0,0"
 		margin         = "0,0,0,30"
 		BorderStyle    = 0
 		autoSize       = 1
 		autoSizeMode   = 1
 	}
-	$GUILangChangeDownloadMatch = New-Object system.Windows.Forms.Label -Property @{
+	$UI_Main_Download_Match_Filter = New-Object system.Windows.Forms.Label -Property @{
 		Height         = 30
 		Width          = 395
 		Text           = $Lang_Download.LXPsFilter
 	}
-	$GUILangChangeDownloadMatchSetting = New-Object system.Windows.Forms.LinkLabel -Property @{
+	$UI_Main_Download_Match_Filter_Results = New-Object system.Windows.Forms.LinkLabel -Property @{
 		Height         = 30
 		Width          = 395
 		Padding        = "16,0,0,0"
@@ -675,9 +777,9 @@ Function LXPs_Download
 		LinkColor      = "GREEN"
 		ActiveLinkColor = "RED"
 		LinkBehavior   = "NeverUnderline"
-		add_Click      = $GUILangChangeNewClick
+		add_Click      = $UI_Main_Download_Match_Filter_Setting_Click
 	}
-	$GUILangChangeNew = New-Object system.Windows.Forms.LinkLabel -Property @{
+	$UI_Main_Download_Match_Filter_Setting = New-Object system.Windows.Forms.LinkLabel -Property @{
 		Height         = 30
 		Width          = 395
 		Padding        = "16,0,0,0"
@@ -685,39 +787,39 @@ Function LXPs_Download
 		LinkColor      = "GREEN"
 		ActiveLinkColor = "RED"
 		LinkBehavior   = "NeverUnderline"
-		add_Click      = $GUILangChangeNewClick
+		add_Click      = $UI_Main_Download_Match_Filter_Setting_Click
 	}
-	$GUILangChangeDownloadMatchTips = New-Object system.Windows.Forms.Label -Property @{
+	$UI_Main_Download_Match_Filter_Setting_Tips = New-Object system.Windows.Forms.Label -Property @{
 		autoSize       = 1
 		Padding        = "16,0,15,5"
 		Text           = $Lang_Download.LXPsDownloadTips
 	}
 
-	$GUILangChangeRuleRename = New-Object System.Windows.Forms.CheckBox -Property @{
+	$UI_Main_Download_Rename = New-Object System.Windows.Forms.CheckBox -Property @{
 		Height         = 25
 		Width          = 385
-		margin         = "0,20,0,0"
+		margin         = "22,20,0,0"
 		Text           = $Lang_Download.LXPsRename
 		Checked        = $True
-		add_Click      = $GUILangChangeDownloadAllClick
+		add_Click      = $UI_Main_Download_Click
 	}
-	$GUILangChangeRuleRenameTips = New-Object system.Windows.Forms.Label -Property @{
+	$UI_Main_Download_Rename_Tips = New-Object system.Windows.Forms.Label -Property @{
 		autoSize       = 1
-		Padding        = "14,0,15,0"
+		Padding        = "36,0,15,0"
 		Text           = $Lang_Download.LXPsRenameTips
 	}
 
-	$GUILangChangeLicence = New-Object System.Windows.Forms.CheckBox -Property @{
+	$UI_Main_Download_Licence = New-Object System.Windows.Forms.CheckBox -Property @{
 		Height         = 25
 		Width          = 385
-		margin         = "0,20,0,0"
+		margin         = "22,20,0,0"
 		Text           = $Lang_Download.LicenseCreate
 		Checked        = $True
-		add_Click      = $GUILangChangeDownloadAllClick
+		add_Click      = $UI_Main_Download_Click
 	}
-	$GUILangChangeLicenceTips = New-Object system.Windows.Forms.Label -Property @{
+	$UI_Main_Download_Licence_Tips = New-Object system.Windows.Forms.Label -Property @{
 		autoSize       = 1
-		Padding        = "14,0,15,0"
+		Padding        = "36,0,15,0"
 		Text           = $Lang_Download.LicenseCreateTips
 	}
 
@@ -753,87 +855,80 @@ Function LXPs_Download
 		Text           = $Lang_Download.SelectFolderTips
 	}
 
-	$GUIISOSaveToSelectPanel = New-Object system.Windows.Forms.FlowLayoutPanel -Property @{
-		BorderStyle    = 0
-		autoSize       = 1
-		autoSizeMode   = 1
-		Padding        = "16,0,0,0"
-	}
-	$GUIISOSaveToSync  = New-Object System.Windows.Forms.CheckBox -Property @{
+	$UI_Main_Sync_Some_Location = New-Object System.Windows.Forms.CheckBox -Property @{
 		Height         = 25
 		Width          = 455
+		margin         = "22,5,0,0"
 		Text           = $Lang_Download.SaveToSync
-		add_Click      = $GUIISOSaveToSyncClick
+		add_Click      = $UI_Main_Sync_Some_Location_Click
 	}
-	$GUIISOSaveToSyncTips = New-Object system.Windows.Forms.Label -Property @{
+	$UI_Main_Sync_Some_Location_Tips = New-Object system.Windows.Forms.Label -Property @{
 		autoSize       = 1
-		Padding        = "18,0,15,0"
-		margin         = "0,0,0,25"
+		Padding        = "36,0,15,0"
+		margin         = "0,0,0,15"
 		Text           = $Lang_Download.SaveToSyncTips
 	}
 
-	$GUIISOSaveToPanel = New-Object system.Windows.Forms.FlowLayoutPanel -Property @{
-		BorderStyle    = 0
-		autoSize       = 1
-		autoSizeMode   = 1
-		Padding        = "16,0,0,0"
-		margin         = "0,0,0,15"
-	}
 	<#
 		.证书
 	#>
-	$GUIISOAdvAppsLicense = New-Object system.Windows.Forms.LinkLabel -Property @{
+	$UI_Main_Save_To_License = New-Object system.Windows.Forms.LinkLabel -Property @{
 		Height         = 30
 		Width          = 455
+		margin         = "22,5,0,0"
 		Text           = $Lang_Download.LicenseCreate
 		LinkColor      = "GREEN"
 		ActiveLinkColor = "RED"
 		LinkBehavior   = "NeverUnderline"
-		add_Click      = $GUIISOAdvAppsLicenseClick
+		add_Click      = $UI_Main_Save_To_License_Click
 	}
-	$GUIISOAdvAppsLicenseTips = New-Object system.Windows.Forms.Label -Property @{
+	$UI_Main_Save_To_License_Tips = New-Object system.Windows.Forms.Label -Property @{
 		autoSize       = 1
-		Padding        = "18,0,15,0"
-		margin         = "0,0,0,25"
+		Padding        = "36,0,15,0"
+		margin         = "0,0,0,15"
 		Text           = $Lang_Download.LicenseCreateTips
 	}
-	$GUIISOSaveCustomizeOpenFolder = New-Object system.Windows.Forms.LinkLabel -Property @{
+
+	$UI_Main_Save_To_Open_Folder = New-Object system.Windows.Forms.LinkLabel -Property @{
 		Height         = 30
 		Width          = 455
+		margin         = "22,5,0,0"
 		Text           = $Lang_Download.OpenFolder
 		LinkColor      = "GREEN"
 		ActiveLinkColor = "RED"
 		LinkBehavior   = "NeverUnderline"
-		add_Click      = $GUIISOSaveCustomizeOpenFolderClick
+		add_Click      = $UI_Main_Save_To_Open_Folder_Click
 	}
-	$GUIISOSaveCustomizePaste = New-Object system.Windows.Forms.LinkLabel -Property @{
+	$UI_Main_Save_To_Paste = New-Object system.Windows.Forms.LinkLabel -Property @{
 		Height         = 30
 		Width          = 455
+		margin         = "22,5,0,0"
 		Text           = $Lang_Download.Paste
 		LinkColor      = "GREEN"
 		ActiveLinkColor = "RED"
 		LinkBehavior   = "NeverUnderline"
-		add_Click      = $GUIISOSaveCustomizePasteClick
+		add_Click      = $UI_Main_Save_To_Paste_Click
 	}
 
 	<#
 		.匹配未下载项
 	#>
-	$GUILangMatchNoDownloadItem = New-Object system.Windows.Forms.LinkLabel -Property @{
+	$UI_Main_Match_No_Select_Item = New-Object system.Windows.Forms.LinkLabel -Property @{
 		Height         = 30
 		Width          = 455
+		margin         = "22,5,0,0"
 		Text           = $Lang_Download.MatchNoDownloadItem
 		LinkColor      = "GREEN"
 		ActiveLinkColor = "RED"
 		LinkBehavior   = "NeverUnderline"
-		add_Click      = $GUILangMatchNoDownloadItemClick
+		add_Click      = $UI_Main_Match_No_Select_Item_Click
 	}
 
 	<#
 		.显示更改区域设置蒙层
 	#>
-	$GUILangReportPanel = New-Object system.Windows.Forms.Panel -Property @{
-		BorderStyle    = 0
+	$UI_Main_Mask_Report = New-Object system.Windows.Forms.Panel -Property @{
+		BorderStyle    = 1
 		Height         = 760
 		Width          = 1025
 		autoSizeMode   = 1
@@ -841,143 +936,143 @@ Function LXPs_Download
 		Location       = '0,0'
 		Visible        = 0
 	}
-	$GUILangReportShow = New-Object system.Windows.Forms.FlowLayoutPanel -Property @{
+	$UI_Main_Mask_Report_Menu = New-Object system.Windows.Forms.FlowLayoutPanel -Property @{
 		Height         = 665
-		Width          = 450
+		Width          = 530
 		Padding        = "8,0,8,0"
 		Location       = "15,10"
-		BorderStyle    = 0
+		BorderStyle    = 1
 		autoSizeMode   = 0
 		autoScroll     = $True
 	}
-	$GUILangReportShowTitle = New-Object System.Windows.Forms.Label -Property @{
+	$UI_Main_Mask_Report_Sources_Name = New-Object System.Windows.Forms.Label -Property @{
 		Height         = 22
-		Width          = 300
+		Width          = 480
 		Text           = $Lang_Download.AdvAppsDetailed
 	}
-	$GUILangReportShowTitleTips = New-Object system.Windows.Forms.Label -Property @{
+	$UI_Main_Mask_Report_Sources_Name_Tips = New-Object system.Windows.Forms.Label -Property @{
 		autoSize       = 1
 		Padding        = "16,0,0,0"
 		margin         = "0,0,0,20"
 		Text           = $Lang_Download.AdvAppsDetailedTips
 	}
 
-	$GUILangReportShowSelectSources = New-Object System.Windows.Forms.Label -Property @{
+	$UI_Main_Mask_Report_Sources_Path_Name = New-Object System.Windows.Forms.Label -Property @{
 		Height         = 22
-		Width          = 400
+		Width          = 480
 		Text           = $Lang_Download.ProcessSources
 	}
-	$GUILangReportShowSourcesPath = New-Object System.Windows.Forms.TextBox -Property @{
+	$UI_Main_Mask_Report_Sources_Path = New-Object System.Windows.Forms.TextBox -Property @{
 		Height         = 22
-		Width          = 370
-		margin         = "18,5,0,10"
+		Width          = 450
+		margin         = "18,5,0,15"
 		Text           = ""
 		ReadOnly       = $True
 	}
-	$GUILangReportShowSourcesSelectFolder = New-Object system.Windows.Forms.LinkLabel -Property @{
-		Height         = 30
-		Width          = 425
+	$UI_Main_Mask_Report_Sources_Select_Folder = New-Object system.Windows.Forms.LinkLabel -Property @{
+		Height         = 35
+		Width          = 480
 		Padding        = "16,0,0,0"
 		Text           = $Lang_Download.SelectFolder
 		LinkColor      = "GREEN"
 		ActiveLinkColor = "RED"
 		LinkBehavior   = "NeverUnderline"
-		add_Click      = $GUILangReportShowSourcesSelectFolderClick
+		add_Click      = $UI_Main_Mask_Report_Sources_Select_Folder_Click
 	}
-	$GUILangReportShowSourcesOpen = New-Object system.Windows.Forms.LinkLabel -Property @{
-		Height         = 30
-		Width          = 425
+	$UI_Main_Mask_Report_Sources_Open_Folder = New-Object system.Windows.Forms.LinkLabel -Property @{
+		Height         = 35
+		Width          = 480
 		Padding        = "16,0,0,0"
 		Text           = $Lang_Download.OpenFolder
 		LinkColor      = "GREEN"
 		ActiveLinkColor = "RED"
 		LinkBehavior   = "NeverUnderline"
-		add_Click      = $GUILangReportShowSourcesOpenClick
+		add_Click      = $UI_Main_Mask_Report_Sources_Open_Folder_Click
 	}
-	$GUILangReportShowSourcesPaste = New-Object system.Windows.Forms.LinkLabel -Property @{
-		Height         = 30
-		Width          = 425
+	$UI_Main_Mask_Report_Sources_Paste = New-Object system.Windows.Forms.LinkLabel -Property @{
+		Height         = 35
+		Width          = 480
 		Padding        = "16,0,0,0"
 		Text           = $Lang_Download.Paste
 		LinkColor      = "GREEN"
 		ActiveLinkColor = "RED"
 		LinkBehavior   = "NeverUnderline"
-		add_Click      = $GUILangReportShowSourcesPasteClick
+		add_Click      = $UI_Main_Mask_Report_Sources_Paste_Click
 	}
-	$GUILangReportShowSourcesSync = New-Object system.Windows.Forms.LinkLabel -Property @{
-		Height         = 30
-		Width          = 425
+	$UI_Main_Mask_Report_Sources_Sync = New-Object system.Windows.Forms.LinkLabel -Property @{
+		Height         = 35
+		Width          = 480
 		Padding        = "16,0,0,0"
 		Text           = $Lang_Download.SaveToSync
 		LinkColor      = "GREEN"
 		ActiveLinkColor = "RED"
 		LinkBehavior   = "NeverUnderline"
-		add_Click      = $GUILangReportShowSourcesSyncClick
+		add_Click      = $UI_Main_Mask_Report_Sources_Sync_Click
 	}
 
 	<#
 		.报告保存到
 	#>
-	$GUILangChangeReportSaveTo = New-Object System.Windows.Forms.Label -Property @{
+	$UI_Main_Mask_Report_Save_To_Name = New-Object System.Windows.Forms.Label -Property @{
 		Height         = 22
-		Width          = 400
+		Width          = 480
 		margin         = "0,30,0,0"
 		Text           = $Lang_Download.SaveTo
 	}
-	$GUILangChangeReportSaveToPath = New-Object System.Windows.Forms.TextBox -Property @{
+	$UI_Main_Mask_Report_Save_To = New-Object System.Windows.Forms.TextBox -Property @{
 		Height         = 22
-		Width          = 370
+		Width          = 450
 		margin         = "20,5,0,15"
 		Text           = ""
 		ReadOnly       = $True
 	}
-	$GUILangChangeReportSaveToSelectFolder = New-Object system.Windows.Forms.LinkLabel -Property @{
-		Height         = 30
-		Width          = 425
+	$UI_Main_Mask_Report_Select_Folder = New-Object system.Windows.Forms.LinkLabel -Property @{
+		Height         = 35
+		Width          = 480
 		Padding        = "16,0,0,0"
 		Text           = $Lang_Download.SelectFolder
 		LinkColor      = "GREEN"
 		ActiveLinkColor = "RED"
 		LinkBehavior   = "NeverUnderline"
-		add_Click      = $GUILangChangeReportSaveToSelectFolderClick
+		add_Click      = $UI_Main_Mask_Report_Select_Folder_Click
 	}
-	$GUILangChangeReportSaveToPathPaste = New-Object system.Windows.Forms.LinkLabel -Property @{
-		Height         = 30
-		Width          = 425
+	$UI_Main_Mask_Report_Paste = New-Object system.Windows.Forms.LinkLabel -Property @{
+		Height         = 35
+		Width          = 480
 		Padding        = "16,0,0,0"
 		Text           = $Lang_Download.Paste
 		LinkColor      = "GREEN"
 		ActiveLinkColor = "RED"
 		LinkBehavior   = "NeverUnderline"
-		add_Click      = $GUILangChangeReportSaveToPathPasteClick
+		add_Click      = $UI_Main_Mask_Report_Paste_Click
 	}
-	$GUILangReportErrorMsg = New-Object system.Windows.Forms.Label -Property @{
-		Location       = "570,565"
+	$UI_Main_Mask_Report_Error = New-Object system.Windows.Forms.Label -Property @{
+		Location       = "620,565"
 		Height         = 22
 		Width          = 280
 		Text           = ""
 	}
-	$GUILangReportOK = New-Object system.Windows.Forms.Button -Property @{
+	$UI_Main_Mask_Report_OK = New-Object system.Windows.Forms.Button -Property @{
 		UseVisualStyleBackColor = $True
-		Location       = "570,595"
+		Location       = "620,595"
 		Height         = 36
 		Width          = 280
-		add_Click      = $GUILangReportOKClick
+		add_Click      = $UI_Main_Mask_Report_OK_Click
 		Text           = $lang.OK
 	}
-	$GUILangReportCanel = New-Object system.Windows.Forms.Button -Property @{
+	$UI_Main_Mask_Report_Canel = New-Object system.Windows.Forms.Button -Property @{
 		UseVisualStyleBackColor = $True
-		Location       = "570,635"
+		Location       = "620,635"
 		Height         = 36
 		Width          = 280
-		add_Click      = $GUILangReportCanelClick
+		add_Click      = $UI_Main_Mask_Report_Canel_Click
 		Text           = $lang.Cancel
 	}
 
 	<#
 		.显示提示蒙层
 	#>
-	$GUILangChangeTips   = New-Object system.Windows.Forms.Panel -Property @{
+	$UI_Main_Tips_Mask = New-Object system.Windows.Forms.Panel -Property @{
 		BorderStyle    = 0
 		Height         = 760
 		Width          = 898
@@ -986,156 +1081,192 @@ Function LXPs_Download
 		Location       = '0,0'
 		Visible        = 0
 	}
-	$GUILangChangeTipsMsg = New-Object System.Windows.Forms.RichTextBox -Property @{
+	$UI_Main_Tips_Mask_Results = New-Object System.Windows.Forms.RichTextBox -Property @{
 		Height         = 580
-		Width          = 845
+		Width          = 830
 		BorderStyle    = 0
 		Location       = "15,15"
 		Text           = $Lang_Download.LXPsGetSNTips
 		BackColor      = "#FFFFFF"
 		ReadOnly       = $True
 	}
-	$GUILangChangeTipsDoNot = New-Object System.Windows.Forms.CheckBox -Property @{
+	$UI_Main_Tips_Mask_DoNot = New-Object System.Windows.Forms.CheckBox -Property @{
 		Location       = "20,635"
 		Height         = 25
 		Width          = 440
 		Text           = $Lang_Download.LXPsAddDelTips
-		add_Click      = $GUILangChangeTipsDoNotClick
+		add_Click      = $UI_Main_Tips_Mask_DoNot_Click
 	}
-	$GUILangChangeTipsCanel = New-Object system.Windows.Forms.Button -Property @{
+	$UI_Main_Tips_Mask_Canel = New-Object system.Windows.Forms.Button -Property @{
 		UseVisualStyleBackColor = $True
-		Location       = "570,635"
+		Location       = "620,635"
 		Height         = 36
 		Width          = 280
-		add_Click      = $GUILangChangeTipsCanelClick
+		add_Click      = $UI_Main_Tips_Mask_Canel_Click
 		Text           = $lang.Cancel
 	}
-	$GUILangChangeTipsView = New-Object system.Windows.Forms.LinkLabel -Property @{
+
+	$UI_Main_Report    = New-Object system.Windows.Forms.Button -Property @{
+		UseVisualStyleBackColor = $True
+		Location       = "620,10"
+		Height         = 36
+		Width          = 280
+		add_Click      = $UI_Main_Report_Click
+		Text           = $Lang_Download.AdvAppsDetailed
+	}
+	$UI_Main_Tips_Mask_View = New-Object system.Windows.Forms.LinkLabel -Property @{
 		Height         = 22
 		Width          = 280
 		Text           = $Lang_Download.LXPsAddDelTipsView
-		Location       = "570,520"
+		Location       = "620,520"
 		LinkColor      = "GREEN"
 		ActiveLinkColor = "RED"
 		LinkBehavior   = "NeverUnderline"
-		add_Click      = $GUILangChangeTipsViewClick
-	}
-
-	$GUILangReportCreate = New-Object system.Windows.Forms.Button -Property @{
-		UseVisualStyleBackColor = $True
-		Location       = "570,10"
-		Height         = 36
-		Width          = 280
-		add_Click      = $GUILangReportCreateClick
-		Text           = $Lang_Download.AdvAppsDetailed
+		add_Click      = $UI_Main_Tips_Mask_View_Click
 	}
 	$UI_Main_Error     = New-Object system.Windows.Forms.Label -Property @{
-		Location       = "570,568"
+		Location       = "620,568"
 		Height         = 22
 		Width          = 280
 		Text           = ""
 	}
 	$UI_Main_OK        = New-Object system.Windows.Forms.Button -Property @{
 		UseVisualStyleBackColor = $True
-		Location       = "570,595"
+		Location       = "620,595"
 		Height         = 36
 		Width          = 280
 		add_Click      = $UI_Main_OK_Click
 		Text           = $lang.StartVerify
 	}
-	$UI_Main_Canel = New-Object system.Windows.Forms.Button -Property @{
+	$UI_Main_Canel     = New-Object system.Windows.Forms.Button -Property @{
 		UseVisualStyleBackColor = $True
-		Location       = "570,635"
+		Location       = "620,635"
 		Height         = 36
 		Width          = 280
 		add_Click      = $UI_Main_Canel_Click
 		Text           = $lang.Cancel
 	}
-	$GUILangChange.controls.AddRange((
-		$GUILangChangeTips,
-		$GUILangReportPanel,
-		$GUILangChangeNumberGroupCL,
-		$GUILangChangeSelect,
-		$GUILangReportCreate,
-		$GUILangChangeTipsView,
+	$UI_Main.controls.AddRange((
+		$UI_Main_Languages_Detailed_View_Mask,
+		$UI_Main_Tips_Mask,
+		$UI_Main_Mask_Report,
+		$UI_Main_Download_Match_Version_Menu,
+		$UI_Main_Menu,
+		$UI_Main_Report,
+		$UI_Main_Tips_Mask_View,
 		$UI_Main_Error,
 		$UI_Main_OK,
 		$UI_Main_Canel
 	))
-	$GUILangChangeTips.controls.AddRange((
-		$GUILangChangeTipsMsg,
-		$GUILangChangeTipsDoNot,
-		$GUILangChangeTipsCanel
+
+	<#
+		.蒙板：显示语言详细信息
+	#>
+	$UI_Main_Languages_Detailed_View_Mask.controls.AddRange((
+		$UI_Main_Languages_Detailed_View_Mask_Results,
+		$UI_Main_Languages_Detailed_View_Mask_Canel
 	))
-	$GUILangReportPanel.controls.AddRange((
-		$GUILangReportShow,
-		$GUILangReportErrorMsg,
-		$GUILangReportOK,
-		$GUILangReportCanel
+
+	<#
+		.你有新的提示
+	#>
+	$UI_Main_Tips_Mask.controls.AddRange((
+		$UI_Main_Tips_Mask_Results,
+		$UI_Main_Tips_Mask_DoNot,
+		$UI_Main_Tips_Mask_Canel
 	))
-	$GUILangReportShow.controls.AddRange((
-		$GUILangReportShowTitle,
-		$GUILangReportShowTitleTips,
-		$GUILangReportShowSelectSources,
-		$GUILangReportShowSourcesPath,
-		$GUILangReportShowSourcesSelectFolder,
 
-
-		$GUILangReportShowSourcesOpen,
-		$GUILangReportShowSourcesPaste,
-		$GUILangReportShowSourcesSync,
-		$GUILangChangeReportSaveTo,
-		$GUILangChangeReportSaveToPath,
-		$GUILangChangeReportSaveToSelectFolder,
-		$GUILangChangeReportSaveToPathPaste
+	<#
+		.蒙板，报告
+	#>
+	$UI_Main_Mask_Report.controls.AddRange((
+		$UI_Main_Mask_Report_Menu,
+		$UI_Main_Mask_Report_Error,
+		$UI_Main_Mask_Report_OK,
+		$UI_Main_Mask_Report_Canel
 	))
-	$GUILangChangeSelect.controls.AddRange((
-		$GUILangSelectAdvTips,
-		$GUILangChangeShowGroupCLVersion,
+	$UI_Main_Mask_Report_Menu.controls.AddRange((
+		$UI_Main_Mask_Report_Sources_Name,
+		$UI_Main_Mask_Report_Sources_Name_Tips,
+		$UI_Main_Mask_Report_Sources_Path_Name,
+		$UI_Main_Mask_Report_Sources_Path,
+		$UI_Main_Mask_Report_Sources_Select_Folder,
+		$UI_Main_Mask_Report_Sources_Open_Folder,
+		$UI_Main_Mask_Report_Sources_Paste,
+		$UI_Main_Mask_Report_Sources_Sync,
+		$UI_Main_Mask_Report_Save_To_Name,
+		$UI_Main_Mask_Report_Save_To,
+		$UI_Main_Mask_Report_Select_Folder,
+		$UI_Main_Mask_Report_Paste
+	))
+	$UI_Main_Menu.controls.AddRange((
+		<#
+			.可用语言
+		#>
+		$UI_Main_Available_Languages_Name,
+		$UI_Main_Available_Languages_Select,
+		$UI_Main_Languages_Detailed_View,
 
-		$GUILangChangeDownloadAll,
-		$GUILangChangeDownloadPanel,
+		<#
+			.选择全部下载
+		#>
+		$UI_Main_Download,
+		$UI_Main_Download_Menu,
 
+		<#
+			.保存到
+		#>
 		$GUIISOSaveTo,
 		$GUIISOSaveCustomizePath,
+
+		<#
+			.打开目录
+		#>
+		$UI_Main_Save_To_Open_Folder,
+
+		<#
+			.粘贴
+		#>
+		$UI_Main_Save_To_Paste,
+
+		<#
+			.选择目录
+		#>
 		$GUIISOSaveCustomizeSelectFolder,
 		$GUIISOSaveCustomizeSelectFolderTips,
-#		$GUIISOSaveCustomizeOpenFolder,
-#		$GUIISOSaveCustomizePaste,
 
-		$GUIISOSaveToSelectPanel,
-		$GUIISOSaveToPanel
+		<#
+			.同步目录与版本号相同
+		#>
+		$UI_Main_Sync_Some_Location,
+		$UI_Main_Sync_Some_Location_Tips,
+
+		<#
+			.创建 License.xml
+		#>
+		$UI_Main_Save_To_License,
+		$UI_Main_Save_To_License_Tips,
+		$UI_Main_Match_No_Select_Item
 	))
-	$GUIISOSaveToSelectPanel.controls.AddRange((
-		$GUIISOSaveToSync,
-		$GUIISOSaveToSyncTips
+	$UI_Main_Download_Menu.controls.AddRange((
+		$UI_Main_Download_Match_Filter,
+		$UI_Main_Download_Match_Filter_Results,
+		$UI_Main_Download_Match_Filter_Setting,
+		$UI_Main_Download_Match_Filter_Setting_Tips,
+		$UI_Main_Download_Rename,
+		$UI_Main_Download_Rename_Tips,
+		$UI_Main_Download_Licence,
+		$UI_Main_Download_Licence_Tips
 	))
-	$GUIISOSaveToPanel.controls.AddRange((
-		$GUIISOAdvAppsLicense,
-		$GUIISOAdvAppsLicenseTips,
-		$GUIISOSaveCustomizeOpenFolder,
-		$GUIISOSaveCustomizePaste,
-		$GUILangMatchNoDownloadItem
-	))
-	$GUILangChangeDownloadPanel.controls.AddRange((
-		$GUILangChangeDownloadMatch,
-		$GUILangChangeDownloadMatchSetting,
-		$GUILangChangeNew,
-		$GUILangChangeDownloadMatchTips,
-		$GUILangChangeRuleRename,
-		$GUILangChangeRuleRenameTips,
-		$GUILangChangeLicence,
-		$GUILangChangeLicenceTips
-	))
-	$GUILangChangeNumberGroupCL.controls.AddRange((
-		$GUILangChangeSelectVersionTitle,
-		$GUILangChangeSelectVersion,
-		$GUILangChangeNumberGroupCLShowTitle,
-		$GUILangChangeNumberShow,
-		$GUILangChangeNumberShowTips,
-		$GUILangChangeSelectErrorMsg,
-		$GUILangChangeSelectOK,
-		$GUIImageSourceGroupCLCanel
+	$UI_Main_Download_Match_Version_Menu.controls.AddRange((
+		$UI_Main_Download_Match_Version_Name,
+		$UI_Main_Download_Match_Version,
+		$UI_Main_Download_Match_Version_Select_Name,
+		$UI_Main_Download_Match_Version_Select,
+		$UI_Main_Download_Match_Version_Select_Tips,
+		$UI_Main_Download_Match_Version_Error,
+		$UI_Main_Download_Match_Version_OK,
+		$UI_Main_Download_Match_Version_Canel
 	))
 
 	<#
@@ -1156,7 +1287,7 @@ Function LXPs_Download
 			$CheckBox   = New-Object System.Windows.Forms.CheckBox -Property @{
 				Height  = 28
 				Width   = 430
-				Text    = "$($Global:AvailableLanguages[$i][2].PadRight(45)) $($Global:AvailableLanguages[$i][4])"
+				Text    = "$($Global:AvailableLanguages[$i][2].PadRight(45))$($Global:AvailableLanguages[$i][4])"
 				Tag     = $($Global:AvailableLanguages[$i][2])
 			}
 
@@ -1166,17 +1297,18 @@ Function LXPs_Download
 				$CheckBox.Checked = $False
 			}
 
-			$GUILangChangeShowGroupCLVersion.controls.AddRange($CheckBox)
+			$UI_Main_Available_Languages_Select.controls.AddRange($CheckBox)
 		}
-	}
 
+		$UI_Main_Languages_Detailed_View_Mask_Results.Text += "    $($Global:AvailableLanguages[$i][4])`n    https://www.microsoft.com/store/productId/$($Global:AvailableLanguages[$i][6])`n`n"
+	}
 
 	if (Get-ItemProperty -Path "HKCU:\SOFTWARE\$($Global:UniqueID)\LXPs" -Name "LXPsSelect" -ErrorAction SilentlyContinue) {
 		$GetLXPsSelect = Get-ItemPropertyValue -Path "HKCU:\SOFTWARE\$($Global:UniqueID)\LXPs" -Name "LXPsSelect" -ErrorAction SilentlyContinue
-		$GUILangChangeDownloadMatchSetting.Text = $GetLXPsSelect
-		$GUILangChangeNumberShow.Text = $GetLXPsSelect
+		$UI_Main_Download_Match_Filter_Results.Text = $GetLXPsSelect
+		$UI_Main_Download_Match_Version_Select.Text = $GetLXPsSelect
 	} else {
-		$GUILangChangeDownloadMatchSetting.Text = $Lang_Download.MatchDownloadNoNewitem
+		$UI_Main_Download_Match_Filter_Results.Text = $Lang_Download.MatchDownloadNoNewitem
 	}
 
 	for ($i=0; $i -lt $Global:OSCodename.Count; $i++) {
@@ -1188,61 +1320,64 @@ Function LXPs_Download
 			add_Click = $GUILangChangeSelectVersionClick
 		}
 
-		$GUILangChangeSelectVersion.controls.AddRange($CheckBox)
+		$UI_Main_Download_Match_Version.controls.AddRange($CheckBox)
 	}
 
 	if (Get-ItemProperty -Path "HKCU:\SOFTWARE\$($Global:UniqueID)\LXPs" -Name "IsSyncSaveTo" -ErrorAction SilentlyContinue) {
 		switch (Get-ItemPropertyValue -Path "HKCU:\SOFTWARE\$($Global:UniqueID)\LXPs" -Name "IsSyncSaveTo" -ErrorAction SilentlyContinue) {
 			"True" {
-				$GUIISOSaveToSync.Checked = $True
+				$UI_Main_Sync_Some_Location.Checked = $True
 			}
 			"False" {
-				$GUIISOSaveToSync.Checked = $False
+				$UI_Main_Sync_Some_Location.Checked = $False
 			}
 		}
 	} else {
-		$GUIISOSaveToSync.Checked = $True
+		$UI_Main_Sync_Some_Location.Checked = $True
 	}
 
 	$GetCurrentDisk = Convert-Path -Path "$($PSScriptRoot)\..\..\..\" -ErrorAction SilentlyContinue
 	if (Get-ItemProperty -Path "HKCU:\SOFTWARE\$($Global:UniqueID)\LXPs" -Name "IsDownloadAll" -ErrorAction SilentlyContinue) {
 		switch (Get-ItemPropertyValue -Path "HKCU:\SOFTWARE\$($Global:UniqueID)\LXPs" -Name "IsDownloadAll" -ErrorAction SilentlyContinue) {
 			"True" {
-				$GUILangChangeDownloadAll.Checked = $True
-				$GUILangChangeSelectVersion.Enabled = $False
-				$GUILangChangeDownloadPanel.Enabled = $False
-				$GUIISOSaveToSelectPanel.Enabled = $False
+				$UI_Main_Download.Checked = $True
+				$UI_Main_Download_Match_Version.Enabled = $False
+				$UI_Main_Download_Menu.Enabled = $False
+				$UI_Main_Sync_Some_Location.Enabled = $False
+				$UI_Main_Sync_Some_Location_Tips.Enabled = $False
 			}
 			"False" {
-				$GUILangChangeDownloadAll.Checked = $False
-				$GUILangChangeSelectVersion.Enabled = $True
-				$GUILangChangeDownloadPanel.Enabled = $True
-				$GUIISOSaveToSelectPanel.Enabled = $True
+				$UI_Main_Download.Checked = $False
+				$UI_Main_Download_Match_Version.Enabled = $True
+				$UI_Main_Download_Menu.Enabled = $True
+				$UI_Main_Sync_Some_Location.Enabled = $True
+				$UI_Main_Sync_Some_Location_Tips.Enabled = $True
 			}
 		}
 	} else {
-		$GUILangChangeDownloadAll.Checked = $True
-		$GUILangChangeSelectVersion.Enabled = $False
-		$GUILangChangeDownloadPanel.Enabled = $False
-		$GUIISOSaveToSelectPanel.Enabled = $False
+		$UI_Main_Download.Checked = $True
+		$UI_Main_Download_Match_Version.Enabled = $False
+		$UI_Main_Download_Menu.Enabled = $False
+		$UI_Main_Sync_Some_Location.Enabled = $False
+		$UI_Main_Sync_Some_Location_Tips.Enabled = $False
 	}
 
-	Refresh_Download_Sources_To
+	LXPs_Refresh_Sources_To_Event
 
 	if (Get-ItemProperty -Path "HKCU:\SOFTWARE\$($Global:UniqueID)\LXPs" -Name "LXPsTipsWarning" -ErrorAction SilentlyContinue) {
 		switch (Get-ItemPropertyValue -Path "HKCU:\SOFTWARE\$($Global:UniqueID)\LXPs" -Name "LXPsTipsWarning" -ErrorAction SilentlyContinue) {
 			"True" {
-				$GUILangChangeTips.Visible = 0
-				$GUILangChangeTipsDoNot.Checked = $True
+				$UI_Main_Tips_Mask.Visible = 0
+				$UI_Main_Tips_Mask_DoNot.Checked = $True
 			}
 			"False" {
-				$GUILangChangeTips.Visible = 1
-				$GUILangChangeTipsDoNot.Checked = $False
+				$UI_Main_Tips_Mask.Visible = 1
+				$UI_Main_Tips_Mask_DoNot.Checked = $False
 			}
 		}
 	} else {
-		$GUILangChangeTips.Visible = 1
-		$GUILangChangeTipsDoNot.Checked = $False
+		$UI_Main_Tips_Mask.Visible = 1
+		$UI_Main_Tips_Mask_DoNot.Checked = $False
 	}
 
 	<#
@@ -1250,138 +1385,31 @@ Function LXPs_Download
 		.添加右键菜单：全选、清除按钮
 	#>
 	$GUIImageSelectFunctionSelClick = {
-		$GUILangChangeShowGroupCLVersion.Controls | ForEach-Object {
+		$UI_Main_Available_Languages_Select.Controls | ForEach-Object {
 			if ($_ -is [System.Windows.Forms.CheckBox]) { $_.Checked = $true }
 		}
 	}
 	$GUIImageSelectFunctionAllClearClick = {
-		$GUILangChangeShowGroupCLVersion.Controls | ForEach-Object {
+		$UI_Main_Available_Languages_Select.Controls | ForEach-Object {
 			if ($_ -is [System.Windows.Forms.CheckBox]) { $_.Checked = $false }
 		}
 	}
 	$GUIImageSelectFunctionSelectMenu = New-Object System.Windows.Forms.ContextMenuStrip
 	$GUIImageSelectFunctionSelectMenu.Items.Add($lang.AllSel).add_Click($GUIImageSelectFunctionSelClick)
 	$GUIImageSelectFunctionSelectMenu.Items.Add($lang.AllClear).add_Click($GUIImageSelectFunctionAllClearClick)
-	$GUILangChangeShowGroupCLVersion.ContextMenuStrip = $GUIImageSelectFunctionSelectMenu
+	$UI_Main_Available_Languages_Select.ContextMenuStrip = $GUIImageSelectFunctionSelectMenu
 
 	switch ($Global:IsLang) {
 		"zh-CN" {
-			$GUILangChange.Font = New-Object System.Drawing.Font("Microsoft YaHei", 9, [System.Drawing.FontStyle]::Regular)
+			$UI_Main.Font = New-Object System.Drawing.Font("Microsoft YaHei", 9, [System.Drawing.FontStyle]::Regular)
 		}
 		Default {
-			$GUILangChange.Font = New-Object System.Drawing.Font("Segoe UI", 9, [System.Drawing.FontStyle]::Regular)
+			$UI_Main.Font = New-Object System.Drawing.Font("Segoe UI", 9, [System.Drawing.FontStyle]::Regular)
 		}
 	}
 
-	$GUILangChange.FormBorderStyle = 'Fixed3D'
-	$GUILangChange.ShowDialog() | Out-Null
-}
-
-
-function MicrosoftToDo
-{
-	param
-	(
-		$lang,
-		$StoreURL,
-		$SaveTo
-	)
-
-	write-host "   $StoreURL"
-	write-host "   $SaveTo"
-
-	$wchttp=[System.Net.WebClient]::new()
-	$URI = "https://store.rg-adguard.net/api/GetFiles"
-	$myParameters = "type=url&url=$($StoreURL)"
-	#&ring=Retail&lang=sv-SE"
-
-	$wchttp.Headers[[System.Net.HttpRequestHeader]::ContentType]="application/x-www-form-urlencoded"
-	$HtmlResult = $wchttp.UploadString($URI, $myParameters)
-
-	$Start=$HtmlResult.IndexOf("<p>The links were successfully received from the Microsoft Store server.</p>")
-	#write-host $start
-
-	if ($Start -eq -1)
-	{
-		write-host "Could not get the links, please check the StoreURL."
-		return
-	}
-	$TableEnd=($HtmlResult.LastIndexOf("</table>")+8)
-
-	$SemiCleaned=$HtmlResult.Substring($start,$TableEnd-$start)
-
-	#https://stackoverflow.com/questions/46307976/unable-to-use-ihtmldocument2
-	$newHtml=New-Object -ComObject "HTMLFile"
-	try {
-		# This works in PowerShell with Office installed
-		$newHtml.IHTMLDocument2_write($SemiCleaned)
-	} catch {
-		# This works when Office is not installed    
-		$src = [System.Text.Encoding]::Unicode.GetBytes($SemiCleaned)
-		$newHtml.write($src)
-	}
-
-	$ToDownload=$newHtml.getElementsByTagName("a") | Select-Object textContent, href
-
-	$LastFrontSlash=$StoreURL.LastIndexOf("/")
-	$ProductID=$StoreURL.Substring($LastFrontSlash+1,$StoreURL.Length-$LastFrontSlash-1)
-
-	# OldRegEx   Failed when the %tmp% started with a lowercase char
-	#if ([regex]::IsMatch("$SaveTo\$ProductID","([,!@?#$%^&*()\[\]]+|\\\.\.|\\\\\.|\.\.\\\|\.\\\|\.\.\/|\.\/|\/\.\.|\/\.|;|(?<![A-Z]):)|^\w+:(\w|.*:)"))
-
-	if ([regex]::IsMatch("$SaveTo","([,!@?#$%^&*()\[\]]+|\\\.\.|\\\\\.|\.\.\\\|\.\\\|\.\.\/|\.\/|\/\.\.|\/\.|;|(?<![A-Za-z]):)|^\w+:(\w|.*:)")) {
-		write-host "Invalid characters in path"$SaveTo""
-		return
-	}
-
-	Foreach ($Download in $ToDownload)
-	{
-		if ($Script:IsDownload) {
-			Write-host "   Downloading $($Download.textContent)"
-			$wchttp.DownloadFile($Download.href, "$($SaveTo)\$($Download.textContent)")
-		} else {
-			if ($Download.textContent -like "*$($Script:Version)*.appx") {
-				Write-host "   Downloading $($Download.textContent)"
-				$wchttp.DownloadFile($Download.href, "$($SaveTo)\$($Download.textContent)")
-
-				<#
-					.改名
-				#>
-				write-host "   改名"
-				if ($Script:IsRename) {
-					write-host "   允许改名" -ForegroundColor Green
-					Rename-Item -Path "$($SaveTo)\$($Download.textContent)" -NewName "$($SaveTo)\LanguageExperiencePack.$($lang).Neutral.appx" -ErrorAction SilentlyContinue
-
-					if (Test-Path -Path "$($SaveTo)\LanguageExperiencePack.$($lang).Neutral.appx" -PathType Leaf) {
-						write-host "   Done" -ForegroundColor Green
-					} else {
-						write-host "   Failure" -ForegroundColor Red
-					}
-				} else {
-					write-host " 不改名" -ForegroundColor Red
-				}
-
-				<#
-					.证书
-				#>
-				if ($Script:IsLicence) {
-					write-host "   允许创建证书" -ForegroundColor Green
-
-					if (Test-Path -Path "$($SaveTo)\License.xml" -PathType Leaf) {
-						write-host "   Failure" -ForegroundColor Red
-					} else {
-						$zipFile = [IO.Compression.ZipFile]::OpenRead("$($SaveTo)\LanguageExperiencePack.$($lang).Neutral.appx")
-						$zipFile.Entries | where { $_.Name -like 'License.xml' } | foreach { [System.IO.Compression.ZipFileExtensions]::ExtractToFile($_, "$($SaveTo)\$($_.Name)", $true) }
-						$zipFile.Dispose()
-
-						write-host "   Done" -ForegroundColor Green
-					}
-				} else {
-					write-host "   跳过创建证书" -ForegroundColor Red
-				}
-			}
-		}
-	}
+	$UI_Main.FormBorderStyle = 'Fixed3D'
+	$UI_Main.ShowDialog() | Out-Null
 }
 
 Function LXPs_Download_Report_Process
@@ -1420,7 +1448,7 @@ Function LXPs_Download_Report_Process
 			if (Test-Path -Path "$($TempNewFileFolderPath)\AppxManifest.xml" -PathType Leaf) {
 				[xml]$xml = Get-Content -Path "$($TempNewFileFolderPath)\AppxManifest.xml"
 
-				$QueueSelectLXPsReport += @{
+				$QueueSelectLXPsReport += [PSCustomObject]@{
 					FileName           = "LanguageExperiencePack.$($Global:AvailableLanguages[$i][2]).Neutral.appx"
 					MatchLanguage      = "$($Global:AvailableLanguages[$i][2])"
 					LXPsDisplayName    = $Xml.Package.Properties.DisplayName
@@ -1432,7 +1460,7 @@ Function LXPs_Download_Report_Process
 				}
 			}
 		} else {
-			$QueueSelectLXPsReport += @{
+			$QueueSelectLXPsReport += [PSCustomObject]@{
 				FileName           = "LanguageExperiencePack.$($Global:AvailableLanguages[$i][2]).Neutral.appx"
 				MatchLanguage      = "$($Global:AvailableLanguages[$i][2])"
 				LXPsDisplayName    = ""
@@ -1445,7 +1473,8 @@ Function LXPs_Download_Report_Process
 		}
 	}
 
-	$QueueSelectLXPsReport | Export-CSV –NoType -Path "$($SaveTo)" -Encoding utf8BOM
+	$QueueSelectLXPsReport | Export-CSV -NoTypeInformation -Path "$($SaveTo)" -Encoding UTF8
+
 	Remove_Tree $ISOTestFolderMain
 }
 
@@ -1506,9 +1535,9 @@ Function LXPs_Download_Licence_Process
 				$zipFile.Dispose()
 
 				if (Test-Path -Path "$($item.OrgPath)\License.xml" -PathType Leaf) {
-					write-host " YES"
+					Write-Host "   $($lang.Done)" -ForegroundColor Green
 				} else {
-					write-host " NO"
+					Write-Host "   $($lang.Failed)" -ForegroundColor Red
 				}
 			}
 		}
@@ -1519,36 +1548,179 @@ Function LXPs_Download_Licence_Process
 
 Function LXPs_Download_Process
 {
-	Write-Host "   $($Lang_Download.YesWork)" -ForegroundColor Green
-
-	write-host "   待下载的语言"
 	if ($Script:Queue_Language_Download_Select.Count -gt 0) {
+		Write-Host "   $($Lang_Download.YesWork)" -ForegroundColor Green
+
+		Write-Host "`n   $($Lang_Download.AddSources)`n   ---------------------------------------------------"
 		foreach ($item in $Script:Queue_Language_Download_Select) {
 			write-host "   $($item)"
 		}
 
-		Write-hsot "`n    正在下载："
+		Write-host "`n   $($Lang_Download.ProcessSources)`n   ---------------------------------------------------"
 		for ($i=0; $i -lt $Global:AvailableLanguages.Count; $i++) {
 			if (($Script:Queue_Language_Download_Select) -Contains $($Global:AvailableLanguages[$i][2])) {
-				$NewStoreURL = "https://www.microsoft.com/store/productId/$($Global:AvailableLanguages[$i][6])"
-				$NewFolder   = "$($PSScriptRoot)\..\..\..\Download\$($Script:Version)\LocalExperiencePack\$($Global:AvailableLanguages[$i][2])"
-				$NewFilename = "LanguageExperiencePack.$($Global:AvailableLanguages[$i][2]).Neutral.appx"
-
+				$NewFolder = "$($PSScriptRoot)\..\..\..\Download\$($Script:Version)\LocalExperiencePack\$($Global:AvailableLanguages[$i][2])"
 				Check_Folder -chkpath $NewFolder
 				$NewFolder = Convert-Path -Path $NewFolder -ErrorAction SilentlyContinue
 
-				write-host "   $($NewFolder)\$($NewFilename)" -ForegroundColor Green
-
-				if (Test-Path -Path "$($NewFolder)\$($NewFilename)" -PathType Leaf) {
-					write-host "   Local presence: $($NewFolder)\$($NewFilename)`n" -ForegroundColor Green
+				write-host "   $($Global:AvailableLanguages[$i][2].PadRight(45))$($Global:AvailableLanguages[$i][4])"
+				write-host "   $($Lang_Download.SaveTo)"
+				Write-host "   $($NewFolder)"
+				if ($Script:IsDownload) {
+					LXPs_URL_Download_Process -Lang $Global:AvailableLanguages[$i][2] -StoreURL $Global:AvailableLanguages[$i][6] -SaveTo $NewFolder
 				} else {
-					write-host "   Sources: $($NewStoreURL)"
+					$NewFilename = "LanguageExperiencePack.$($Global:AvailableLanguages[$i][2]).Neutral.appx"
+					write-host "   $($NewFilename)" -ForegroundColor Green
 
-					MicrosoftToDo -Lang $Global:AvailableLanguages[$i][2] -StoreURL $NewStoreURL -SaveTo $NewFolder
+					if (Test-Path -Path "$($NewFolder)\$($NewFilename)" -PathType Leaf) {
+						write-host "   $($Lang_Download.AlreadyExists)`n" -ForegroundColor Green
+					} else {
+						LXPs_URL_Download_Process -Lang $Global:AvailableLanguages[$i][2] -StoreURL $Global:AvailableLanguages[$i][6] -SaveTo $NewFolder
+					}
 				}
 			}
 		}
 	} else {
 		Write-Host "   $($Lang_Download.NoWork)" -ForegroundColor Red
+	}
+}
+
+function LXPs_URL_Download_Process
+{
+	param
+	(
+		$lang,
+		$StoreURL,
+		$SaveTo
+	)
+
+	$NewStoreURL = "https://www.microsoft.com/store/productId/$($StoreURL)"
+
+	write-host "   $($Lang_Update.UpdateDownloadAddress)$($NewStoreURL)"
+
+	$wchttp=[System.Net.WebClient]::new()
+	$URI = "https://store.rg-adguard.net/api/GetFiles"
+	$myParameters = "type=url&url=$($NewStoreURL)"
+	#&ring=Retail&lang=sv-SE"
+
+	$wchttp.Headers[[System.Net.HttpRequestHeader]::ContentType]="application/x-www-form-urlencoded"
+	$HtmlResult = $wchttp.UploadString($URI, $myParameters)
+
+	$Start=$HtmlResult.IndexOf("<p>The links were successfully received from the Microsoft Store server.</p>")
+	#write-host $start
+
+	if ($Start -eq -1)
+	{
+		write-host "   $($Lang_Download.Get_Link_Failed)"
+		return
+	}
+	$TableEnd=($HtmlResult.LastIndexOf("</table>")+8)
+
+	$SemiCleaned=$HtmlResult.Substring($start,$TableEnd-$start)
+
+	#https://stackoverflow.com/questions/46307976/unable-to-use-ihtmldocument2
+	$newHtml = New-Object -ComObject "HTMLFile"
+	try {
+		# This works in PowerShell with Office installed
+		$newHtml.IHTMLDocument2_write($SemiCleaned)
+	} catch {
+		# This works when Office is not installed    
+		$src = [System.Text.Encoding]::Unicode.GetBytes($SemiCleaned)
+		$newHtml.write($src)
+	}
+
+	$ToDownload = $newHtml.getElementsByTagName("a") | Select-Object textContent, href
+
+	$LastFrontSlash = $NewStoreURL.LastIndexOf("/")
+	$ProductID = $NewStoreURL.Substring($LastFrontSlash+1,$NewStoreURL.Length-$LastFrontSlash-1)
+
+	# OldRegEx   Failed when the %tmp% started with a lowercase char
+	#if ([regex]::IsMatch("$SaveTo\$ProductID","([,!@?#$%^&*()\[\]]+|\\\.\.|\\\\\.|\.\.\\\|\.\\\|\.\.\/|\.\/|\/\.\.|\/\.|;|(?<![A-Z]):)|^\w+:(\w|.*:)"))
+
+	if ([regex]::IsMatch("$SaveTo","([,!@?#$%^&*()\[\]]+|\\\.\.|\\\\\.|\.\.\\\|\.\\\|\.\.\/|\.\/|\/\.\.|\/\.|;|(?<![A-Za-z]):)|^\w+:(\w|.*:)")) {
+		write-host "Invalid characters in path"$SaveTo""
+		return
+	}
+
+	Foreach ($Download in $ToDownload)
+	{
+		if ($Script:IsDownload) {
+			Write-host "   $($Lang_Download.DownloadNow)"
+			Write-host "   $($Download.textContent)" -ForegroundColor Green
+
+			if (Test-Path -Path "$($SaveTo)\$($Download.textContent)" -PathType Leaf) {
+				write-host "   $($Lang_Download.AlreadyExists)`n" -ForegroundColor Green
+			} else {
+				$wchttp.DownloadFile($Download.href, "$($SaveTo)\$($Download.textContent)")
+
+				if (Test-Path -Path "$($SaveTo)\$($Download.textContent)" -PathType Leaf) {
+					write-host "   $($lang.Done)`n" -ForegroundColor Green
+				} else {
+					write-host "   $($Lang_Download.DownloadFailed)`n" -ForegroundColor Red
+				}
+			}
+		} else {
+			if ($Download.textContent -like "*$($Script:Version)*.appx") {
+				Write-host "   $($Lang_Download.DownloadNow)`n   $($Download.textContent)"
+				$wchttp.DownloadFile($Download.href, "$($SaveTo)\$($Download.textContent)")
+
+				if (Test-Path -Path "$($SaveTo)\$($Download.textContent)" -PathType Leaf) {
+					Write-Host "   $($lang.Done)" -ForegroundColor Green
+
+					<#
+						.改名
+					#>
+					write-host "`n   $($Lang_Download.LXPsRename)"
+					if ($Script:IsRename) {
+						write-host "   $($lang_Update.UpdateAvailable)" -ForegroundColor Green
+						write-host "   LanguageExperiencePack.$($lang).Neutral.appx"
+
+						Rename-Item -Path "$($SaveTo)\$($Download.textContent)" -NewName "$($SaveTo)\LanguageExperiencePack.$($lang).Neutral.appx" -ErrorAction SilentlyContinue
+
+						if (Test-Path -Path "$($SaveTo)\LanguageExperiencePack.$($lang).Neutral.appx" -PathType Leaf) {
+							Write-Host "   $($lang.Done)" -ForegroundColor Green
+						} else {
+							Write-Host "   $($lang.Failed)" -ForegroundColor Red
+						}
+					} else {
+						write-host "   $($lang_Update.UpdateUnavailable)" -ForegroundColor Red
+					}
+
+					<#
+						.证书
+					#>
+					
+					write-host "`n   $($Lang_Download.LicenseCreate)"
+					if ($Script:IsLicence) {
+						write-host "   $($lang_Update.UpdateAvailable)" -ForegroundColor Green
+						Remove-Item "$($SaveTo)\License.xml" -ErrorAction SilentlyContinue
+
+						if (Test-Path -Path "$($SaveTo)\LanguageExperiencePack.$($lang).Neutral.appx" -PathType Leaf) {
+							try {
+								$zipFile = [IO.Compression.ZipFile]::OpenRead("$($SaveTo)\LanguageExperiencePack.$($lang).Neutral.appx")
+								$zipFile.Entries | where { $_.Name -like 'License.xml' } | foreach {
+									[System.IO.Compression.ZipFileExtensions]::ExtractToFile($_, "$($SaveTo)\$($_.Name)", $true)
+								}
+								$zipFile.Dispose()
+
+								if (Test-Path -Path "$($SaveTo)\License.xml" -PathType Leaf) {
+									Write-Host "   $($lang.Done)" -ForegroundColor Green
+								} else {
+									Write-Host "   $($lang.Failed)" -ForegroundColor Red
+								}
+							} catch {
+								Write-Host "   $($lang.Failed)" -ForegroundColor Red
+							}
+						} else {
+							Write-Host "   $($lang.Failed)" -ForegroundColor Red
+						}
+					} else {
+						write-host "   $($lang_Update.UpdateUnavailable)" -ForegroundColor Green
+					}
+				} else {
+					write-host "   $($Lang_Download.DownloadFailed)" -ForegroundColor Red
+				}
+			}
+		}
 	}
 }
