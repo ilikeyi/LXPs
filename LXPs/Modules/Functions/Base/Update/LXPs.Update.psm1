@@ -132,7 +132,7 @@ Function Update_Setting_UI
 				Update_Process
 				$UI_Main.Close()
 			} else {
-				$UI_Main_Error.Text = "$($Lang_Update.UpdateServerNoSelect)"
+				$UI_Main_Error.Text = "$($lang.UpdateServerNoSelect)"
 			}
 		}
 	}
@@ -150,7 +150,7 @@ Function Update_Setting_UI
 	$UI_Main_Auto_Select = New-Object System.Windows.Forms.CheckBox -Property @{
 		Height         = 22
 		Width          = 505
-		Text           = $Lang_Update.UpdateServerSelect
+		Text           = $lang.UpdateServerSelect
 		Location       = '10,6'
 		add_Click      = $UI_Main_Auto_Select_Click
 		Checked        = $True
@@ -169,21 +169,21 @@ Function Update_Setting_UI
 	$UI_Main_Silent    = New-Object System.Windows.Forms.CheckBox -Property @{
 		Height         = 22
 		Width          = 505
-		Text           = $Lang_Update.UpdateSilent
+		Text           = $lang.UpdateSilent
 		Location       = '12,465'
 		Checked        = $True
 	}
 	$UI_Main_Reset     = New-Object System.Windows.Forms.CheckBox -Property @{
 		Height         = 22
 		Width          = 505
-		Text           = $Lang_Update.UpdateReset
+		Text           = $lang.UpdateReset
 		Location       = '12,493'
 	}
 	$UI_Main_Reset_Tips = New-Object system.Windows.Forms.Label -Property @{
 		Location       = "28,518"
 		Height         = 36
 		Width          = 490
-		Text           = $Lang_Update.UpdateResetTips
+		Text           = $lang.UpdateResetTips
 	}
 	$UI_Main_Error     = New-Object system.Windows.Forms.Label -Property @{
 		Location       = "10,570"
@@ -287,39 +287,39 @@ Function Update_Process
 	#>
 	Set-ItemProperty -Path "HKLM:\SOFTWARE\Microsoft\Internet Explorer\Main" -Name "DisableFirstRunCustomize" -Value 2 -ErrorAction SilentlyContinue
 
-	Write-Host "   $($Lang_Update.UpdateCheckServerStatus -f $($Global:ServerList.Count))
+	Write-Host "   $($lang.UpdateCheckServerStatus -f $($Global:ServerList.Count))
    ---------------------------------------------------"
 
 	foreach ($item in $Global:ServerList) {
-		Write-Host "   * $($Lang_Update.UpdateServerAddress -f $($item))"
+		Write-Host "   * $($lang.UpdateServerAddress -f $($item))"
 		if (Test_URI $item) {
 			$PreServerVersion = $item
 			$ServerTest = $true
-			Write-Host "     $($Lang_Update.UpdateServeravailable)" -ForegroundColor Green
+			Write-Host "     $($lang.UpdateServeravailable)" -ForegroundColor Green
 			break
 		} else {
-			Write-Host "     $($Lang_Update.UpdateServerUnavailable)`n" -ForegroundColor Red
+			Write-Host "     $($lang.UpdateServerUnavailable)`n" -ForegroundColor Red
 		}
 	}
 
 	if ($ServerTest) {
 		Write-Host "   ---------------------------------------------------"
-		Write-Host "     $($Lang_Update.UpdatePriority)" -ForegroundColor Green
+		Write-Host "     $($lang.UpdatePriority)" -ForegroundColor Green
 	} else {
-		Write-Host "     $($Lang_Update.UpdateServerTestFailed)" -ForegroundColor Red
+		Write-Host "     $($lang.UpdateServerTestFailed)" -ForegroundColor Red
 		Write-Host "   ---------------------------------------------------"
 		return
 	}
 
-	Write-host "`n   $($Lang_Update.UpdateQueryingUpdate)"
+	Write-host "`n   $($lang.UpdateQueryingUpdate)"
 
 	$error.Clear()
 	$time = Measure-Command { Invoke-WebRequest -Uri $PreServerVersion -TimeoutSec 15 -ErrorAction stop }
 
 	if ($error.Count -eq 0) {
-		Write-Host "`n   $($Lang_Update.UpdateQueryingTime -f $($time.TotalMilliseconds))"
+		Write-Host "`n   $($lang.UpdateQueryingTime -f $($time.TotalMilliseconds))"
 	} else {
-		Write-host "`n   $($Lang_Update.UpdateConnectFailed)"
+		Write-host "`n   $($lang.UpdateConnectFailed)"
 		return
 	}
 
@@ -338,7 +338,7 @@ Function Update_Process
 	}
 
 	if ($IsCorrectAuVer) {
-		Write-Host "`n   $($Lang_Update.UpdateMinimumVersion -f $($Global:ChkLocalver))"
+		Write-Host "`n   $($lang.UpdateMinimumVersion -f $($Global:ChkLocalver))"
 		$IsUpdateAvailable = $false
 
 		if ($getSerVer.version.version.Replace('.', '') -gt (Get-Module -Name LXPs).Version.ToString().Replace('.', '')) {
@@ -348,20 +348,20 @@ Function Update_Process
 		}
 
 		if ($IsUpdateAvailable) {
-			Write-host "`n   $($Lang_Update.UpdateVerifyAvailable)`n   ---------------------------------------------------"
-			Write-Host "   * $($Lang_Update.UpdateDownloadAddress)$($url)"
+			Write-host "`n   $($lang.UpdateVerifyAvailable)`n   ---------------------------------------------------"
+			Write-Host "   * $($lang.UpdateDownloadAddress)$($url)"
 			if (Test_URI $url) {
-				Write-Host "     $($Lang_Update.UpdateAvailable)" -ForegroundColor Green
+				Write-Host "     $($lang.UpdateAvailable)" -ForegroundColor Green
 				Write-Host "   ---------------------------------------------------"
 
-				Write-host "`n   $($Lang_Update.UpdateCurrent)$((Get-Module -Name LXPs).Version.ToString())
-   $($Lang_Update.UpdateLatest)$($getSerVer.version.version)
+				Write-host "`n   $($lang.UpdateCurrent)$((Get-Module -Name LXPs).Version.ToString())
+   $($lang.UpdateLatest)$($getSerVer.version.version)
 
    $($getSerVer.changelog.title)
    $('-' * ($getSerVer.changelog.title).Length)
 $($getSerVer.changelog.log)`n"
 	
-				Write-host "   $($Lang_Update.UpdateNewLatest)`n" -ForegroundColor Green
+				Write-host "   $($lang.UpdateNewLatest)`n" -ForegroundColor Green
 
 				$FlagsCheckForceUpdate = $False
 				if ($Force) {
@@ -379,8 +379,8 @@ $($getSerVer.changelog.log)`n"
 				If ($FlagsCheckForceUpdate) {
 					Update_And_Download -url $url
 				} else {
-					$title = "$($Lang_Update.UpdateInstall)"
-					$message = "$($Lang_Update.UpdateInstallSel)"
+					$title = "$($lang.UpdateInstall)"
+					$message = "$($lang.UpdateInstallSel)"
 					$yes = New-Object System.Management.Automation.Host.ChoiceDescription "&Yes", "Yes"
 					$no = New-Object System.Management.Automation.Host.ChoiceDescription "&No", "No"
 					$options = [System.Management.Automation.Host.ChoiceDescription[]]($yes, $no)
@@ -396,29 +396,29 @@ $($getSerVer.changelog.log)`n"
 					}
 				}
 			} else {
-				Write-Host "     $($Lang_Update.UpdateUnavailable)" -ForegroundColor Red
+				Write-Host "     $($lang.UpdateUnavailable)" -ForegroundColor Red
 				Write-Host "   ---------------------------------------------------"
 				return
 			}
 		} else {
 			if ($Global:UpdateAvailableReset) {
-				Write-host "`n   $($Lang_Update.UpdateVerifyAvailable)`n   ---------------------------------------------------"
-				Write-Host "   * $($Lang_Update.UpdateDownloadAddress)$($url)"
+				Write-host "`n   $($lang.UpdateVerifyAvailable)`n   ---------------------------------------------------"
+				Write-Host "   * $($lang.UpdateDownloadAddress)$($url)"
 				if (Test_URI $url) {
-					Write-Host "     $($Lang_Update.UpdateAvailable)" -ForegroundColor Green
+					Write-Host "     $($lang.UpdateAvailable)" -ForegroundColor Green
 					Write-Host "   ---------------------------------------------------"
 					Update_And_Download -url $url
 				} else {
-					Write-Host "     $($Lang_Update.UpdateUnavailable)" -ForegroundColor Red
+					Write-Host "     $($lang.UpdateUnavailable)" -ForegroundColor Red
 					Write-Host "   ---------------------------------------------------"
 					return
 				}
 			} else {
-				Write-host "   $($Lang_Update.UpdateNoUpdateAvailable -f $($Global:UniqueID))"
+				Write-host "   $($lang.UpdateNoUpdateAvailable -f $($Global:UniqueID))"
 			}
 		}
 	} else {
-		Write-host "   $($Lang_Update.UpdateNotSatisfied -f $($Global:ChkLocalver), $($Global:UniqueID))"
+		Write-host "   $($lang.UpdateNotSatisfied -f $($Global:ChkLocalver), $($Global:UniqueID))"
 	}
 
 	Modules_Refresh -Function "ToMainpage -wait 2"
@@ -436,14 +436,14 @@ Function Update_And_Download
 	$start_time = Get-Date
 	remove-item -path $output -force -ErrorAction SilentlyContinue
 	Invoke-WebRequest -Uri $url -OutFile $output -TimeoutSec 30 -DisableKeepAlive -ErrorAction SilentlyContinue | Out-Null
-	Write-Host "`n   $($Lang_Update.UpdateTimeUsed)$((Get-Date).Subtract($start_time).Seconds) (s)`n"
+	Write-Host "`n   $($lang.UpdateTimeUsed)$((Get-Date).Subtract($start_time).Seconds) (s)`n"
 
 	if (Test-Path -Path $output -PathType Leaf) {
 		Archive -filename $output -to "$($PSScriptRoot)\..\..\..\.."
 		Modules_Refresh -Function "Unzip_Done_Refresh_Process"
 		remove-item -path $output -force -ErrorAction SilentlyContinue
 	} else {
-		Write-host "`n   $($Lang_Update.UpdateUpdateStop)"
+		Write-host "`n   $($lang.UpdateUpdateStop)"
 	}
 }
 
@@ -513,9 +513,9 @@ Function Unzip_Done_Refresh_Process
 	#>
 	Update_Done_Refresh_Process
 
-	Write-Host "`n   * $($Lang_Update.UpdatePostProc)"
+	Write-Host "`n   * $($lang.UpdatePostProc)"
 	if ($Script:IsProcess) {
-		Write-Host "   $($Lang_Update.UpdateNotExecuted)" -ForegroundColor red
+		Write-Host "   $($lang.UpdateNotExecuted)" -ForegroundColor red
 	} else {
 		Write-Host "`n   $($PPocess)"
 		if (Test-Path -Path $PPocess -PathType Leaf) {
@@ -523,7 +523,7 @@ Function Unzip_Done_Refresh_Process
 			remove-item -path $PPocess -force
 			Write-Host "   $($lang.Done)" -ForegroundColor Green
 		} else {
-			Write-Host "   $($Lang_Update.UpdateNoPost)" -ForegroundColor red
+			Write-Host "   $($lang.UpdateNoPost)" -ForegroundColor red
 		}
 
 		Write-Host "`n   $($PsPocess)"
@@ -532,10 +532,10 @@ Function Unzip_Done_Refresh_Process
 			remove-item -path $PsPocess -force
 			Write-Host "   $($lang.Done)" -ForegroundColor Green
 		} else {
-			Write-Host "   $($Lang_Update.UpdateNoPost)" -ForegroundColor red
+			Write-Host "   $($lang.UpdateNoPost)" -ForegroundColor red
 		}
 
-		Write-host "`n   $($Global:UniqueID)'s Solutions $($Lang_Update.UpdateDone)`n"
+		Write-host "`n   $($Global:UniqueID)'s Solutions $($lang.UpdateDone)`n"
 	}
 }
 
@@ -545,7 +545,7 @@ Function Unzip_Done_Refresh_Process
 #>
 Function Update_Done_Refresh_Process
 {
-	Write-Host "`n   $($Lang_Update.UpdateDoneRefresh)"
+	Write-Host "`n   $($lang.UpdateDoneRefresh)"
 	<#
 		.Add code from here
 		.从此处添加代码

@@ -261,7 +261,7 @@ Function Update_Create_UI
 		Location       = "12,5"
 		Height         = 22
 		Width          = 390
-		Text           = "$($Lang_Update.UpdateCurrent) $((Get-Module -Name LXPs).Version.ToString())"
+		Text           = "$($lang.UpdateCurrent) $((Get-Module -Name LXPs).Version.ToString())"
 	}
 	$GUIUpdateLowVersion = New-Object system.Windows.Forms.Label -Property @{
 		Location       = "12,30"

@@ -142,7 +142,7 @@ Function Archive
 	Convert-Path $filename -ErrorAction SilentlyContinue | Out-Null
 
 	Write-Host "   $($filename)"
-	Write-Host "   $($Lang_Update.UpdateUnpacking)".PadRight(28) -NoNewline
+	Write-Host "   $($lang.UpdateUnpacking)".PadRight(28) -NoNewline
 	if (Compressing) {
 		if (([string]::IsNullOrEmpty($Password))) {
 			$arguments = "x ""-r"" ""-tzip"" ""$filename"" ""-o$to"" ""-y"""

@@ -120,7 +120,7 @@ Function LXPs_Download
 			.判断：1. 空值
 		#>
 		if ([string]::IsNullOrEmpty($UI_Main_Download_Match_Version_Select.Text)) {
-			$UI_Main_Download_Match_Version_Error.Text = "$($Upgrade_Package.SelectFromError -f $($Lang_Download.NoSetLabel))"
+			$UI_Main_Download_Match_Version_Error.Text = "$($Upgrade_Package.SelectFromError -f $($lang.NoSetLabel))"
 			return
 		}
 
@@ -129,7 +129,7 @@ Function LXPs_Download
 			.判断：2. 前缀不能带空格
 		#>
 		if ($UI_Main_Download_Match_Version_Select.Text -match '^\s') {
-			$UI_Main_Download_Match_Version_Error.Text = "$($Upgrade_Package.SelectFromError -f $($Lang_Download.ISO9660TipsErrorSpace))"
+			$UI_Main_Download_Match_Version_Error.Text = "$($Upgrade_Package.SelectFromError -f $($lang.ISO9660TipsErrorSpace))"
 			return
 		}
 
@@ -138,7 +138,7 @@ Function LXPs_Download
 			.判断：3. 后缀不能带空格
 		#>
 		if ($UI_Main_Download_Match_Version_Select.Text -match '\s$') {
-			$UI_Main_Download_Match_Version_Error.Text = "$($Upgrade_Package.SelectFromError -f $($Lang_Download.ISO9660TipsErrorSpace))"
+			$UI_Main_Download_Match_Version_Error.Text = "$($Upgrade_Package.SelectFromError -f $($lang.ISO9660TipsErrorSpace))"
 			return
 		}
 
@@ -147,7 +147,7 @@ Function LXPs_Download
 			.判断：4. 后缀不能带多空格
 		#>
 		if ($UI_Main_Download_Match_Version_Select.Text -match '\s{2,}$') {
-			$UI_Main_Download_Match_Version_Error.Text = "$($Upgrade_Package.SelectFromError -f $($Lang_Download.ISO9660TipsErrorSpace))"
+			$UI_Main_Download_Match_Version_Error.Text = "$($Upgrade_Package.SelectFromError -f $($lang.ISO9660TipsErrorSpace))"
 			return
 		}
 
@@ -156,7 +156,7 @@ Function LXPs_Download
 			.判断：5. 中间不能含有二个空格
 		#>
 		if ($UI_Main_Download_Match_Version_Select.Text -match '\s{1,}') {
-			$UI_Main_Download_Match_Version_Error.Text = "$($Upgrade_Package.SelectFromError -f $($Lang_Download.ISO9660TipsErrorSpace))"
+			$UI_Main_Download_Match_Version_Error.Text = "$($Upgrade_Package.SelectFromError -f $($lang.ISO9660TipsErrorSpace))"
 			return
 		}
 
@@ -165,7 +165,7 @@ Function LXPs_Download
 			.判断：6. 不能包含：字母 A-Z
 		#>
 		if ($UI_Main_Download_Match_Version_Select.Text -match '[A-Za-z]+') {
-			$UI_Main_Download_Match_Version_Error.Text = "$($Upgrade_Package.SelectFromError -f $($Lang_Download.ISO9660TipsErrorAZ))"
+			$UI_Main_Download_Match_Version_Error.Text = "$($Upgrade_Package.SelectFromError -f $($lang.ISO9660TipsErrorAZ))"
 			return
 		}
 
@@ -174,7 +174,7 @@ Function LXPs_Download
 			.判断：7, 不能包含：\\ / : * ? "" < > |
 		#>
 		if ($UI_Main_Download_Match_Version_Select.Text -match '[~#$@!%&*{}<>?/|+".]') {
-			$UI_Main_Download_Match_Version_Error.Text = "$($Upgrade_Package.SelectFromError -f $($Lang_Download.ISO9660TipsErrorOther))"
+			$UI_Main_Download_Match_Version_Error.Text = "$($Upgrade_Package.SelectFromError -f $($lang.ISO9660TipsErrorOther))"
 			return
 		}
 
@@ -183,7 +183,7 @@ Function LXPs_Download
 			.判断：8. 不能小于 5 字符
 		#>
 		if ($UI_Main_Download_Match_Version_Select.Text.length -lt 5) {
-			$UI_Main_Download_Match_Version_Error.Text = "$($Upgrade_Package.SelectFromError -f $($Lang_Download.ISOShortError -f "5"))"
+			$UI_Main_Download_Match_Version_Error.Text = "$($Upgrade_Package.SelectFromError -f $($lang.ISOShortError -f "5"))"
 			return
 		}
 
@@ -192,7 +192,7 @@ Function LXPs_Download
 			.判断：9. 不能大于 16 字符
 		#>
 		if ($UI_Main_Download_Match_Version_Select.Text.length -gt 16) {
-			$UI_Main_Download_Match_Version_Error.Text = "$($Upgrade_Package.SelectFromError -f $($Lang_Download.ISOLengthError -f "16"))"
+			$UI_Main_Download_Match_Version_Error.Text = "$($Upgrade_Package.SelectFromError -f $($lang.ISOLengthError -f "16"))"
 			return
 		}
 
@@ -276,7 +276,7 @@ Function LXPs_Download
 				}
 			}
 		} else {
-			$UI_Main_Error.Text = $Lang_Download.MatchDownloadNoNewitem
+			$UI_Main_Error.Text = $lang.MatchDownloadNoNewitem
 		}
 	}
 
@@ -562,12 +562,12 @@ Function LXPs_Download
 		if ($Script:Queue_Language_Download_Select.count -gt 0) {
 			Save_Dynamic -regkey "LXPs" -name "Select_Download_Language" -value $Script:Queue_Language_Download_Select -Multi
 		} else {
-			$UI_Main_Error.Text = "$($Upgrade_Package.SelectFromError -f $($Lang_Download.Not_Select))"
+			$UI_Main_Error.Text = "$($Upgrade_Package.SelectFromError -f $($lang.Not_Select))"
 			return
 		}
 
 		if ([string]::IsNullOrEmpty($UI_Main_Download_Match_Filter_Results.Text)) {
-			$UI_Main_Error.Text = "$($Upgrade_Package.SelectFromError -f $($Lang_Downloadr.OSVersion))"
+			$UI_Main_Error.Text = "$($Upgrade_Package.SelectFromError -f $($langr.OSVersion))"
 			return
 		}
 
@@ -619,7 +619,7 @@ Function LXPs_Download
 	$UI_Main_Available_Languages_Name = New-Object system.Windows.Forms.Label -Property @{
 		Height         = 30
 		Width          = 340
-		Text           = $Lang_Download.AvailableLanguages
+		Text           = $lang.AvailableLanguages
 	}
 	$UI_Main_Available_Languages_Select = New-Object system.Windows.Forms.FlowLayoutPanel -Property @{
 		BorderStyle    = 0
@@ -691,7 +691,7 @@ Function LXPs_Download
 		Height         = 22
 		Width          = 240
 		Location       = "15,10"
-		Text           = $Lang_Download.OSVersion
+		Text           = $lang.OSVersion
 	}
 	$UI_Main_Download_Match_Version = New-Object system.Windows.Forms.FlowLayoutPanel -Property @{
 		Height         = 640
@@ -707,7 +707,7 @@ Function LXPs_Download
 		Height         = 25
 		Width          = 400
 		Location       = "405,15"
-		Text           = $Lang_Download.LXPsFilter
+		Text           = $lang.LXPsFilter
 	}
 	$UI_Main_Download_Match_Version_Select = New-Object System.Windows.Forms.TextBox -Property @{
 		Height         = 22
@@ -719,7 +719,7 @@ Function LXPs_Download
 		Height         = 150
 		Width          = 385
 		Location       = "425,80"
-		Text           = $Lang_Download.LXPsDownloadTips
+		Text           = $lang.LXPsDownloadTips
 	}
 
 	$UI_Main_Download_Match_Version_Error = New-Object system.Windows.Forms.Label -Property @{
@@ -752,7 +752,7 @@ Function LXPs_Download
 		Height         = 25
 		Width          = 385
 		margin         = "0,25,0,0"
-		Text           = $Lang_Download.DownloadAll
+		Text           = $lang.DownloadAll
 		Checked        = $True
 		add_Click      = $UI_Main_Download_Click
 	}
@@ -767,7 +767,7 @@ Function LXPs_Download
 	$UI_Main_Download_Match_Filter = New-Object system.Windows.Forms.Label -Property @{
 		Height         = 30
 		Width          = 395
-		Text           = $Lang_Download.LXPsFilter
+		Text           = $lang.LXPsFilter
 	}
 	$UI_Main_Download_Match_Filter_Results = New-Object system.Windows.Forms.LinkLabel -Property @{
 		Height         = 30
@@ -783,7 +783,7 @@ Function LXPs_Download
 		Height         = 30
 		Width          = 395
 		Padding        = "16,0,0,0"
-		Text           = $Lang_Download.OSVersion
+		Text           = $lang.OSVersion
 		LinkColor      = "GREEN"
 		ActiveLinkColor = "RED"
 		LinkBehavior   = "NeverUnderline"
@@ -792,35 +792,35 @@ Function LXPs_Download
 	$UI_Main_Download_Match_Filter_Setting_Tips = New-Object system.Windows.Forms.Label -Property @{
 		autoSize       = 1
 		Padding        = "16,0,15,5"
-		Text           = $Lang_Download.LXPsDownloadTips
+		Text           = $lang.LXPsDownloadTips
 	}
 
 	$UI_Main_Download_Rename = New-Object System.Windows.Forms.CheckBox -Property @{
 		Height         = 25
 		Width          = 385
 		margin         = "22,20,0,0"
-		Text           = $Lang_Download.LXPsRename
+		Text           = $lang.LXPsRename
 		Checked        = $True
 		add_Click      = $UI_Main_Download_Click
 	}
 	$UI_Main_Download_Rename_Tips = New-Object system.Windows.Forms.Label -Property @{
 		autoSize       = 1
 		Padding        = "36,0,15,0"
-		Text           = $Lang_Download.LXPsRenameTips
+		Text           = $lang.LXPsRenameTips
 	}
 
 	$UI_Main_Download_Licence = New-Object System.Windows.Forms.CheckBox -Property @{
 		Height         = 25
 		Width          = 385
 		margin         = "22,20,0,0"
-		Text           = $Lang_Download.LicenseCreate
+		Text           = $lang.LicenseCreate
 		Checked        = $True
 		add_Click      = $UI_Main_Download_Click
 	}
 	$UI_Main_Download_Licence_Tips = New-Object system.Windows.Forms.Label -Property @{
 		autoSize       = 1
 		Padding        = "36,0,15,0"
-		Text           = $Lang_Download.LicenseCreateTips
+		Text           = $lang.LicenseCreateTips
 	}
 
 	<#
@@ -829,7 +829,7 @@ Function LXPs_Download
 	$UI_Main_Save_To_Name      = New-Object system.Windows.Forms.Label -Property @{
 		Height         = 25
 		Width          = 455
-		Text           = $Lang_Download.SaveTo
+		Text           = $lang.SaveTo
 	}
 	$UI_Main_Save_To = New-Object System.Windows.Forms.TextBox -Property @{
 		Height         = 22
@@ -842,7 +842,7 @@ Function LXPs_Download
 		Height         = 30
 		Width          = 455
 		margin         = "22,5,0,0"
-		Text           = $Lang_Download.SelectFolder
+		Text           = $lang.SelectFolder
 		LinkColor      = "GREEN"
 		ActiveLinkColor = "RED"
 		LinkBehavior   = "NeverUnderline"
@@ -852,21 +852,21 @@ Function LXPs_Download
 		autoSize       = 1
 		Padding        = "36,0,15,0"
 		margin         = "0,0,0,15"
-		Text           = $Lang_Download.SelectFolderTips
+		Text           = $lang.SelectFolderTips
 	}
 
 	$UI_Main_Sync_Some_Location = New-Object System.Windows.Forms.CheckBox -Property @{
 		Height         = 25
 		Width          = 455
 		margin         = "22,5,0,0"
-		Text           = $Lang_Download.SaveToSync
+		Text           = $lang.SaveToSync
 		add_Click      = $UI_Main_Sync_Some_Location_Click
 	}
 	$UI_Main_Sync_Some_Location_Tips = New-Object system.Windows.Forms.Label -Property @{
 		autoSize       = 1
 		Padding        = "36,0,15,0"
 		margin         = "0,0,0,15"
-		Text           = $Lang_Download.SaveToSyncTips
+		Text           = $lang.SaveToSyncTips
 	}
 
 	<#
@@ -876,7 +876,7 @@ Function LXPs_Download
 		Height         = 30
 		Width          = 455
 		margin         = "22,5,0,0"
-		Text           = $Lang_Download.LicenseCreate
+		Text           = $lang.LicenseCreate
 		LinkColor      = "GREEN"
 		ActiveLinkColor = "RED"
 		LinkBehavior   = "NeverUnderline"
@@ -886,14 +886,14 @@ Function LXPs_Download
 		autoSize       = 1
 		Padding        = "36,0,15,0"
 		margin         = "0,0,0,15"
-		Text           = $Lang_Download.LicenseCreateTips
+		Text           = $lang.LicenseCreateTips
 	}
 
 	$UI_Main_Save_To_Open_Folder = New-Object system.Windows.Forms.LinkLabel -Property @{
 		Height         = 30
 		Width          = 455
 		margin         = "22,5,0,0"
-		Text           = $Lang_Download.OpenFolder
+		Text           = $lang.OpenFolder
 		LinkColor      = "GREEN"
 		ActiveLinkColor = "RED"
 		LinkBehavior   = "NeverUnderline"
@@ -903,7 +903,7 @@ Function LXPs_Download
 		Height         = 30
 		Width          = 455
 		margin         = "22,5,0,0"
-		Text           = $Lang_Download.Paste
+		Text           = $lang.Paste
 		LinkColor      = "GREEN"
 		ActiveLinkColor = "RED"
 		LinkBehavior   = "NeverUnderline"
@@ -917,7 +917,7 @@ Function LXPs_Download
 		Height         = 30
 		Width          = 455
 		margin         = "22,5,0,0"
-		Text           = $Lang_Download.MatchNoDownloadItem
+		Text           = $lang.MatchNoDownloadItem
 		LinkColor      = "GREEN"
 		ActiveLinkColor = "RED"
 		LinkBehavior   = "NeverUnderline"
@@ -948,19 +948,19 @@ Function LXPs_Download
 	$UI_Main_Mask_Report_Sources_Name = New-Object System.Windows.Forms.Label -Property @{
 		Height         = 22
 		Width          = 480
-		Text           = $Lang_Download.AdvAppsDetailed
+		Text           = $lang.AdvAppsDetailed
 	}
 	$UI_Main_Mask_Report_Sources_Name_Tips = New-Object system.Windows.Forms.Label -Property @{
 		autoSize       = 1
 		Padding        = "16,0,0,0"
 		margin         = "0,0,0,20"
-		Text           = $Lang_Download.AdvAppsDetailedTips
+		Text           = $lang.AdvAppsDetailedTips
 	}
 
 	$UI_Main_Mask_Report_Sources_Path_Name = New-Object System.Windows.Forms.Label -Property @{
 		Height         = 22
 		Width          = 480
-		Text           = $Lang_Download.ProcessSources
+		Text           = $lang.ProcessSources
 	}
 	$UI_Main_Mask_Report_Sources_Path = New-Object System.Windows.Forms.TextBox -Property @{
 		Height         = 22
@@ -973,7 +973,7 @@ Function LXPs_Download
 		Height         = 35
 		Width          = 480
 		Padding        = "16,0,0,0"
-		Text           = $Lang_Download.SelectFolder
+		Text           = $lang.SelectFolder
 		LinkColor      = "GREEN"
 		ActiveLinkColor = "RED"
 		LinkBehavior   = "NeverUnderline"
@@ -983,7 +983,7 @@ Function LXPs_Download
 		Height         = 35
 		Width          = 480
 		Padding        = "16,0,0,0"
-		Text           = $Lang_Download.OpenFolder
+		Text           = $lang.OpenFolder
 		LinkColor      = "GREEN"
 		ActiveLinkColor = "RED"
 		LinkBehavior   = "NeverUnderline"
@@ -993,7 +993,7 @@ Function LXPs_Download
 		Height         = 35
 		Width          = 480
 		Padding        = "16,0,0,0"
-		Text           = $Lang_Download.Paste
+		Text           = $lang.Paste
 		LinkColor      = "GREEN"
 		ActiveLinkColor = "RED"
 		LinkBehavior   = "NeverUnderline"
@@ -1003,7 +1003,7 @@ Function LXPs_Download
 		Height         = 35
 		Width          = 480
 		Padding        = "16,0,0,0"
-		Text           = $Lang_Download.SaveToSync
+		Text           = $lang.SaveToSync
 		LinkColor      = "GREEN"
 		ActiveLinkColor = "RED"
 		LinkBehavior   = "NeverUnderline"
@@ -1017,7 +1017,7 @@ Function LXPs_Download
 		Height         = 22
 		Width          = 480
 		margin         = "0,30,0,0"
-		Text           = $Lang_Download.SaveTo
+		Text           = $lang.SaveTo
 	}
 	$UI_Main_Mask_Report_Save_To = New-Object System.Windows.Forms.TextBox -Property @{
 		Height         = 22
@@ -1030,7 +1030,7 @@ Function LXPs_Download
 		Height         = 35
 		Width          = 480
 		Padding        = "16,0,0,0"
-		Text           = $Lang_Download.SelectFolder
+		Text           = $lang.SelectFolder
 		LinkColor      = "GREEN"
 		ActiveLinkColor = "RED"
 		LinkBehavior   = "NeverUnderline"
@@ -1040,7 +1040,7 @@ Function LXPs_Download
 		Height         = 35
 		Width          = 480
 		Padding        = "16,0,0,0"
-		Text           = $Lang_Download.Paste
+		Text           = $lang.Paste
 		LinkColor      = "GREEN"
 		ActiveLinkColor = "RED"
 		LinkBehavior   = "NeverUnderline"
@@ -1086,7 +1086,7 @@ Function LXPs_Download
 		Width          = 830
 		BorderStyle    = 0
 		Location       = "15,15"
-		Text           = $Lang_Download.LXPsGetSNTips
+		Text           = $lang.LXPsGetSNTips
 		BackColor      = "#FFFFFF"
 		ReadOnly       = $True
 	}
@@ -1094,7 +1094,7 @@ Function LXPs_Download
 		Location       = "20,635"
 		Height         = 25
 		Width          = 440
-		Text           = $Lang_Download.LXPsAddDelTips
+		Text           = $lang.LXPsAddDelTips
 		add_Click      = $UI_Main_Tips_Mask_DoNot_Click
 	}
 	$UI_Main_Tips_Mask_Canel = New-Object system.Windows.Forms.Button -Property @{
@@ -1112,12 +1112,12 @@ Function LXPs_Download
 		Height         = 36
 		Width          = 280
 		add_Click      = $UI_Main_Report_Click
-		Text           = $Lang_Download.AdvAppsDetailed
+		Text           = $lang.AdvAppsDetailed
 	}
 	$UI_Main_Tips_Mask_View = New-Object system.Windows.Forms.LinkLabel -Property @{
 		Height         = 22
 		Width          = 280
-		Text           = $Lang_Download.LXPsAddDelTipsView
+		Text           = $lang.LXPsAddDelTipsView
 		Location       = "620,520"
 		LinkColor      = "GREEN"
 		ActiveLinkColor = "RED"
@@ -1308,7 +1308,7 @@ Function LXPs_Download
 		$UI_Main_Download_Match_Filter_Results.Text = $GetLXPsSelect
 		$UI_Main_Download_Match_Version_Select.Text = $GetLXPsSelect
 	} else {
-		$UI_Main_Download_Match_Filter_Results.Text = $Lang_Download.MatchDownloadNoNewitem
+		$UI_Main_Download_Match_Filter_Results.Text = $lang.MatchDownloadNoNewitem
 	}
 
 	for ($i=0; $i -lt $Global:OSCodename.Count; $i++) {
@@ -1428,7 +1428,7 @@ Function LXPs_Download_Report_Process
 		$FolderDirect = (Join_MainFolder -Path $Path)
 	}
 
-	write-host "`n   $($Lang_Download.AdvAppsDetailed)"
+	write-host "`n   $($lang.AdvAppsDetailed)"
 	$QueueSelectLXPsReport = @()
 	$RandomGuid = [guid]::NewGuid()
 	$ISOTestFolderMain = "$($env:userprofile)\AppData\Local\Temp\$($RandomGuid)"
@@ -1493,7 +1493,7 @@ Function LXPs_Download_Licence_Process
 		$FolderDirect = (Join_MainFolder -Path $Path)
 	}
 
-	write-host "`n   $($Lang_Download.LicenseCreate)"
+	write-host "`n   $($lang.LicenseCreate)"
 	$QueueLXPsLicenceSelect = @()
 	for ($i=0; $i -lt $Global:AvailableLanguages.Count; $i++) {
 		$TempNewFileFolderPath = "$($FolderDirect)$($Global:AvailableLanguages[$i][2])"
@@ -1509,18 +1509,18 @@ Function LXPs_Download_Licence_Process
 	}
 
 	if ($QueueLXPsLicenceSelect.count -gt 0) {
-		Write-Host "   $($Lang_Download.YesWork)" -ForegroundColor Green
+		Write-Host "   $($lang.YesWork)" -ForegroundColor Green
 
-		Write-host "`n   $($Lang_Download.ProcessSources)`n   ---------------------------------------------------"
+		Write-host "`n   $($lang.ProcessSources)`n   ---------------------------------------------------"
 		write-host "   $($Path)"
 
-		Write-Host "`n   $($Lang_Download.AddSources)`n   ---------------------------------------------------"
+		Write-Host "`n   $($lang.AddSources)`n   ---------------------------------------------------"
 		foreach ($item in $QueueLXPsLicenceSelect) {
 			Write-Host "   $($item.Language)".PadRight(28) -NoNewline
 			write-host " $($item.FileName)"
 		}
 
-		Write-Host "`n   $($Lang_Download.AddQueue)`n   ---------------------------------------------------"
+		Write-Host "`n   $($lang.AddQueue)`n   ---------------------------------------------------"
 		foreach ($item in $QueueLXPsLicenceSelect) {
 			$TempNewFileFullPath = "$($item.OrgPath)\$($item.FileName)"
 
@@ -1542,21 +1542,21 @@ Function LXPs_Download_Licence_Process
 			}
 		}
 	} else {
-		Write-Host "   $($Lang_Download.NoWork)" -ForegroundColor Red
+		Write-Host "   $($lang.NoWork)" -ForegroundColor Red
 	}
 }
 
 Function LXPs_Download_Process
 {
 	if ($Script:Queue_Language_Download_Select.Count -gt 0) {
-		Write-Host "   $($Lang_Download.YesWork)" -ForegroundColor Green
+		Write-Host "   $($lang.YesWork)" -ForegroundColor Green
 
-		Write-Host "`n   $($Lang_Download.AddSources)`n   ---------------------------------------------------"
+		Write-Host "`n   $($lang.AddSources)`n   ---------------------------------------------------"
 		foreach ($item in $Script:Queue_Language_Download_Select) {
 			write-host "   $($item)"
 		}
 
-		Write-host "`n   $($Lang_Download.ProcessSources)`n   ---------------------------------------------------"
+		Write-host "`n   $($lang.ProcessSources)`n   ---------------------------------------------------"
 		for ($i=0; $i -lt $Global:AvailableLanguages.Count; $i++) {
 			if (($Script:Queue_Language_Download_Select) -Contains $($Global:AvailableLanguages[$i][2])) {
 				$NewFolder = "$($PSScriptRoot)\..\..\..\Download\$($Script:Version)\LocalExperiencePack\$($Global:AvailableLanguages[$i][2])"
@@ -1564,7 +1564,7 @@ Function LXPs_Download_Process
 				$NewFolder = Convert-Path -Path $NewFolder -ErrorAction SilentlyContinue
 
 				write-host "   $($Global:AvailableLanguages[$i][2].PadRight(45))$($Global:AvailableLanguages[$i][4])"
-				write-host "   $($Lang_Download.SaveTo)"
+				write-host "   $($lang.SaveTo)"
 				Write-host "   $($NewFolder)"
 				if ($Script:IsDownload) {
 					LXPs_URL_Download_Process -Lang $Global:AvailableLanguages[$i][2] -StoreURL $Global:AvailableLanguages[$i][6] -SaveTo $NewFolder
@@ -1573,7 +1573,7 @@ Function LXPs_Download_Process
 					write-host "   $($NewFilename)" -ForegroundColor Green
 
 					if (Test-Path -Path "$($NewFolder)\$($NewFilename)" -PathType Leaf) {
-						write-host "   $($Lang_Download.AlreadyExists)`n" -ForegroundColor Green
+						write-host "   $($lang.AlreadyExists)`n" -ForegroundColor Green
 					} else {
 						LXPs_URL_Download_Process -Lang $Global:AvailableLanguages[$i][2] -StoreURL $Global:AvailableLanguages[$i][6] -SaveTo $NewFolder
 					}
@@ -1581,7 +1581,7 @@ Function LXPs_Download_Process
 			}
 		}
 	} else {
-		Write-Host "   $($Lang_Download.NoWork)" -ForegroundColor Red
+		Write-Host "   $($lang.NoWork)" -ForegroundColor Red
 	}
 }
 
@@ -1596,7 +1596,7 @@ function LXPs_URL_Download_Process
 
 	$NewStoreURL = "https://www.microsoft.com/store/productId/$($StoreURL)"
 
-	write-host "   $($Lang_Update.UpdateDownloadAddress)$($NewStoreURL)"
+	write-host "   $($lang.UpdateDownloadAddress)$($NewStoreURL)"
 
 	$wchttp=[System.Net.WebClient]::new()
 	$URI = "https://store.rg-adguard.net/api/GetFiles"
@@ -1611,7 +1611,7 @@ function LXPs_URL_Download_Process
 
 	if ($Start -eq -1)
 	{
-		write-host "   $($Lang_Download.Get_Link_Failed)"
+		write-host "   $($lang.Get_Link_Failed)"
 		return
 	}
 	$TableEnd=($HtmlResult.LastIndexOf("</table>")+8)
@@ -1645,23 +1645,23 @@ function LXPs_URL_Download_Process
 	Foreach ($Download in $ToDownload)
 	{
 		if ($Script:IsDownload) {
-			Write-host "   $($Lang_Download.DownloadNow)"
+			Write-host "   $($lang.DownloadNow)"
 			Write-host "   $($Download.textContent)" -ForegroundColor Green
 
 			if (Test-Path -Path "$($SaveTo)\$($Download.textContent)" -PathType Leaf) {
-				write-host "   $($Lang_Download.AlreadyExists)`n" -ForegroundColor Green
+				write-host "   $($lang.AlreadyExists)`n" -ForegroundColor Green
 			} else {
 				$wchttp.DownloadFile($Download.href, "$($SaveTo)\$($Download.textContent)")
 
 				if (Test-Path -Path "$($SaveTo)\$($Download.textContent)" -PathType Leaf) {
 					write-host "   $($lang.Done)`n" -ForegroundColor Green
 				} else {
-					write-host "   $($Lang_Download.DownloadFailed)`n" -ForegroundColor Red
+					write-host "   $($lang.DownloadFailed)`n" -ForegroundColor Red
 				}
 			}
 		} else {
 			if ($Download.textContent -like "*$($Script:Version)*.appx") {
-				Write-host "   $($Lang_Download.DownloadNow)`n   $($Download.textContent)"
+				Write-host "   $($lang.DownloadNow)`n   $($Download.textContent)"
 				$wchttp.DownloadFile($Download.href, "$($SaveTo)\$($Download.textContent)")
 
 				if (Test-Path -Path "$($SaveTo)\$($Download.textContent)" -PathType Leaf) {
@@ -1670,9 +1670,9 @@ function LXPs_URL_Download_Process
 					<#
 						.改名
 					#>
-					write-host "`n   $($Lang_Download.LXPsRename)"
+					write-host "`n   $($lang.LXPsRename)"
 					if ($Script:IsRename) {
-						write-host "   $($lang_Update.UpdateAvailable)" -ForegroundColor Green
+						write-host "   $($lang.UpdateAvailable)" -ForegroundColor Green
 						write-host "   LanguageExperiencePack.$($lang).Neutral.appx"
 
 						Rename-Item -Path "$($SaveTo)\$($Download.textContent)" -NewName "$($SaveTo)\LanguageExperiencePack.$($lang).Neutral.appx" -ErrorAction SilentlyContinue
@@ -1683,16 +1683,16 @@ function LXPs_URL_Download_Process
 							Write-Host "   $($lang.Failed)" -ForegroundColor Red
 						}
 					} else {
-						write-host "   $($lang_Update.UpdateUnavailable)" -ForegroundColor Red
+						write-host "   $($lang.UpdateUnavailable)" -ForegroundColor Red
 					}
 
 					<#
 						.证书
 					#>
 					
-					write-host "`n   $($Lang_Download.LicenseCreate)"
+					write-host "`n   $($lang.LicenseCreate)"
 					if ($Script:IsLicence) {
-						write-host "   $($lang_Update.UpdateAvailable)" -ForegroundColor Green
+						write-host "   $($lang.UpdateAvailable)" -ForegroundColor Green
 						Remove-Item "$($SaveTo)\License.xml" -ErrorAction SilentlyContinue
 
 						if (Test-Path -Path "$($SaveTo)\LanguageExperiencePack.$($lang).Neutral.appx" -PathType Leaf) {
@@ -1715,10 +1715,10 @@ function LXPs_URL_Download_Process
 							Write-Host "   $($lang.Failed)" -ForegroundColor Red
 						}
 					} else {
-						write-host "   $($lang_Update.UpdateUnavailable)" -ForegroundColor Green
+						write-host "   $($lang.UpdateUnavailable)" -ForegroundColor Green
 					}
 				} else {
-					write-host "   $($Lang_Download.DownloadFailed)" -ForegroundColor Red
+					write-host "   $($lang.DownloadFailed)" -ForegroundColor Red
 				}
 			}
 		}
