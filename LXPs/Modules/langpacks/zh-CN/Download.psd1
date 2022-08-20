@@ -1,6 +1,7 @@
 ﻿ConvertFrom-StringData -StringData @'
 	OSVersion                 = 选择已知版本号
 	DownloadAll               = 下载全部
+	StartVerify               = 验证下载任务
 	LXPsFilter                = 筛选
 	LXPsDownloadTips          = 选择已知版本号，或手动输入对应的版本号来进行筛选，数字长度不少于 5 位，不能包含：英文字母、前后空格、\\ / : * ? & @ ! "" < > | .
 	ISO9660TipsErrorSpace     = 不能包含：前后空格

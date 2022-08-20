@@ -1,6 +1,7 @@
 ﻿ConvertFrom-StringData -StringData @'
 	OSVersion                 = Select a known version number
 	DownloadAll               = Download all
+	StartVerify               = Verify download task
 	LXPsFilter                = Filter
 	LXPsDownloadTips          = Select a known version number, or manually enter the corresponding version number to filter, only numbers are allowed, and cannot contain: spaces before and after, \\ / : * ? & @ ! "" < > |
 	ISO9660TipsErrorSpace     = Cannot contain: leading and trailing spaces

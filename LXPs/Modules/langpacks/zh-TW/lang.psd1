@@ -1,11 +1,9 @@
 ﻿ConvertFrom-StringData -StringData @'
 	LXPs                      = 本地語言體驗包 ( LXPs )
 	Menu                      = 菜單
-	Update                    = 檢查更新
 	AddTo                     = 添加
 	Done                      = 完成
 	Failed                    = 失敗
-	StartVerify               = 驗證下載任務
 	OK                        = 確定
 	Cancel                    = 取消
 	Exit                      = 退出

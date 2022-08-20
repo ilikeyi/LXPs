@@ -1,4 +1,5 @@
 ﻿ConvertFrom-StringData -StringData @'
+	Update                    = Check for updates
 	UpdateServerSelect        = Automatic server selection or custom selection
 	UpdateServerNoSelect      = Please select an available server
 	UpdateSilent              = When updates are available, update silently

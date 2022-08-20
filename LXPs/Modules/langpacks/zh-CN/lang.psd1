@@ -1,11 +1,9 @@
 ﻿ConvertFrom-StringData -StringData @'
 	LXPs                      = 本地语言体验包 ( LXPs )
 	Menu                      = 菜单
-	Update                    = 检查更新
 	AddTo                     = 添加
 	Done                      = 完成
 	Failed                    = 失败
-	StartVerify               = 验证下载任务
 	OK                        = 确定
 	Cancel                    = 取消
 	Exit                      = 退出

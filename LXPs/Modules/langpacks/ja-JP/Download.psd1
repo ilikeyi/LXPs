@@ -1,6 +1,7 @@
 ﻿ConvertFrom-StringData -StringData @'
 	OSVersion                 = 既知のバージョン番号を選択してください
 	DownloadAll               = すべてダウンロード
+	StartVerify               = ダウンロードタスクを確認する
 	LXPsFilter                = フィルター
 	LXPsDownloadTips          = 既知のバージョン番号を選択するか、対応するバージョン番号を手動で入力してフィルタリングします。番号のみが許可され、次のスペースを含めることはできません：前後のスペース、\\ / : * ? & @ ! "" < > |
 	ISO9660TipsErrorSpace     = 含めることはできません：先頭と末尾のスペース

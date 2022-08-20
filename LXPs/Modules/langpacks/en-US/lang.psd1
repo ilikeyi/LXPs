@@ -1,11 +1,9 @@
 ﻿ConvertFrom-StringData -StringData @'
 	LXPs                      = Local language experience pack ( LXPs )
 	Menu                      = Menu
-	Update                    = Check for updates
 	AddTo                     = Add
 	Done                      = Complete
 	Failed                    = Failed
-	StartVerify               = Verify download task
 	OK                        = OK
 	Cancel                    = Cancel
 	Exit                      = Exit
