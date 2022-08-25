@@ -1,6 +1,6 @@
 ﻿@{
 	RootModule        = 'LXPs.Update.psm1'
-	ModuleVersion     = '1.0.0.0'
+	ModuleVersion     = '1.0.0.1'
 	GUID              = '9721911e-8259-439a-bfc0-06039e44f3ad'
 	Author            = 'Yi'
 	Copyright         = 'FengYi, Inc. All rights reserved.'

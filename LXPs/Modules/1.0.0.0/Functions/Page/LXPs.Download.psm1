@@ -1336,7 +1336,7 @@ Function LXPs_Download
 		$UI_Main_Sync_Some_Location.Checked = $True
 	}
 
-	$GetCurrentDisk = Convert-Path -Path "$($PSScriptRoot)\..\..\..\" -ErrorAction SilentlyContinue
+	$GetCurrentDisk = Convert-Path -Path "$($PSScriptRoot)\..\..\..\..\" -ErrorAction SilentlyContinue
 	if (Get-ItemProperty -Path "HKCU:\SOFTWARE\$($Global:UniqueID)\LXPs" -Name "IsDownloadAll" -ErrorAction SilentlyContinue) {
 		switch (Get-ItemPropertyValue -Path "HKCU:\SOFTWARE\$($Global:UniqueID)\LXPs" -Name "IsDownloadAll" -ErrorAction SilentlyContinue) {
 			"True" {
@@ -1559,7 +1559,7 @@ Function LXPs_Download_Process
 		Write-host "`n   $($lang.ProcessSources)`n   ---------------------------------------------------"
 		for ($i=0; $i -lt $Global:AvailableLanguages.Count; $i++) {
 			if (($Script:Queue_Language_Download_Select) -Contains $($Global:AvailableLanguages[$i][2])) {
-				$NewFolder = "$($PSScriptRoot)\..\..\..\Download\$($Script:Version)\LocalExperiencePack\$($Global:AvailableLanguages[$i][2])"
+				$NewFolder = "$($PSScriptRoot)\..\..\..\..\Download\$($Script:Version)\LocalExperiencePack\$($Global:AvailableLanguages[$i][2])"
 				Check_Folder -chkpath $NewFolder
 				$NewFolder = Convert-Path -Path $NewFolder -ErrorAction SilentlyContinue
 
