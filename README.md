@@ -22,113 +22,39 @@ The main function:
 6. All conditions of "Language Overview" have been followed and met
    https://docs.microsoft.com/zh-cn/windows-hardware/manufacture/desktop/languages-overview
 ```
-The deployment LXPs is divided into multiple parts
--
-You can intervene in the deployment process by adding more deployment tags, activate the first deployment:
 .\LXPs.ps1 -Force
 
-
-* Shared deployment tags
-
-| Path             | Deployment tag        | Description |
-|------------------|-----------------------|---|
-| \Deploy\Allow    | IsMarkSync            | Allows full disk search and synchronization of deployment tags |
-
-When enabling full disk search and synchronization of deployment tags, you can store deployment tags on any other disk, allowing or disallowing deployment, for example:
-   1. The priority judgment deployment is marked as:
-      D:\Yi\Deploy\Not Allowed\AutoUpdate
-
-   2. Continue to judge: D:\Yi\Deploy\Allow\AutoUpdate
-
-   3. Continue to judge the Deploy directory under the directory where the deployment LXPs script is stored.
-
-When full disk search and synchronization of deployment tags are not allowed, only the Deploy directory under the directory where the deployment LXPs scripts are stored is recognized.
-
-Download template: LXPs.Deploy.Rule.ISO
-
-
-* Part 1: Prerequisite deployment
-
-| Assignable path               | Deployment tag        | Description |
-|-------------------------------|-----------------------|---|
-| \Deploy\{allow, Not Allowed}  | AutoUpdate            | Allow automatic updates |
-| \Deploy\{allow, Not Allowed}  | UseUTF8               | Beta: Use Unicode UTF-8 to provide global language support |
-| \Deploy\{allow, Not Allowed}  | PrerequisitesReboot   | Restart the computer<br>Restarting the computer after completing the prerequisite deployment can solve the problem that needs to be restarted to take effect. |
-| \Deploy\Regional              | Zone marker           | Change system locale |
-
-
-* Part 2: Complete the first deployment
-
-| Assignable path               | Deployment tag        | Description |
-|-------------------------------|-----------------------|---|
-| \Deploy\{allow, Not Allowed}  | PopupLXPs           | Allow the main interface of the deployment LXPs to pop up for the first time |
-| \Deploy\{allow, Not Allowed}  | FirstPreExperience    | Allow the first pre-experience, as planned |
-| \Deploy\{allow, Not Allowed}  | ResetExecutionPolicy  | Recovery PowerShell execution strategy: restricted |
-| \Deploy\{allow, Not Allowed}  | ClearSolutions        | Delete the entire solution |
-| \Deploy\{allow, Not Allowed}  | ClearLXPs           | Delete the deployment LXPs, keep the others |
-| \Deploy\{allow, Not Allowed}  | FirstExperienceReboot | Restart the computer<br>After the deployment is complete, there are no important events. It is recommended that you cancel. |
 </details>
  
 <details>
   <summary>简体中文 - 中国</summary>
-  <h1>全自动添加 Windows 系统已安装的语言</h1>
+  <h1>本地语言体验包（LXPs）</h1>
 
 主要功能：
 ```
-1、支持在线升级；
-2、修改脚本按 R 可热刷新；
-3、根据描述文件来实现部署规则；
-4、获取已安装的语言包，自动添加；
-5、添加过程中，自动判断 S、SN 版，按规则添加；
-6、已遵循并满足“语言概述”的所有条件
-   https://docs.microsoft.com/zh-cn/windows-hardware/manufacture/desktop/languages-overview
+1、支持在线升级，请了解“如何自定义创建升级包”；
+2、支持热刷新，热加载，修改代码后，在主界面按 R 即可完成；
+3、可自定义选择待下载的本地语言体验包（LXPs）；
+4、下载时：
+   a. 可下载全部；
+   b. 下载时可按版本号筛选，下载完成后可自动：
+      按规则重命名、
+      创建 License.xml 证书；
+5、生成报告，生成内容：文件名、语言、语言描述、最低版本号、最高测试版本等。
 ```
 
-部署引擎分为多部分
--
-可通过添加更多的部署标记来进行干预部署过程，激活首次部署：
-.\LXPs.ps1 -Force
+* 如何自定义创建升级包
+  a、继续使用当前版本请跳过修改，例如当前版本号：1.0.0.0，创建为新的版本号：2.0.0.0，
+     打开 \LXPs\Modules\LXPs.psd1，修改“ModuleVersion”为：2.0.0.0
 
+  b、将 Modules\1.0.0.0 目录修改为 2.0.0.0；
+     注意：1.0.0.0 请根据每版本号进行更改。
 
-* 共享部署标记
+  c、重新指定升级服务器，修改 URL 连接：
+     打开：Modules\1.0.0.0\Functions\Base\Update\LXPs.Update.psm1，更改：
+     c.1  修改最低要求版本号：$Global:ChkLocalver，如果支持滑行升级可从 1.0.0.0 开始，如果脚本最低要求 2.0.0.0 开始，请更改为 2.0.0.0；
+     c.2  重新指定更新服务器：$PreServerList。
 
-| 路径             | 部署标记               | 描述 |
-|------------------|-----------------------|---|
-| \Deploy\Allow    | IsMarkSync            | 允许全盘搜索并同步部署标记 |
-
-允许全盘搜索并同步部署标记时，你可以在其它任意磁盘存放部署标记，可允许部署和不允许部署，例如：
-   1、优先判断部署标记为：
-      D:\Yi\Deploy\Not Allowed\AutoUpdate
-
-   2、继续判断：D:\Yi\Deploy\Allow\AutoUpdate
-
-   3、继续判断部署引擎脚本存放目录下的 Deploy 目录。
-
-不允许全盘搜索并同步部署标记时，仅识别部署引擎脚本存放目录下的 Deploy 目录。
-
-下载模板：LXPs.Deploy.Rule.ISO
-
-
-* 第一部分：先决部署
-
-| 可分配路径                     | 部署标记               | 描述 |
-|-------------------------------|-----------------------|---|
-| \Deploy\{allow, Not Allowed}  | AutoUpdate            | 允许自动更新 |
-| \Deploy\{allow, Not Allowed}  | UseUTF8               | Beta 版：使用 Unicode UTF-8 提供全球语言支持 |
-| \Deploy\{allow, Not Allowed}  | PrerequisitesReboot   | 重新启动计算机<br>完成先决部署后重新启动计算机，可解决需重启才生效的问题。 |
-| \Deploy\Regional              | 区域标记               | 更改系统区域设置 |
-
-
-* 第二部分：完成首次部署
-
-| 可分配路径                     | 部署标记               | 描述 |
-|-------------------------------|-----------------------|---|
-| \Deploy\{allow, Not Allowed}  | PopupLXPs           | 允许首次弹出部署引擎主界面 |
-| \Deploy\{allow, Not Allowed}  | FirstPreExperience    | 允许首次预体验，按计划 |
-| \Deploy\{allow, Not Allowed}  | ResetExecutionPolicy  | 恢复 PowerShell 执行策略：受限 |
-| \Deploy\{allow, Not Allowed}  | ClearSolutions        | 删除整个解决方案 |
-| \Deploy\{allow, Not Allowed}  | ClearLXPs           | 删除部署引擎，保留其它 |
-| \Deploy\{allow, Not Allowed}  | FirstExperienceReboot | 重新启动计算机<br>部署完成后没有重要的事件，建议您取消。 |
 </details>
 
 
