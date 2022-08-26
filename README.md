@@ -12,18 +12,32 @@ Available languages
   <summary>United States - English</summary>
   <h1>Local Experience Packs (LXPs)</h1>
 
-The main function:
+Main functions:
 ```
-1. Support online upgrade;
-2. Modify the script and press R to hot refresh;
-3. Implement deployment rules according to the description file;
-4. Get the installed language pack and add it automatically;
-5. During the adding process, the S and SN versions are automatically judged and added according to the rules;
-6. All conditions of "Language Overview" have been followed and met
-   https://docs.microsoft.com/zh-cn/windows-hardware/manufacture/desktop/languages-overview
+1. Support online upgrade, please understand "how to customize the creation of upgrade package";
+2. Support hot refresh, hot loading, modify the code, press R on the main interface to complete;
+3. Customizable selection of local language experience packs (LXPs) to be downloaded;
+4. When downloading:
+   a. Downloadable in full;
+   b. When downloading, you can filter by version number, and when the download is complete, you can automatically:
+      Rename by rule,
+      Create a License .xml Certificate;
+5. Generate report, generate content: file name, language, language description, minimum version number, highest test version, etc.
 ```
-.\LXPs.ps1 -Force
 
+* How to custom create an upgrade package
+```
+  a. If you continue to use the current version, please skip the modification, for example, the current version number: 1.0.0.0, create a new version number: 2.0.0.0,
+     Open LXPs\Modules\LXPs.psd1, and modify ModuleVersion to: 2.0.0.0
+
+  b. Modify the Modules\1.0.0.0 directory to 2.0.0.0;
+     Note: 1.0.0.0 Please change it according to the version number.
+
+  c. Re-specify the upgrade server and modify the URL connection:
+     Open it: Modules\1.0.0.0\Functions\Base\Update\LXPs.Update.psm1, Change: 
+     c.1  To modify the minimum required version number: $Global:ChkLocalver, If the glide upgrade is supported starting at 1.0.0.0, if the script requires a minimum of 2.0.0.0, change to 2.0.0.0;
+     c.2  To reassign the update server: $PreServerList。
+```
 </details>
  
 <details>
@@ -44,6 +58,7 @@ The main function:
 ```
 
 * 如何自定义创建升级包
+```
   a、继续使用当前版本请跳过修改，例如当前版本号：1.0.0.0，创建为新的版本号：2.0.0.0，
      打开 \LXPs\Modules\LXPs.psd1，修改“ModuleVersion”为：2.0.0.0
 
@@ -54,7 +69,7 @@ The main function:
      打开：Modules\1.0.0.0\Functions\Base\Update\LXPs.Update.psm1，更改：
      c.1  修改最低要求版本号：$Global:ChkLocalver，如果支持滑行升级可从 1.0.0.0 开始，如果脚本最低要求 2.0.0.0 开始，请更改为 2.0.0.0；
      c.2  重新指定更新服务器：$PreServerList。
-
+```
 </details>
 
 
