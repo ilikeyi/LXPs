@@ -25,7 +25,7 @@ Main functions:
 5. Generate report, generate content: file name, language, language description, minimum version number, highest test version, etc.
 ```
 
-* How to custom create an upgrade package
+## How to custom create an upgrade package
 ```
   a. If you continue to use the current version, please skip the modification, for example, the current version number: 1.0.0.0, create a new version number: 2.0.0.0,
      Open LXPs\Modules\LXPs.psd1, and modify ModuleVersion to: 2.0.0.0
@@ -57,8 +57,8 @@ Main functions:
 5、生成报告，生成内容：文件名、语言、语言描述、最低版本号、最高测试版本等。
 ```
 
-* 如何自定义创建升级包
-```
+## 如何自定义创建升级包
+
   a、继续使用当前版本请跳过修改，例如当前版本号：1.0.0.0，创建为新的版本号：2.0.0.0，
      打开 \LXPs\Modules\LXPs.psd1，修改“ModuleVersion”为：2.0.0.0
 
@@ -69,7 +69,10 @@ Main functions:
      打开：Modules\1.0.0.0\Functions\Base\Update\LXPs.Update.psm1，更改：
      c.1  修改最低要求版本号：$Global:ChkLocalver，如果支持滑行升级可从 1.0.0.0 开始，如果脚本最低要求 2.0.0.0 开始，请更改为 2.0.0.0；
      c.2  重新指定更新服务器：$PreServerList。
-```
+
+  d、运行：
+     .\_Create.Upgrade.Package.ps1
+
 </details>
 
 
