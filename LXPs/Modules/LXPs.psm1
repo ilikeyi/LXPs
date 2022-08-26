@@ -329,7 +329,7 @@ Function Language_Select_GUI
 	} else {
 		$FlagsDefaultLanguage = (Get-Culture).Name
 	}
-	
+
 	$CurrentVersion = (Get-Module -Name LXPs).Version
 	for ($i=0; $i -lt $Global:AvailableLanguages.Count; $i++) {
 		if (Test-Path -Path "$($PSScriptRoot)\$($CurrentVersion)\langpacks\$($Global:AvailableLanguages[$i][2])" -PathType Container) {
