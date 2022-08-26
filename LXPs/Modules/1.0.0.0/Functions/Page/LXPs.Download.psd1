@@ -16,7 +16,7 @@
 		PSData = @{
 			# Tags = @()
 			# LicenseUri   = ''
-			ProjectUri   = 'https://github.com/ilikeyi/Solutions'
+			ProjectUri   = 'https://github.com/ilikeyi/LXPs'
 			# IconUri      = ''
 			# ReleaseNotes = ''
 		}
