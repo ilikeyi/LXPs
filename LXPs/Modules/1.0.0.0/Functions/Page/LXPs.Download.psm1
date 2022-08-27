@@ -1,4 +1,5 @@
 ﻿<#
+	.Windows system version, version number
 	.Windows 系统版本、版本号
 #>
 $Global:OSCodename = @(
@@ -47,6 +48,7 @@ Function LXPs_Download
 				}
 			} else {
 				<#
+					.Determine if the last selected directory has been saved
 					.判断是否有已保存上次选择的目录
 				#>
 				if ([string]::IsNullOrEmpty($Script:InitalSaveToPath)) {
@@ -81,6 +83,7 @@ Function LXPs_Download
 	}
 
 	<#
+		.Event: Displays the rule details
 		.事件：显示规则详细
 	#>
 	$UI_Main_Languages_Detailed_View_Click = {
@@ -88,6 +91,7 @@ Function LXPs_Download
 	}
 
 	<#
+		.Event: Hide show rule details
 		.事件：隐藏显示规则详细
 	#>
 	$UI_Main_Languages_Detailed_View_Mask_Canel_Click = {
@@ -95,6 +99,7 @@ Function LXPs_Download
 	}
 
 	<#
+		.Event: Select a known version
 		.事件：选择已知版本
 	#>
 	$GUILangChangeSelectVersionClick = {
@@ -113,6 +118,7 @@ Function LXPs_Download
 	#>
 	$UI_Main_Download_Match_Version_OK_Click = {
 		<#
+			.Verify that the custom ISO is saved to the directory name by default
 			.验证自定义 ISO 默认保存到目录名
 		#>
 		<#
@@ -199,6 +205,7 @@ Function LXPs_Download
 		$UI_Main_Download_Match_Version_Menu.Visible = 0
 
 		<#
+			.Verify that the custom ISO is saved to the directory name by default, ends, and saves the new path
 			.验证自定义 ISO 默认保存到目录名，结束并保存新路径
 		#>
 		Save_Dynamic -regkey "LXPs" -name "LXPsSelect" -value $UI_Main_Download_Match_Version_Select.Text -String
@@ -243,7 +250,8 @@ Function LXPs_Download
 	}
 
 	<#
-		事件：匹配未下载项
+		.Event: Matched undownloaded
+		.事件：匹配未下载项
 	#>
 	$UI_Main_Match_No_Select_Item_Click = {
 		$InitalReportSources = $UI_Main_Save_To.Text
@@ -281,6 +289,7 @@ Function LXPs_Download
 	}
 
 	<#
+		.Event: Generate a License .xml
 		.事件：生成 License.xml
 	#>
 	$UI_Main_Save_To_License_Click = {
@@ -290,6 +299,7 @@ Function LXPs_Download
 	}
 
 	<#
+		.Event: Generate a report
 		.事件：生成报告
 	#>
 	$UI_Main_Mask_Report_OK_Click = {
@@ -342,6 +352,7 @@ Function LXPs_Download
 		$UI_Main_Mask_Report_Error.Text = ""
 
 		<#
+			.Determine whether the save to is empty, if not, randomly generate a new save path
 			.判断保存到是否为空，如果不为空则随机生成新的保存路径
 		#>
 		if ([string]::IsNullOrEmpty($InitalReportSources)) {
@@ -373,6 +384,7 @@ Function LXPs_Download
 	}
 
 	<#
+		.Event: Copy path
 		.事件：复制路径
 	#>
 	$UI_Main_Mask_Report_Paste_Click = {
@@ -410,7 +422,8 @@ Function LXPs_Download
 		}
 	}
 	<#
-		.事件：打开目录
+		.Event: Opens the directory, Report
+		.事件：打开目录，报告
 	#>
 	$UI_Main_Mask_Report_Sources_Open_Folder_Click = {
 		if (-not [string]::IsNullOrEmpty($UI_Main_Mask_Report_Sources_Path.Text)) {
@@ -420,7 +433,8 @@ Function LXPs_Download
 		}
 	}
 	<#
-		.事件：复制路径
+		.Event: Copy path, Report
+		.事件：复制路径，报告
 	#>
 	$UI_Main_Mask_Report_Sources_Paste_Click = {
 		if (-not [string]::IsNullOrEmpty($UI_Main_Mask_Report_Sources_Path.Text)) {
@@ -428,8 +442,9 @@ Function LXPs_Download
 		}
 	}
 	<#
-		.事件：同步来源位置与下载到位置一致
-	#>#>
+		.Event: The synchronization source location matches the download to location, Report
+		.事件：同步来源位置与下载到位置一致，报告
+	#>
 	$UI_Main_Mask_Report_Sources_Sync_Click = {
 		$RandomGuid = [guid]::NewGuid()
 		$DesktopOldpath = [Environment]::GetFolderPath("Desktop")
@@ -454,6 +469,7 @@ Function LXPs_Download
 	}
 
 	<#
+		.Event: Save directory location synchronized with filtered version number
 		.事件：保存目录位置与筛选版本号同步
 	#>
 	$UI_Main_Sync_Some_Location_Click = {
@@ -467,6 +483,7 @@ Function LXPs_Download
 	}
 
 	<#
+		.Event: The custom selection is saved to the directory
 		.事件：自定义选择保存到目录
 	#>
 	$UI_Main_Select_Folder_Click = {
@@ -486,6 +503,7 @@ Function LXPs_Download
 					$Script:InitalSaveToPath = $InitalReportSources
 
 					<#
+						.After the replacement is successful, turn off the Sync Check Box that matches the download location from location
 						.更换成功后，关闭同步来源位置与下载位置一致，复选框
 					#>
 					$UI_Main_Sync_Some_Location.Checked = $False
@@ -503,6 +521,7 @@ Function LXPs_Download
 	}
 
 	<#
+		.Event: Opens the directory
 		.事件：打开目录
 	#>
 	$UI_Main_Save_To_Open_Folder_Click = {
@@ -514,6 +533,7 @@ Function LXPs_Download
 	}
 
 	<#
+		.Event: Copy path
 		.事件：复制路径
 	#>
 	$UI_Main_Save_To_Paste_Click = {
@@ -642,6 +662,7 @@ Function LXPs_Download
 	}
 
 	<#
+		.Mask: Displays rule details
 		.蒙板：显示规则详细信息
 	#>
 	$UI_Main_Languages_Detailed_View_Mask = New-Object system.Windows.Forms.Panel -Property @{
@@ -664,6 +685,7 @@ Function LXPs_Download
 	}
 
 	<#
+		.Event, hide show rule details
 		.事件，隐藏显示规则详细
 	#>
 	$UI_Main_Languages_Detailed_View_Mask_Canel = New-Object system.Windows.Forms.Button -Property @{
@@ -676,6 +698,7 @@ Function LXPs_Download
 	}
 
 	<#
+		.Group: Select a known version number
 		.组：选择已知版本号
 	#>
 	$UI_Main_Download_Match_Version_Menu = New-Object system.Windows.Forms.Panel -Property @{
@@ -746,6 +769,7 @@ Function LXPs_Download
 	}
 
 	<#
+		.Download all
 		.下载全部
 	#>
 	$UI_Main_Download = New-Object System.Windows.Forms.CheckBox -Property @{
@@ -824,9 +848,10 @@ Function LXPs_Download
 	}
 
 	<#
+		.Save to
 		.保存到
 	#>
-	$UI_Main_Save_To_Name      = New-Object system.Windows.Forms.Label -Property @{
+	$UI_Main_Save_To_Name = New-Object system.Windows.Forms.Label -Property @{
 		Height         = 25
 		Width          = 455
 		Text           = $lang.SaveTo
@@ -870,6 +895,7 @@ Function LXPs_Download
 	}
 
 	<#
+		.License
 		.证书
 	#>
 	$UI_Main_Save_To_License = New-Object system.Windows.Forms.LinkLabel -Property @{
@@ -911,6 +937,7 @@ Function LXPs_Download
 	}
 
 	<#
+		.Matches undownloaded items
 		.匹配未下载项
 	#>
 	$UI_Main_Match_No_Select_Item = New-Object system.Windows.Forms.LinkLabel -Property @{
@@ -925,6 +952,7 @@ Function LXPs_Download
 	}
 
 	<#
+		.Displays the Change Locale mask
 		.显示更改区域设置蒙层
 	#>
 	$UI_Main_Mask_Report = New-Object system.Windows.Forms.Panel -Property @{
@@ -1011,6 +1039,7 @@ Function LXPs_Download
 	}
 
 	<#
+		.The report is saved to
 		.报告保存到
 	#>
 	$UI_Main_Mask_Report_Save_To_Name = New-Object System.Windows.Forms.Label -Property @{
@@ -1070,6 +1099,7 @@ Function LXPs_Download
 	}
 
 	<#
+		.Displays a hint mask
 		.显示提示蒙层
 	#>
 	$UI_Main_Tips_Mask = New-Object system.Windows.Forms.Panel -Property @{
@@ -1160,6 +1190,7 @@ Function LXPs_Download
 	))
 
 	<#
+		.Mask: Displays language details
 		.蒙板：显示语言详细信息
 	#>
 	$UI_Main_Languages_Detailed_View_Mask.controls.AddRange((
@@ -1168,6 +1199,7 @@ Function LXPs_Download
 	))
 
 	<#
+		.You have new tips
 		.你有新的提示
 	#>
 	$UI_Main_Tips_Mask.controls.AddRange((
@@ -1177,6 +1209,7 @@ Function LXPs_Download
 	))
 
 	<#
+		.Mask, report
 		.蒙板，报告
 	#>
 	$UI_Main_Mask_Report.controls.AddRange((
@@ -1201,6 +1234,7 @@ Function LXPs_Download
 	))
 	$UI_Main_Menu.controls.AddRange((
 		<#
+			.Available languages
 			.可用语言
 		#>
 		$UI_Main_Available_Languages_Name,
@@ -1208,40 +1242,47 @@ Function LXPs_Download
 		$UI_Main_Languages_Detailed_View,
 
 		<#
+			.Select Download All
 			.选择全部下载
 		#>
 		$UI_Main_Download,
 		$UI_Main_Download_Menu,
 
 		<#
+			.Save to
 			.保存到
 		#>
 		$UI_Main_Save_To_Name,
 		$UI_Main_Save_To,
 
 		<#
+			.Open the catalog
 			.打开目录
 		#>
 		$UI_Main_Save_To_Open_Folder,
 
 		<#
+			.Paste
 			.粘贴
 		#>
 		$UI_Main_Save_To_Paste,
 
 		<#
+			.Select a directory
 			.选择目录
 		#>
 		$UI_Main_Select_Folder,
 		$UI_Main_Select_Folder_Tips,
 
 		<#
+			.The synchronization directory is the same as the version number
 			.同步目录与版本号相同
 		#>
 		$UI_Main_Sync_Some_Location,
 		$UI_Main_Sync_Some_Location_Tips,
 
 		<#
+			.Create a License .xml
 			.创建 License.xml
 		#>
 		$UI_Main_Save_To_License,
@@ -1270,6 +1311,7 @@ Function LXPs_Download
 	))
 
 	<#
+		.Gets the list of languages and initializes the selection
 		.获取语言列表并初始化选择
 	#>
 	if (-not (Get-ItemProperty -Path  "HKCU:\SOFTWARE\$($Global:UniqueID)\LXPs" -Name 'Select_Download_Language' -ErrorAction SilentlyContinue)) {
@@ -1420,8 +1462,6 @@ Function LXPs_Download_Report_Process
 		$SaveTo
 	)
 
-	Add-Type -AssemblyName System.IO.Compression.FileSystem;
-
 	if (Test-Path -Path "$($Path)\LocalExperiencePack" -PathType Container) {
 		$FolderDirect = (Join_MainFolder -Path "$($Path)\LocalExperiencePack")
 	} else {
@@ -1441,8 +1481,11 @@ Function LXPs_Download_Report_Process
 		if (Test-Path -Path $TempNewFileFullPath -PathType Leaf) {
 			Check_Folder -chkpath $TempNewFileFolderPath
 
+			Add-Type -AssemblyName System.IO.Compression.FileSystem
 			$zipFile = [IO.Compression.ZipFile]::OpenRead($TempNewFileFullPath)
-			$zipFile.Entries | where { $_.Name -like 'AppxManifest.xml' } | foreach { [System.IO.Compression.ZipFileExtensions]::ExtractToFile($_, "$($TempNewFileFolderPath)\$($_.Name)", $true) }
+			$zipFile.Entries | where { $_.Name -like 'AppxManifest.xml' } | foreach {
+				[System.IO.Compression.ZipFileExtensions]::ExtractToFile($_, "$($TempNewFileFolderPath)\$($_.Name)", $true)
+			}
 			$zipFile.Dispose()
 
 			if (Test-Path -Path "$($TempNewFileFolderPath)\AppxManifest.xml" -PathType Leaf) {
@@ -1528,6 +1571,7 @@ Function LXPs_Download_Licence_Process
 				write-host "   $($item.Language)".PadRight(28) -NoNewline
 				Remove-Item -Path "$($item.OrgPath)\License.xml" -ErrorAction SilentlyContinue
 
+				Add-Type -AssemblyName System.IO.Compression.FileSystem
 				$zipFile = [IO.Compression.ZipFile]::OpenRead($TempNewFileFullPath)
 				$zipFile.Entries | where { $_.Name -like 'License.xml' } | foreach {
 					[System.IO.Compression.ZipFileExtensions]::ExtractToFile($_, "$($item.OrgPath)\$($_.Name)", $true)
@@ -1567,7 +1611,7 @@ Function LXPs_Download_Process
 				write-host "   $($lang.SaveTo)"
 				Write-host "   $($NewFolder)"
 				if ($Script:IsDownload) {
-					LXPs_URL_Download_Process -Lang $Global:AvailableLanguages[$i][2] -StoreURL $Global:AvailableLanguages[$i][6] -SaveTo $NewFolder
+					LXPs_URL_Download_Process -NewLang $Global:AvailableLanguages[$i][2] -StoreURL $Global:AvailableLanguages[$i][6] -SaveTo $NewFolder
 				} else {
 					$NewFilename = "LanguageExperiencePack.$($Global:AvailableLanguages[$i][2]).Neutral.appx"
 					write-host "   $($NewFilename)" -ForegroundColor Green
@@ -1575,7 +1619,7 @@ Function LXPs_Download_Process
 					if (Test-Path -Path "$($NewFolder)\$($NewFilename)" -PathType Leaf) {
 						write-host "   $($lang.AlreadyExists)`n" -ForegroundColor Green
 					} else {
-						LXPs_URL_Download_Process -Lang $Global:AvailableLanguages[$i][2] -StoreURL $Global:AvailableLanguages[$i][6] -SaveTo $NewFolder
+						LXPs_URL_Download_Process -NewLang $Global:AvailableLanguages[$i][2] -StoreURL $Global:AvailableLanguages[$i][6] -SaveTo $NewFolder
 					}
 				}
 			}
@@ -1589,7 +1633,7 @@ function LXPs_URL_Download_Process
 {
 	param
 	(
-		$lang,
+		$NewLang,
 		$StoreURL,
 		$SaveTo
 	)
@@ -1598,19 +1642,23 @@ function LXPs_URL_Download_Process
 
 	write-host "   $($lang.UpdateDownloadAddress)$($NewStoreURL)"
 
-	$wchttp=[System.Net.WebClient]::new()
-	$URI = "https://store.rg-adguard.net/api/GetFiles"
-	$myParameters = "type=url&url=$($NewStoreURL)"
-	#&ring=Retail&lang=sv-SE"
 
-	$wchttp.Headers[[System.Net.HttpRequestHeader]::ContentType]="application/x-www-form-urlencoded"
-	$HtmlResult = $wchttp.UploadString($URI, $myParameters)
+	try {
+		$wchttp = [System.Net.WebClient]::new()
+		$URI = "https://store.rg-adguard.net/api/GetFiles"
+		$myParameters = "type=url&url=$($NewStoreURL)"
+		#&ring=Retail&lang=sv-SE"
 
-	$Start=$HtmlResult.IndexOf("<p>The links were successfully received from the Microsoft Store server.</p>")
-	#write-host $start
+		$wchttp.Headers[[System.Net.HttpRequestHeader]::ContentType]="application/x-www-form-urlencoded"
+		$HtmlResult = $wchttp.UploadString($URI, $myParameters)
+		$Start = $HtmlResult.IndexOf("<p>The links were successfully received from the Microsoft Store server.</p>")
+		#write-host $start
+	} catch {
+		write-host "   $($lang.DownloadFailed)" -ForegroundColor Red
+		return
+	}
 
-	if ($Start -eq -1)
-	{
+	if ($Start -eq -1) {
 		write-host "   $($lang.Get_Link_Failed)"
 		return
 	}
@@ -1662,22 +1710,28 @@ function LXPs_URL_Download_Process
 		} else {
 			if ($Download.textContent -like "*$($Script:Version)*.appx") {
 				Write-host "   $($lang.DownloadNow)`n   $($Download.textContent)"
-				$wchttp.DownloadFile($Download.href, "$($SaveTo)\$($Download.textContent)")
+				try {
+					$wchttp.DownloadFile($Download.href, "$($SaveTo)\$($Download.textContent)")
+				} catch {
+					write-host "   $($lang.DownloadFailed)" -ForegroundColor Red
+					return
+				}
 
 				if (Test-Path -Path "$($SaveTo)\$($Download.textContent)" -PathType Leaf) {
 					Write-Host "   $($lang.Done)" -ForegroundColor Green
 
 					<#
+						.Renaming
 						.改名
 					#>
 					write-host "`n   $($lang.LXPsRename)"
 					if ($Script:IsRename) {
 						write-host "   $($lang.UpdateAvailable)" -ForegroundColor Green
-						write-host "   LanguageExperiencePack.$($lang).Neutral.appx"
+						write-host "   LanguageExperiencePack.$($NewLang).Neutral.appx"
 
-						Rename-Item -Path "$($SaveTo)\$($Download.textContent)" -NewName "$($SaveTo)\LanguageExperiencePack.$($lang).Neutral.appx" -ErrorAction SilentlyContinue
+						Rename-Item -Path "$($SaveTo)\$($Download.textContent)" -NewName "$($SaveTo)\LanguageExperiencePack.$($NewLang).Neutral.appx" -ErrorAction SilentlyContinue
 
-						if (Test-Path -Path "$($SaveTo)\LanguageExperiencePack.$($lang).Neutral.appx" -PathType Leaf) {
+						if (Test-Path -Path "$($SaveTo)\LanguageExperiencePack.$($NewLang).Neutral.appx" -PathType Leaf) {
 							Write-Host "   $($lang.Done)" -ForegroundColor Green
 						} else {
 							Write-Host "   $($lang.Failed)" -ForegroundColor Red
@@ -1687,17 +1741,22 @@ function LXPs_URL_Download_Process
 					}
 
 					<#
+						.License
 						.证书
 					#>
-					
 					write-host "`n   $($lang.LicenseCreate)"
 					if ($Script:IsLicence) {
+						$TempNewFileFullPath = "$($SaveTo)\LanguageExperiencePack.$($NewLang).Neutral.appx"
+
 						write-host "   $($lang.UpdateAvailable)" -ForegroundColor Green
 						Remove-Item "$($SaveTo)\License.xml" -ErrorAction SilentlyContinue
 
-						if (Test-Path -Path "$($SaveTo)\LanguageExperiencePack.$($lang).Neutral.appx" -PathType Leaf) {
+						if (Test-Path -Path $TempNewFileFullPath -PathType Leaf) {
+							write-host "   $($TempNewFileFullPath)" -ForegroundColor Green
+
 							try {
-								$zipFile = [IO.Compression.ZipFile]::OpenRead("$($SaveTo)\LanguageExperiencePack.$($lang).Neutral.appx")
+								Add-Type -AssemblyName System.IO.Compression.FileSystem
+								$zipFile = [IO.Compression.ZipFile]::OpenRead($TempNewFileFullPath)
 								$zipFile.Entries | where { $_.Name -like 'License.xml' } | foreach {
 									[System.IO.Compression.ZipFileExtensions]::ExtractToFile($_, "$($SaveTo)\$($_.Name)", $true)
 								}
