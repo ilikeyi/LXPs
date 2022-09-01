@@ -319,7 +319,7 @@ Function LXPs_Download
 			$UI_Main_Mask_Report_Error.Text = $($lang.Inoperable)
 		}
 	}
-	
+
 	Function LXPs_Refresh_Sources_To_Status
 	{
 		$UI_Main_Mask_Report_Error.Text = ""
@@ -343,7 +343,7 @@ Function LXPs_Download
 			$UI_Main_Mask_Report_Save_To.Text = "$($DesktopOldpath)\Report.$($RandomGuid).csv"
 		}
 	}
-	
+
 	$UI_Main_Report_Click = {
 		$UI_Main_Mask_Report_Error.Text = ""
 		$InitalReportSources = $UI_Main_Save_To.Text
@@ -441,6 +441,7 @@ Function LXPs_Download
 			Set-Clipboard -Value $UI_Main_Mask_Report_Sources_Path.Text
 		}
 	}
+
 	<#
 		.Event: The synchronization source location matches the download to location, Report
 		.事件：同步来源位置与下载到位置一致，报告
@@ -668,7 +669,7 @@ Function LXPs_Download
 	$UI_Main_Languages_Detailed_View_Mask = New-Object system.Windows.Forms.Panel -Property @{
 		BorderStyle    = 0
 		Height         = 678
-		Width          = 923
+		Width          = 950
 		autoSizeMode   = 1
 		Padding        = "8,0,8,0"
 		Location       = '0,0'
@@ -704,7 +705,7 @@ Function LXPs_Download
 	$UI_Main_Download_Match_Version_Menu = New-Object system.Windows.Forms.Panel -Property @{
 		BorderStyle    = 0
 		Height         = 678
-		Width          = 923
+		Width          = 950
 		autoSizeMode   = 1
 		Padding        = "8,0,8,0"
 		Location       = '0,0'
@@ -952,8 +953,8 @@ Function LXPs_Download
 	}
 
 	<#
-		.Displays the Change Locale mask
-		.显示更改区域设置蒙层
+		.Displays the report mask
+		.显示报告蒙层
 	#>
 	$UI_Main_Mask_Report = New-Object system.Windows.Forms.Panel -Property @{
 		BorderStyle    = 0
@@ -1105,7 +1106,7 @@ Function LXPs_Download
 	$UI_Main_Tips_Mask = New-Object system.Windows.Forms.Panel -Property @{
 		BorderStyle    = 0
 		Height         = 760
-		Width          = 898
+		Width          = 950
 		autoSizeMode   = 1
 		Padding        = "8,0,8,0"
 		Location       = '0,0'
