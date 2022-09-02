@@ -210,6 +210,9 @@ Function LXPs_Download
 		#>
 		Save_Dynamic -regkey "LXPs" -name "LXPsSelect" -value $UI_Main_Download_Match_Version_Select.Text -String
 		$UI_Main_Download_Match_Filter_Results.Text = $UI_Main_Download_Match_Version_Select.Text
+		$UI_Main_Error.Text = ""
+
+		$Script:Version = $UI_Main_Download_Match_Version_Select.Text
 
 		LXPs_Refresh_Sources_To_Event
 	}
@@ -587,13 +590,6 @@ Function LXPs_Download
 			return
 		}
 
-		if ([string]::IsNullOrEmpty($UI_Main_Download_Match_Filter_Results.Text)) {
-			$UI_Main_Error.Text = "$($lang.SelectFromError -f $($langr.OSVersion))"
-			return
-		}
-
-		$UI_Main.Hide()
-		$Script:Version = $UI_Main_Download_Match_Filter_Results.Text
 		$Script:IsDownload = $False
 		$Script:IsRename = $False
 		$Script:IsLicence = $False
@@ -601,6 +597,11 @@ Function LXPs_Download
 		if ($UI_Main_Download.Checked) {
 			$Script:IsDownload = $True
 		} else {
+			if ([string]::IsNullOrEmpty($Script:Version)) {
+				$UI_Main_Error.Text = "$($lang.SelectFromError -f $($lang.OSVersion))"
+				return
+			}
+
 			if ($UI_Main_Download_Rename.Checked) {
 				$Script:IsRename = $True
 			}
@@ -610,6 +611,7 @@ Function LXPs_Download
 			}
 		}
 
+		$UI_Main.Hide()
 		LXPs_Download_Process
 		$UI_Main.Close()
 	}
@@ -1350,8 +1352,9 @@ Function LXPs_Download
 		$GetLXPsSelect = Get-ItemPropertyValue -Path "HKCU:\SOFTWARE\$($Global:UniqueID)\LXPs" -Name "LXPsSelect" -ErrorAction SilentlyContinue
 		$UI_Main_Download_Match_Filter_Results.Text = $GetLXPsSelect
 		$UI_Main_Download_Match_Version_Select.Text = $GetLXPsSelect
+		$Script:Version = $GetLXPsSelect
 	} else {
-		$UI_Main_Download_Match_Filter_Results.Text = $lang.MatchDownloadNoNewitem
+		$UI_Main_Download_Match_Filter_Results.Text = $lang.NoSetLabel
 	}
 
 	for ($i=0; $i -lt $Global:OSCodename.Count; $i++) {

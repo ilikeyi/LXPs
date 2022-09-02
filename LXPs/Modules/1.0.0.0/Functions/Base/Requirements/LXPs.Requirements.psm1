@@ -23,18 +23,6 @@ Function Requirements
 		Write-Host -ForegroundColor Red "Failed".PadLeft(8)
 	}
 
-	Write-Host -NoNewline "   Checking Must be elevated to higher authority".PadRight(58)
-	if (([System.Security.Principal.WindowsIdentity]::GetCurrent()).groups -match "S-1-5-32-544") {
-		Write-Host -ForegroundColor Green "OK".PadLeft(8)
-	} else {
-		Write-Host -ForegroundColor Red "Failed".PadLeft(8)
-		Write-Host "`n   It will automatically exit after 6 seconds." -ForegroundColor Red
-		start-process "timeout.exe" -argumentlist "/t 6 /nobreak" -wait -nonewwindow
-		Modules_Import
-		$Global:Quit = $False
-		exit
-	}
-
 	Write-Host "`n   Congratulations, passing the prerequisites.`n   About to go to the next step." -ForegroundColor Green
 	Start-Sleep -s 2
 }
