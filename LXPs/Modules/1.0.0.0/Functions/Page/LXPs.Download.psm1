@@ -1328,22 +1328,20 @@ Function LXPs_Download
 	}
 
 	for ($i=0; $i -lt $Global:AvailableLanguages.Count; $i++) {
-		if ($Global:AvailableLanguages[$i][0] -eq "1") {
-			$CheckBox   = New-Object System.Windows.Forms.CheckBox -Property @{
-				Height  = 28
-				Width   = 430
-				Text    = "$($Global:AvailableLanguages[$i][2].PadRight(45))$($Global:AvailableLanguages[$i][4])"
-				Tag     = $($Global:AvailableLanguages[$i][2])
-			}
-
-			if ($SelectLXPsLanguageRemove -eq $Global:AvailableLanguages[$i][2]) {
-				$CheckBox.Checked = $True
-			} else {
-				$CheckBox.Checked = $False
-			}
-
-			$UI_Main_Available_Languages_Select.controls.AddRange($CheckBox)
+		$CheckBox   = New-Object System.Windows.Forms.CheckBox -Property @{
+			Height  = 28
+			Width   = 430
+			Text    = "$($Global:AvailableLanguages[$i][2].PadRight(45))$($Global:AvailableLanguages[$i][4])"
+			Tag     = $($Global:AvailableLanguages[$i][2])
 		}
+
+		if ($SelectLXPsLanguageRemove -eq $Global:AvailableLanguages[$i][2]) {
+			$CheckBox.Checked = $True
+		} else {
+			$CheckBox.Checked = $False
+		}
+
+		$UI_Main_Available_Languages_Select.controls.AddRange($CheckBox)
 
 		$UI_Main_Languages_Detailed_View_Mask_Results.Text += "    $($Global:AvailableLanguages[$i][4])`n    https://www.microsoft.com/store/productId/$($Global:AvailableLanguages[$i][6])`n`n"
 	}
