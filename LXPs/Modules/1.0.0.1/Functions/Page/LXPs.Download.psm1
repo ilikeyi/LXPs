@@ -1323,7 +1323,7 @@ Function LXPs_Download
 	$GetSelectLXPsLanguageRemove = Get-ItemPropertyValue -Path "HKCU:\SOFTWARE\$($Global:UniqueID)\LXPs" -Name "Select_Download_Language"
 
 	$SelectLXPsLanguageRemove = @()
-	foreach ($item in $GetSelectLXPsLanguageRemove) {
+	ForEach ($item in $GetSelectLXPsLanguageRemove) {
 		$SelectLXPsLanguageRemove += $item
 	}
 
@@ -1485,7 +1485,7 @@ Function LXPs_Download_Report_Process
 
 			Add-Type -AssemblyName System.IO.Compression.FileSystem
 			$zipFile = [IO.Compression.ZipFile]::OpenRead($TempNewFileFullPath)
-			$zipFile.Entries | where { $_.Name -like 'AppxManifest.xml' } | foreach {
+			$zipFile.Entries | where { $_.Name -like 'AppxManifest.xml' } | ForEach {
 				[System.IO.Compression.ZipFileExtensions]::ExtractToFile($_, "$($TempNewFileFolderPath)\$($_.Name)", $true)
 			}
 			$zipFile.Dispose()
@@ -1556,17 +1556,17 @@ Function LXPs_Download_Licence_Process
 	if ($QueueLXPsLicenceSelect.count -gt 0) {
 		Write-Host "   $($lang.YesWork)" -ForegroundColor Green
 
-		Write-host "`n   $($lang.ProcessSources)`n   ---------------------------------------------------"
+		Write-host "`n   $($lang.ProcessSources)`n   $('-' * 80)"
 		write-host "   $($Path)"
 
-		Write-Host "`n   $($lang.AddSources)`n   ---------------------------------------------------"
-		foreach ($item in $QueueLXPsLicenceSelect) {
+		Write-Host "`n   $($lang.AddSources)`n   $('-' * 80)"
+		ForEach ($item in $QueueLXPsLicenceSelect) {
 			Write-Host "   $($item.Language)".PadRight(28) -NoNewline
 			write-host " $($item.FileName)"
 		}
 
-		Write-Host "`n   $($lang.AddQueue)`n   ---------------------------------------------------"
-		foreach ($item in $QueueLXPsLicenceSelect) {
+		Write-Host "`n   $($lang.AddQueue)`n   $('-' * 80)"
+		ForEach ($item in $QueueLXPsLicenceSelect) {
 			$TempNewFileFullPath = "$($item.OrgPath)\$($item.FileName)"
 
 			if (Test-Path -Path $TempNewFileFullPath -PathType Leaf) {
@@ -1575,7 +1575,7 @@ Function LXPs_Download_Licence_Process
 
 				Add-Type -AssemblyName System.IO.Compression.FileSystem
 				$zipFile = [IO.Compression.ZipFile]::OpenRead($TempNewFileFullPath)
-				$zipFile.Entries | where { $_.Name -like 'License.xml' } | foreach {
+				$zipFile.Entries | where { $_.Name -like 'License.xml' } | ForEach {
 					[System.IO.Compression.ZipFileExtensions]::ExtractToFile($_, "$($item.OrgPath)\$($_.Name)", $true)
 				}
 				$zipFile.Dispose()
@@ -1597,12 +1597,12 @@ Function LXPs_Download_Process
 	if ($Script:Queue_Language_Download_Select.Count -gt 0) {
 		Write-Host "   $($lang.YesWork)" -ForegroundColor Green
 
-		Write-Host "`n   $($lang.AddSources)`n   ---------------------------------------------------"
-		foreach ($item in $Script:Queue_Language_Download_Select) {
+		Write-Host "`n   $($lang.AddSources)`n   $('-' * 80)"
+		ForEach ($item in $Script:Queue_Language_Download_Select) {
 			write-host "   $($item)"
 		}
 
-		Write-host "`n   $($lang.ProcessSources)`n   ---------------------------------------------------"
+		Write-host "`n   $($lang.ProcessSources)`n   $('-' * 80)"
 		for ($i=0; $i -lt $Global:AvailableLanguages.Count; $i++) {
 			if (($Script:Queue_Language_Download_Select) -Contains $($Global:AvailableLanguages[$i][2])) {
 				$NewFolder = "$($PSScriptRoot)\..\..\..\..\Download\$($Script:Version)\LocalExperiencePack\$($Global:AvailableLanguages[$i][2])"
@@ -1692,7 +1692,7 @@ function LXPs_URL_Download_Process
 		return
 	}
 
-	Foreach ($Download in $ToDownload)
+	ForEach ($Download in $ToDownload)
 	{
 		if ($Script:IsDownload) {
 			Write-host "   $($lang.DownloadNow)"
@@ -1759,7 +1759,7 @@ function LXPs_URL_Download_Process
 							try {
 								Add-Type -AssemblyName System.IO.Compression.FileSystem
 								$zipFile = [IO.Compression.ZipFile]::OpenRead($TempNewFileFullPath)
-								$zipFile.Entries | where { $_.Name -like 'License.xml' } | foreach {
+								$zipFile.Entries | where { $_.Name -like 'License.xml' } | ForEach {
 									[System.IO.Compression.ZipFileExtensions]::ExtractToFile($_, "$($SaveTo)\$($_.Name)", $true)
 								}
 								$zipFile.Dispose()
