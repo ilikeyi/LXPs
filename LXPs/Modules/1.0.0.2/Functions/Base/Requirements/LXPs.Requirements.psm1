@@ -6,7 +6,8 @@ Function Requirements
 {
 	Clear-Host
 	$Host.UI.RawUI.WindowTitle = "$($Global:UniqueID)'s Solutions | Prerequisites"
-	Write-Host "`n   Prerequisites`n   $('-' * 80)"
+	Write-Host "`n   Prerequisites" -ForegroundColor Yellow
+	Write-host "   $('-' * 80)"
 
 	Write-Host -NoNewline "   Checking PS version 5.1 and above".PadRight(75)
 	if ($PSVersionTable.PSVersion.major -ge "5") {

@@ -97,7 +97,6 @@ $TempFolderUpdate = "$([Environment]::GetFolderPath("MyDocuments"))\Temp.LXPs.Up
 #>
 $ArchiveExcludeUp = @(
 	"-xr-!Download"
-	"-xr-!Deploy"
 	"-xr-!Logs"
 #	"-xr-!_Create.Upgrade.Package.ps1"
 )
@@ -180,7 +179,7 @@ Function Update_Create_UI
 	Write-Host "`n   Author: $($Global:UniqueID) ( $($Global:AuthorURL) )
 
    From: $($Global:UniqueID)'s Solutions
-   buildstring: $((Get-Module -Name LXPs).Version.ToString()).bs_release.220201-1208`n"
+   buildstring: $((Get-Module -Name LXPs).Version.ToString()).bs_release.230429-1208`n"
 
 	Write-Host "   $($lang.UpdateCreate)`n   $('-' * 80)"
 
@@ -565,13 +564,13 @@ Function Update_Create_Version
 		"url":  "$($Global:AuthorURL)"
 	},
 	"version": {
-		"buildstring": "$($CurrentVersion).bs_release.220201-1208",
+		"buildstring": "$($CurrentVersion).bs_release.230429-1208",
 		"version":     "$($CurrentVersion)",
 		"minau":       "$($LowVer)"
 	},
 	"changelog": {
 		"title": "$($Global:UniqueID)'s Solutions - new autoupdate system",
-		"log":   "   1.0.0.1  Fixed a list that did not display all languages. * Fix"
+		"log":   "   1.0.0.2  Fixed a list that did not display all languages. * Fix"
 	},
 	"url": "$($Global:AuthorURL)/download/solutions/update/LXPs/latest.zip"
 }

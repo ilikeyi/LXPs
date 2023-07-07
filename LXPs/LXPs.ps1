@@ -46,7 +46,7 @@ Import-Module -Name $PSScriptRoot\Modules\LXPs.psd1 -PassThru -Force | Out-Null
 	 Language -Auto          | Automatic matching                  | 自动选择，不提示
 	 Language -Force "zh-CN" | Mandatory use of specified language | 强制选择语言
 #>
-Language
+Language -Auto
 
 <#
 	.Prerequisites

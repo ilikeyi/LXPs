@@ -1644,7 +1644,6 @@ function LXPs_URL_Download_Process
 
 	write-host "   $($lang.UpdateDownloadAddress)$($NewStoreURL)"
 
-
 	try {
 		$wchttp = [System.Net.WebClient]::new()
 		$URI = "https://store.rg-adguard.net/api/GetFiles"
@@ -1654,27 +1653,27 @@ function LXPs_URL_Download_Process
 		$wchttp.Headers[[System.Net.HttpRequestHeader]::ContentType]="application/x-www-form-urlencoded"
 		$HtmlResult = $wchttp.UploadString($URI, $myParameters)
 		$Start = $HtmlResult.IndexOf("<p>The links were successfully received from the Microsoft Store server.</p>")
-		#write-host $start
+#		write-host $start
 	} catch {
-		write-host "   $($lang.DownloadFailed)" -ForegroundColor Red
+		write-host "   $($lang.DownloadFailed)`n" -ForegroundColor Red
 		return
 	}
 
 	if ($Start -eq -1) {
-		write-host "   $($lang.Get_Link_Failed)"
+		write-host "   $($lang.Get_Link_Failed)`n"
 		return
 	}
 	$TableEnd=($HtmlResult.LastIndexOf("</table>")+8)
 
 	$SemiCleaned=$HtmlResult.Substring($start,$TableEnd-$start)
 
-	#https://stackoverflow.com/questions/46307976/unable-to-use-ihtmldocument2
+#	https://stackoverflow.com/questions/46307976/unable-to-use-ihtmldocument2
 	$newHtml = New-Object -ComObject "HTMLFile"
 	try {
-		# This works in PowerShell with Office installed
+#		This works in PowerShell with Office installed
 		$newHtml.IHTMLDocument2_write($SemiCleaned)
 	} catch {
-		# This works when Office is not installed    
+#		This works when Office is not installed    
 		$src = [System.Text.Encoding]::Unicode.GetBytes($SemiCleaned)
 		$newHtml.write($src)
 	}
@@ -1684,11 +1683,11 @@ function LXPs_URL_Download_Process
 	$LastFrontSlash = $NewStoreURL.LastIndexOf("/")
 	$ProductID = $NewStoreURL.Substring($LastFrontSlash+1,$NewStoreURL.Length-$LastFrontSlash-1)
 
-	# OldRegEx   Failed when the %tmp% started with a lowercase char
+	# OldRegEx Failed when the %tmp% started with a lowercase char
 	#if ([regex]::IsMatch("$SaveTo\$ProductID","([,!@?#$%^&*()\[\]]+|\\\.\.|\\\\\.|\.\.\\\|\.\\\|\.\.\/|\.\/|\/\.\.|\/\.|;|(?<![A-Z]):)|^\w+:(\w|.*:)"))
 
 	if ([regex]::IsMatch("$SaveTo","([,!@?#$%^&*()\[\]]+|\\\.\.|\\\\\.|\.\.\\\|\.\\\|\.\.\/|\.\/|\/\.\.|\/\.|;|(?<![A-Za-z]):)|^\w+:(\w|.*:)")) {
-		write-host "Invalid characters in path"$SaveTo""
+		write-host "Invalid characters in path"$($SaveTo)""
 		return
 	}
 
@@ -1715,7 +1714,7 @@ function LXPs_URL_Download_Process
 				try {
 					$wchttp.DownloadFile($Download.href, "$($SaveTo)\$($Download.textContent)")
 				} catch {
-					write-host "   $($lang.DownloadFailed)" -ForegroundColor Red
+					write-host "   $($lang.DownloadFailed)`n" -ForegroundColor Red
 					return
 				}
 
@@ -1779,7 +1778,7 @@ function LXPs_URL_Download_Process
 						write-host "   $($lang.UpdateUnavailable)" -ForegroundColor Green
 					}
 				} else {
-					write-host "   $($lang.DownloadFailed)" -ForegroundColor Red
+					write-host "   $($lang.DownloadFailed)`n" -ForegroundColor Red
 				}
 			}
 		}
