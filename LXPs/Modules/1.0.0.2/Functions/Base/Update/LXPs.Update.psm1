@@ -21,17 +21,14 @@ $IsCorrectAuVer = $false
        Only one URL address must be added in front of the, number, multiple addresses do not need to be added, example:
        只有一个 URL 地址必须在前面添加 , 号，多地址不用添加，示例：
 
-	$PreServerList = @(
-		,("$($Global:AuthorURL)",
-		  "/download/solutions/update/LXPs/latest.json")
+	$Script:PreServerList = @(
+		,("https://fengyi.tel/download/solutions/update/LXPs/latest.json")
 	)
 #>
-$Global:ServerList = @()
-$PreServerList = @(
-	("$($Global:AuthorURL)",
-	 "/download/solutions/update/LXPs/latest.json"),
-	("https://github.com",
-	 "/ilikeyi/LXPs/raw/main/update/latest.json")
+$Script:ServerList = @()
+$Script:PreServerList = @(
+	("https://fengyi.tel/download/solutions/update/LXPs/latest.json"),
+	("https://github.com/ilikeyi/LXPs/raw/main/update/latest.json")
 )
 
 <#
@@ -47,7 +44,7 @@ Function Update
 		[switch]$IsProcess
 	)
 	
-	$Global:ServerList = @()
+	$Script:ServerList = @()
 	if ($IsProcess) {
 		$Script:IsProcess = $True
 	} else {
@@ -58,8 +55,8 @@ Function Update
 	Write-Host "   $($lang.ChkUpdate)`n   $('-' * 80)"
 
 	if ($Auto) {
-		ForEach ($item in $PreServerList | Sort-Object { Get-Random } ) {
-			$Global:ServerList += $item[0] + $item[1]
+		ForEach ($item in $Script:PreServerList | Sort-Object { Get-Random } ) {
+			$Script:ServerList += $item
 		}
 
 		Update_Process -Force
@@ -87,47 +84,45 @@ Function Update_Setting_UI
 	}
 	$UI_Main_Canel_Click = {
 		$UI_Main.Hide()
-		$Global:ServerList = @()
-		$Global:UpdateAvailableSilent = $False
-		$Global:UpdateAvailableReset = $False
+		$Script:ServerList = @()
+		$Script:UpdateAvailableSilent = $False
+		$Script:UpdateAvailableReset = $False
 
 		Write-Host "   $($lang.UserCancel)" -ForegroundColor Red
 		$UI_Main.Close()
 	}
 	$UI_Main_OK_Click = {
-		$Global:ServerList = @()
+		$Script:ServerList = @()
 
 		if ($UI_Main_Silent.Checked) {
-			$Global:UpdateAvailableSilent = $True
+			$Script:UpdateAvailableSilent = $True
 		} else {
-			$Global:UpdateAvailableSilent = $False
+			$Script:UpdateAvailableSilent = $False
 		}
 
 		if ($UI_Main_Reset.Checked) {
-			$Global:UpdateAvailableReset = $True
+			$Script:UpdateAvailableReset = $True
 		} else {
-			$Global:UpdateAvailableReset = $False
+			$Script:UpdateAvailableReset = $False
 		}
 
 		if ($UI_Main_Auto_Select.Checked) {
 			$UI_Main.Hide()
-			ForEach ($item in $PreServerList | Sort-Object { Get-Random } ) {
-				$Global:ServerList += $item[0] + $item[1]
+			ForEach ($item in $Script:PreServerList | Sort-Object { Get-Random } ) {
+				$Script:ServerList += $item
 			}
 			Update_Process
 			$UI_Main.Close()
 		} else {
-			$FlagsVerifyServerlist = $False
 			$UI_Main_Menu.Controls | ForEach-Object {
 				if ($_ -is [System.Windows.Forms.CheckBox]) {
 					if ($_.Checked) {
-						$FlagsVerifyServerlist = $true
-						$Global:ServerList += $_.Tag
+						$Script:ServerList += $_.Tag
 					}
 				}
 			}
 
-			if ($FlagsVerifyServerlist) {
+			if ($Script:ServerList.Count -gt 0) {
 				$UI_Main.Hide()
 				Update_Process
 				$UI_Main.Close()
@@ -218,13 +213,13 @@ Function Update_Setting_UI
 		$UI_Main_Canel
 	))
 
-	ForEach ($list in $PreServerList) {
-		$fullurl = $list[0] + $list[1]
+	ForEach ($itemLink in $Script:PreServerList) {
+		$url2 = $itemLink.split("/")
 		$CheckBox   = New-Object System.Windows.Forms.CheckBox -Property @{
 			Height  = 35
 			Width   = 395
-			Text    = $list[0]
-			Tag     = $fullurl
+			Text    = "$($url2[0])//$($url2[2])"
+			Tag     = $itemLink
 			Checked = $true
 		}
 		$UI_Main_Menu.controls.AddRange($CheckBox)
@@ -287,10 +282,10 @@ Function Update_Process
 	#>
 	Set-ItemProperty -Path "HKLM:\SOFTWARE\Microsoft\Internet Explorer\Main" -Name "DisableFirstRunCustomize" -Value 2 -ErrorAction SilentlyContinue
 
-	Write-Host "   $($lang.UpdateCheckServerStatus -f $($Global:ServerList.Count))
+	Write-Host "   $($lang.UpdateCheckServerStatus -f $($Script:ServerList.Count))
    $('-' * 80)"
 
-	ForEach ($item in $Global:ServerList) {
+	ForEach ($item in $Script:ServerList) {
 		Write-Host "   * $($lang.UpdateServerAddress -f $($item))"
 		if (Test_URI $item) {
 			$PreServerVersion = $item
@@ -368,11 +363,11 @@ $($getSerVer.changelog.log)`n"
 					$FlagsCheckForceUpdate = $True
 				}
 
-				if ($Global:UpdateAvailableSilent) {
+				if ($Script:UpdateAvailableSilent) {
 					$FlagsCheckForceUpdate = $True
 				}
 	
-				if ($Global:UpdateAvailableReset) {
+				if ($Script:UpdateAvailableReset) {
 					$FlagsCheckForceUpdate = $True
 				}
 	
@@ -401,7 +396,7 @@ $($getSerVer.changelog.log)`n"
 				return
 			}
 		} else {
-			if ($Global:UpdateAvailableReset) {
+			if ($Script:UpdateAvailableReset) {
 				Write-host "`n   $($lang.UpdateVerifyAvailable)`n   $('-' * 80)"
 				Write-Host "   * $($lang.UpdateDownloadAddress)$($url)"
 				if (Test_URI $url) {
