@@ -6,7 +6,6 @@
 	Failed                    = Failed
 	OK                        = OK
 	Cancel                    = Cancel
-	Exit                      = Exit
 	AllSel                    = Select all
 	AllClear                  = Clear all
 	Operable                  = Operable

@@ -6,7 +6,6 @@
 	Failed                    = 실패했습니다
 	OK                        = 결정
 	Cancel                    = 취소
-	Exit                      = 그만두 다
 	AllSel                    = 모두 선택
 	AllClear                  = 모두 지우기
 	Operable                  = 실시 가능한
