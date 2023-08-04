@@ -236,37 +236,7 @@ Function Language_Select_GUI
 	
 	Clear-Host
 	Write-Host "`n   Choose your country or region."
-	
-	$GUISelectLanguageDontPromptClick = {
-		if ($GUISelectLanguageDontPrompt.Checked) {
-			New-ItemProperty -Path $Path -Name "LanguagePrompt" -Value "True" -PropertyType string -Force | Out-Null
-		} else {
-			New-ItemProperty -Path $Path -Name "LanguagePrompt" -Value "False" -PropertyType string -Force | Out-Null
-		}
-	}
-	$GUISelectLanguageCanelClick = {
-		$GUISelectLanguage.Close()
-		$Global:Quit = $True
-	}
-	$GUISelectLanguageOKClick = {
-		$FlagsLanguageCheck = $False
-		$GUISelectLanguagePanel.Controls | ForEach-Object {
-			if ($_ -is [System.Windows.Forms.RadioButton]) {
-				if ($_.Checked) {
-					$FlagsLanguageCheck = $True
-					New-ItemProperty -Path $Path -Name "Language" -Value $_.Tag -PropertyType string -Force | Out-Null
-					Language_Change -lang $_.Tag
-					Modules_Import -Import
-				}
-			}
-		}
 
-		if ($FlagsLanguageCheck) {
-			$GUISelectLanguage.Close()
-		} else {
-			$GUISelectLanguageErrorMsg.Text = "Please select your preferred language"
-		}
-	}
 	$GUISelectLanguage = New-Object system.Windows.Forms.Form -Property @{
 		autoScaleMode  = 2
 		Height         = 720
@@ -298,23 +268,50 @@ Function Language_Select_GUI
 		Width          = 508
 		Text           = "&Remember the chosen language"
 		Location       = '10,566'
-		add_Click      = $GUISelectLanguageDontPromptClick
+		add_Click      = {
+			if ($GUISelectLanguageDontPrompt.Checked) {
+				New-ItemProperty -Path $Path -Name "LanguagePrompt" -Value "True" -PropertyType string -Force | Out-Null
+			} else {
+				New-ItemProperty -Path $Path -Name "LanguagePrompt" -Value "False" -PropertyType string -Force | Out-Null
+			}
+		}
 	}
 	$GUISelectLanguageOK = New-Object system.Windows.Forms.Button -Property @{
 		UseVisualStyleBackColor = $True
 		Location       = "8,595"
 		Height         = 36
 		Width          = 515
-		add_Click      = $GUISelectLanguageOKClick
 		Text           = "&OK"
+		add_Click      = {
+			$FlagsLanguageCheck = $False
+			$GUISelectLanguagePanel.Controls | ForEach-Object {
+				if ($_ -is [System.Windows.Forms.RadioButton]) {
+					if ($_.Checked) {
+						$FlagsLanguageCheck = $True
+						New-ItemProperty -Path $Path -Name "Language" -Value $_.Tag -PropertyType string -Force | Out-Null
+						Language_Change -lang $_.Tag
+						Modules_Import -Import
+					}
+				}
+			}
+
+			if ($FlagsLanguageCheck) {
+				$GUISelectLanguage.Close()
+			} else {
+				$GUISelectLanguageErrorMsg.Text = "Please select your preferred language"
+			}
+		}
 	}
 	$GUISelectLanguageCanel = New-Object system.Windows.Forms.Button -Property @{
 		UseVisualStyleBackColor = $True
 		Location       = "8,635"
 		Height         = 36
 		Width          = 515
-		add_Click      = $GUISelectLanguageCanelClick
 		Text           = "&Cancel"
+		add_Click      = {
+			$GUISelectLanguage.Close()
+			$Global:Quit = $True
+		}
 	}
 	$GUISelectLanguage.controls.AddRange((
 		$GUISelectLanguagePanel,

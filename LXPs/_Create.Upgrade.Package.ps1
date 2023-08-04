@@ -190,65 +190,7 @@ Function Update_Create_UI
 	Add-Type -AssemblyName System.Windows.Forms
 	Add-Type -AssemblyName System.Drawing
 	[System.Windows.Forms.Application]::EnableVisualStyles()
- 
-	$GUIUpdateCreateASCClick = {
-		if ($GUIUpdateCreateASC.Checked) {
-			$GUIUpdateCreateASCPanel.Enabled = $True
-			Save_Dynamic -regkey "LXPs" -name "IsPGP" -value "True" -String
-		} else {
-			$GUIUpdateCreateASCPanel.Enabled = $False
-			Save_Dynamic -regkey "LXPs" -name "IsPGP" -value "False" -String
-		}
-	}
 
-	<#
-		.Event: canceled
-		.事件：取消
-	#>
-	$GUIUpdateCanelClick = {
-		Write-Host "   $($lang.UserCancel)" -ForegroundColor Red
-		$GUIUpdate.Close()
-	}
-
-	<#
-		.Event: Ok
-		.事件：确认
-	#>
-	$GUIUpdateOKClick = {
-		<#
-			.搜索到后生成 PGP
-		#>
-		if ($GUIUpdateCreateASC.Enabled) {
-			if ($GUIUpdateCreateASC.Checked) {
-				if ([string]::IsNullOrEmpty($GUIUpdateCreateASCSign.Text)) {
-					$GUIUpdateErrorMsg.Text = "$($lang.SelectFromError -f $($lang.CreateASCAuthorTips))"
-					return
-				} else {
-					Save_Dynamic -regkey "LXPs" -name "PGP" -value $GUIUpdateCreateASCSign.Text -String
-					$Script:secure_password = $GUIUpdateCreateASCPWD.Text
-					$Script:SignGpgKeyID = $GUIUpdateCreateASCSign.Text
-				}
-			}
-		}
-
-		$GUIUpdate.Hide()
-		remove-item -path "$TempFolderUpdate" -Recurse -force -ErrorAction SilentlyContinue
-		Update_Create_Process
-
-		if ($GUIUpdateCreateASC.Enabled) {
-			if ($GUIUpdateCreateASC.Checked) {
-				Update_Create_ASC
-			}
-		}
-
-		if ($GUIUpdateCreateSHA256.Enabled) {
-			if ($GUIUpdateCreateSHA256.Checked) {
-				Update_Create_SHA256
-			}
-		}
-		Update_Create_MoveTo
-		$GUIUpdate.Close()
-	}
 	$GUIUpdate         = New-Object system.Windows.Forms.Form -Property @{
 		autoScaleMode  = 2
 		Height         = 720
@@ -296,7 +238,15 @@ Function Update_Create_UI
 		Text           = $lang.UpCreateASC
 		Location       = '26,0'
 		Checked        = $True
-		add_Click      = $GUIUpdateCreateASCClick
+		add_Click      = {
+			if ($GUIUpdateCreateASC.Checked) {
+				$GUIUpdateCreateASCPanel.Enabled = $True
+				Save_Dynamic -regkey "LXPs" -name "IsPGP" -value "True" -String
+			} else {
+				$GUIUpdateCreateASCPanel.Enabled = $False
+				Save_Dynamic -regkey "LXPs" -name "IsPGP" -value "False" -String
+			}
+		}
 	}
 	$GUIUpdateCreateASCPanel = New-Object system.Windows.Forms.Panel -Property @{
 		BorderStyle    = 0
@@ -351,16 +301,53 @@ Function Update_Create_UI
 		Location       = "8,595"
 		Height         = 36
 		Width          = 515
-		add_Click      = $GUIUpdateOKClick
 		Text           = $lang.OK
+		add_Click      = {
+			<#
+				.搜索到后生成 PGP
+			#>
+			if ($GUIUpdateCreateASC.Enabled) {
+				if ($GUIUpdateCreateASC.Checked) {
+					if ([string]::IsNullOrEmpty($GUIUpdateCreateASCSign.Text)) {
+						$GUIUpdateErrorMsg.Text = "$($lang.SelectFromError -f $($lang.CreateASCAuthorTips))"
+						return
+					} else {
+						Save_Dynamic -regkey "LXPs" -name "PGP" -value $GUIUpdateCreateASCSign.Text -String
+						$Script:secure_password = $GUIUpdateCreateASCPWD.Text
+						$Script:SignGpgKeyID = $GUIUpdateCreateASCSign.Text
+					}
+				}
+			}
+
+			$GUIUpdate.Hide()
+			remove-item -path "$TempFolderUpdate" -Recurse -force -ErrorAction SilentlyContinue
+			Update_Create_Process
+
+			if ($GUIUpdateCreateASC.Enabled) {
+				if ($GUIUpdateCreateASC.Checked) {
+					Update_Create_ASC
+				}
+			}
+
+			if ($GUIUpdateCreateSHA256.Enabled) {
+				if ($GUIUpdateCreateSHA256.Checked) {
+					Update_Create_SHA256
+				}
+			}
+			Update_Create_MoveTo
+			$GUIUpdate.Close()
+		}
 	}
 	$GUIUpdateCanel = New-Object system.Windows.Forms.Button -Property @{
 		UseVisualStyleBackColor = $True
 		Location       = "8,635"
 		Height         = 36
 		Width          = 515
-		add_Click      = $GUIUpdateCanelClick
 		Text           = $lang.Cancel
+		add_Click      = {
+			Write-Host "   $($lang.UserCancel)" -ForegroundColor Red
+			$GUIUpdate.Close()
+		}
 	}
 	$GUIUpdate.controls.AddRange((
 		$GUIUpdateVersion,
