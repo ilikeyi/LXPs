@@ -51,7 +51,7 @@ Function Mainpage
 		}
 		"q" {
 			Modules_Import
-			$Global:Quit = $False
+			Stop-Process $PID
 			exit
 		}
 		default { Mainpage }
@@ -69,15 +69,7 @@ Function ToMainpage
 		[int]$wait
 	)
 
-	if ($Global:QUIT) {
-		Write-Host $($lang.ToQuit -f $wait) -ForegroundColor Red
-		Start-Sleep -s $wait
-		Modules_Import
-		$Global:Quit = $False
-		exit
-	} else {
-		Write-Host $($lang.ToMsg -f $wait) -ForegroundColor Red
-		Start-Sleep -s $wait
-		Mainpage
-	}
+	Write-Host $($lang.ToMsg -f $wait) -ForegroundColor Red
+	Start-Sleep -s $wait
+	Mainpage
 }

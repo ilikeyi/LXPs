@@ -191,6 +191,7 @@ Function Language
 		} else {
 			Language_Change -lang (Get-Culture).Name
 		}
+
 		Modules_Import -Import
 		return
 	}
@@ -199,8 +200,7 @@ Function Language
 		.Mandatory use of the specified language
 		.强制使用指定语言
 	#>
-	if (-not (([string]::IsNullOrEmpty($Force))))
-	{
+	if (-not ([string]::IsNullOrEmpty($Force))) {
 		Language_Change -lang $Force
 		Modules_Import -Import
 		return
@@ -210,13 +210,8 @@ Function Language
 		.Saved language
 		.已保存语言
 	#>
-	if (([string]::IsNullOrEmpty($Global:IsLang))) {
+	if ([string]::IsNullOrEmpty($Global:IsLang)) {
 		Language_Select_GUI
-		if ($Global:Quit) {
-			Modules_Import
-			$Global:Quit = $False
-			exit
-		}
 	} else {
 		Language_Change -lang $Global:IsLang
 		Modules_Import -Import
@@ -310,7 +305,7 @@ Function Language_Select_GUI
 		Text           = "&Cancel"
 		add_Click      = {
 			$GUISelectLanguage.Close()
-			$Global:Quit = $True
+			Stop-Process $PID
 		}
 	}
 	$GUISelectLanguage.controls.AddRange((
