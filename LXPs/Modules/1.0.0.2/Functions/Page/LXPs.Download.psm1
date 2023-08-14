@@ -563,6 +563,19 @@ Function LXPs_Download
 			LXPs_Refresh_Sources_To_Event
 		}
 	}
+	if (Get-ItemProperty -Path "HKCU:\SOFTWARE\$($Global:UniqueID)\LXPs" -Name "IsSyncSaveTo" -ErrorAction SilentlyContinue) {
+		switch (Get-ItemPropertyValue -Path "HKCU:\SOFTWARE\$($Global:UniqueID)\LXPs" -Name "IsSyncSaveTo" -ErrorAction SilentlyContinue) {
+			"True" {
+				$UI_Main_Sync_Some_Location.Checked = $True
+			}
+			"False" {
+				$UI_Main_Sync_Some_Location.Checked = $False
+			}
+		}
+	} else {
+		$UI_Main_Sync_Some_Location.Checked = $True
+	}
+
 	$UI_Main_Sync_Some_Location_Tips = New-Object system.Windows.Forms.Label -Property @{
 		autoSize       = 1
 		Padding        = "36,0,15,0"
@@ -1263,19 +1276,6 @@ Function LXPs_Download
 		}
 
 		$UI_Main_Download_Match_Version.controls.AddRange($CheckBox)
-	}
-
-	if (Get-ItemProperty -Path "HKCU:\SOFTWARE\$($Global:UniqueID)\LXPs" -Name "IsSyncSaveTo" -ErrorAction SilentlyContinue) {
-		switch (Get-ItemPropertyValue -Path "HKCU:\SOFTWARE\$($Global:UniqueID)\LXPs" -Name "IsSyncSaveTo" -ErrorAction SilentlyContinue) {
-			"True" {
-				$UI_Main_Sync_Some_Location.Checked = $True
-			}
-			"False" {
-				$UI_Main_Sync_Some_Location.Checked = $False
-			}
-		}
-	} else {
-		$UI_Main_Sync_Some_Location.Checked = $True
 	}
 
 	$GetCurrentDisk = Convert-Path -Path "$($PSScriptRoot)\..\..\..\..\" -ErrorAction SilentlyContinue

@@ -258,6 +258,7 @@ Function Language_Select_GUI
 		Width          = 508
 		Text           = ""
 	}
+
 	$GUISelectLanguageDontPrompt = New-Object System.Windows.Forms.CheckBox -Property @{
 		Height         = 22
 		Width          = 508
@@ -271,6 +272,14 @@ Function Language_Select_GUI
 			}
 		}
 	}
+	if (Get-ItemProperty -Path "HKCU:\SOFTWARE\$($Global:UniqueID)\LXPs" -Name "LanguagePrompt" -ErrorAction SilentlyContinue) {
+		$GetLanguagePrompt = Get-ItemPropertyValue -Path "HKCU:\SOFTWARE\$($Global:UniqueID)\LXPs" -Name "LanguagePrompt"
+		switch ($GetLanguagePrompt) {
+			"True" { $GUISelectLanguageDontPrompt.Checked = $True }
+			"False" { $GUISelectLanguageDontPrompt.Checked = $False }
+		}
+	}
+
 	$GUISelectLanguageOK = New-Object system.Windows.Forms.Button -Property @{
 		UseVisualStyleBackColor = $True
 		Location       = "8,595"
@@ -337,14 +346,6 @@ Function Language_Select_GUI
 			}
 
 			$GUISelectLanguagePanel.controls.AddRange($CheckBox)
-		}
-	}
-
-	if (Get-ItemProperty -Path "HKCU:\SOFTWARE\$($Global:UniqueID)\LXPs" -Name "LanguagePrompt" -ErrorAction SilentlyContinue) {
-		$GetLanguagePrompt = Get-ItemPropertyValue -Path "HKCU:\SOFTWARE\$($Global:UniqueID)\LXPs" -Name "LanguagePrompt"
-		switch ($GetLanguagePrompt) {
-			"True" { $GUISelectLanguageDontPrompt.Checked = $True }
-			"False" { $GUISelectLanguageDontPrompt.Checked = $False }
 		}
 	}
 
