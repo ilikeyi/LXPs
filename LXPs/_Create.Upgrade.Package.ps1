@@ -179,10 +179,10 @@ Function Update_Create_UI
 	)
 
 	Clear-Host
-	$Host.UI.RawUI.WindowTitle = "$($Global:UniqueID)'s Solutions | $($lang.UpdateCreate)"
-	Write-Host "`n   Author: $($Global:UniqueID) ( $($Global:AuthorURL) )
+	$Host.UI.RawUI.WindowTitle = "$((Get-Module -Name LXPs).Author)'s Solutions | $($lang.UpdateCreate)"
+	Write-Host "`n   Author: $((Get-Module -Name LXPs).Author) ( $((Get-Module -Name LXPs).HelpInfoURI) )
 
-   From: $($Global:UniqueID)'s Solutions
+   From: $((Get-Module -Name LXPs).Author)'s Solutions
    buildstring: $((Get-Module -Name LXPs).Version.ToString()).bs_release.230429-1208`n"
 
 	Write-Host "   $($lang.UpdateCreate)`n   $('-' * 80)"
@@ -387,16 +387,16 @@ Function Update_Create_UI
 	ForEach ($item in $GpgKI) {
 		$GUIUpdateCreateASCSign.Items.Add($item) | Out-Null
 	}
-	if (Get-ItemProperty -Path "HKCU:\SOFTWARE\$($Global:UniqueID)\LXPs" -Name "PGP" -ErrorAction SilentlyContinue) {
-		$GUIUpdateCreateASCSign.Text = Get-ItemPropertyValue -Path "HKCU:\SOFTWARE\$($Global:UniqueID)\LXPs" -Name "PGP" -ErrorAction SilentlyContinue
+	if (Get-ItemProperty -Path "HKCU:\SOFTWARE\$((Get-Module -Name LXPs).Author)\LXPs" -Name "PGP" -ErrorAction SilentlyContinue) {
+		$GUIUpdateCreateASCSign.Text = Get-ItemPropertyValue -Path "HKCU:\SOFTWARE\$((Get-Module -Name LXPs).Author)\LXPs" -Name "PGP" -ErrorAction SilentlyContinue
 	}
 
 	$Verify_Install_Path = Get_ASC -Run "gpg.exe"
 	if (Test-Path -Path $Verify_Install_Path -PathType leaf) {
 		$GUIUpdateGroupASC.Enabled = $True
 		
-		if (Get-ItemProperty -Path "HKCU:\SOFTWARE\$($Global:UniqueID)\LXPs" -Name "IsPGP" -ErrorAction SilentlyContinue) {
-			switch (Get-ItemPropertyValue -Path "HKCU:\SOFTWARE\$($Global:UniqueID)\LXPs" -Name "IsPGP" -ErrorAction SilentlyContinue) {
+		if (Get-ItemProperty -Path "HKCU:\SOFTWARE\$((Get-Module -Name LXPs).Author)\LXPs" -Name "IsPGP" -ErrorAction SilentlyContinue) {
+			switch (Get-ItemPropertyValue -Path "HKCU:\SOFTWARE\$((Get-Module -Name LXPs).Author)\LXPs" -Name "IsPGP" -ErrorAction SilentlyContinue) {
 				"True" {
 					$GUIUpdateCreateASC.Checked = $True
 					$GUIUpdateCreateASCPanel.Enabled = $True
@@ -551,8 +551,8 @@ Function Update_Create_Version
 @"
 {
 	"author": {
-		"name": "$($Global:UniqueID)",
-		"url":  "$($Global:AuthorURL)"
+		"name": "$((Get-Module -Name LXPs).Author)",
+		"url":  "$((Get-Module -Name LXPs).HelpInfoURI)"
 	},
 	"version": {
 		"buildstring": "$($CurrentVersion).bs_release.230429-1208",
@@ -560,10 +560,10 @@ Function Update_Create_Version
 		"minau":       "$($LowVer)"
 	},
 	"changelog": {
-		"title": "$($Global:UniqueID)'s Solutions - new autoupdate system",
+		"title": "$((Get-Module -Name LXPs).Author)'s Solutions - new autoupdate system",
 		"log":   "   1.0.0.2  Fixed a list that did not display all languages. * Fix"
 	},
-	"url": "$($Global:AuthorURL)/download/solutions/update/LXPs/latest.zip"
+	"url": "$((Get-Module -Name LXPs).HelpInfoURI)/download/solutions/update/LXPs/latest.zip"
 }
 "@ | Out-File -FilePath "$($SaveTo)\latest.json" -Encoding Ascii
 }

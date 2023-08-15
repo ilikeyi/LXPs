@@ -563,8 +563,8 @@ Function LXPs_Download
 			LXPs_Refresh_Sources_To_Event
 		}
 	}
-	if (Get-ItemProperty -Path "HKCU:\SOFTWARE\$($Global:UniqueID)\LXPs" -Name "IsSyncSaveTo" -ErrorAction SilentlyContinue) {
-		switch (Get-ItemPropertyValue -Path "HKCU:\SOFTWARE\$($Global:UniqueID)\LXPs" -Name "IsSyncSaveTo" -ErrorAction SilentlyContinue) {
+	if (Get-ItemProperty -Path "HKCU:\SOFTWARE\$((Get-Module -Name LXPs).Author)\LXPs" -Name "IsSyncSaveTo" -ErrorAction SilentlyContinue) {
+		switch (Get-ItemPropertyValue -Path "HKCU:\SOFTWARE\$((Get-Module -Name LXPs).Author)\LXPs" -Name "IsSyncSaveTo" -ErrorAction SilentlyContinue) {
 			"True" {
 				$UI_Main_Sync_Some_Location.Checked = $True
 			}
@@ -1220,10 +1220,10 @@ Function LXPs_Download
 		.Gets the list of languages and initializes the selection
 		.获取语言列表并初始化选择
 	#>
-	if (-not (Get-ItemProperty -Path  "HKCU:\SOFTWARE\$($Global:UniqueID)\LXPs" -Name 'Select_Download_Language' -ErrorAction SilentlyContinue)) {
+	if (-not (Get-ItemProperty -Path  "HKCU:\SOFTWARE\$((Get-Module -Name LXPs).Author)\LXPs" -Name 'Select_Download_Language' -ErrorAction SilentlyContinue)) {
 		Save_Dynamic -regkey "LXPs" -name "Select_Download_Language" -value "" -Multi
 	}
-	$GetSelectLXPsLanguageRemove = Get-ItemPropertyValue -Path "HKCU:\SOFTWARE\$($Global:UniqueID)\LXPs" -Name "Select_Download_Language"
+	$GetSelectLXPsLanguageRemove = Get-ItemPropertyValue -Path "HKCU:\SOFTWARE\$((Get-Module -Name LXPs).Author)\LXPs" -Name "Select_Download_Language"
 
 	$SelectLXPsLanguageRemove = @()
 	ForEach ($item in $GetSelectLXPsLanguageRemove) {
@@ -1249,8 +1249,8 @@ Function LXPs_Download
 		$UI_Main_Languages_Detailed_View_Mask_Results.Text += "    $($Global:AvailableLanguages[$i][4])`n    https://www.microsoft.com/store/productId/$($Global:AvailableLanguages[$i][6])`n`n"
 	}
 
-	if (Get-ItemProperty -Path "HKCU:\SOFTWARE\$($Global:UniqueID)\LXPs" -Name "LXPsSelect" -ErrorAction SilentlyContinue) {
-		$GetLXPsSelect = Get-ItemPropertyValue -Path "HKCU:\SOFTWARE\$($Global:UniqueID)\LXPs" -Name "LXPsSelect" -ErrorAction SilentlyContinue
+	if (Get-ItemProperty -Path "HKCU:\SOFTWARE\$((Get-Module -Name LXPs).Author)\LXPs" -Name "LXPsSelect" -ErrorAction SilentlyContinue) {
+		$GetLXPsSelect = Get-ItemPropertyValue -Path "HKCU:\SOFTWARE\$((Get-Module -Name LXPs).Author)\LXPs" -Name "LXPsSelect" -ErrorAction SilentlyContinue
 		$UI_Main_Download_Match_Filter_Results.Text = $GetLXPsSelect
 		$UI_Main_Download_Match_Version_Select.Text = $GetLXPsSelect
 		$Script:Version = $GetLXPsSelect
@@ -1279,8 +1279,8 @@ Function LXPs_Download
 	}
 
 	$GetCurrentDisk = Convert-Path -Path "$($PSScriptRoot)\..\..\..\..\" -ErrorAction SilentlyContinue
-	if (Get-ItemProperty -Path "HKCU:\SOFTWARE\$($Global:UniqueID)\LXPs" -Name "IsDownloadAll" -ErrorAction SilentlyContinue) {
-		switch (Get-ItemPropertyValue -Path "HKCU:\SOFTWARE\$($Global:UniqueID)\LXPs" -Name "IsDownloadAll" -ErrorAction SilentlyContinue) {
+	if (Get-ItemProperty -Path "HKCU:\SOFTWARE\$((Get-Module -Name LXPs).Author)\LXPs" -Name "IsDownloadAll" -ErrorAction SilentlyContinue) {
+		switch (Get-ItemPropertyValue -Path "HKCU:\SOFTWARE\$((Get-Module -Name LXPs).Author)\LXPs" -Name "IsDownloadAll" -ErrorAction SilentlyContinue) {
 			"True" {
 				$UI_Main_Download.Checked = $True
 				$UI_Main_Download_Match_Version.Enabled = $False
@@ -1306,8 +1306,8 @@ Function LXPs_Download
 
 	LXPs_Refresh_Sources_To_Event
 
-	if (Get-ItemProperty -Path "HKCU:\SOFTWARE\$($Global:UniqueID)\LXPs" -Name "LXPsTipsWarning" -ErrorAction SilentlyContinue) {
-		switch (Get-ItemPropertyValue -Path "HKCU:\SOFTWARE\$($Global:UniqueID)\LXPs" -Name "LXPsTipsWarning" -ErrorAction SilentlyContinue) {
+	if (Get-ItemProperty -Path "HKCU:\SOFTWARE\$((Get-Module -Name LXPs).Author)\LXPs" -Name "LXPsTipsWarning" -ErrorAction SilentlyContinue) {
+		switch (Get-ItemPropertyValue -Path "HKCU:\SOFTWARE\$((Get-Module -Name LXPs).Author)\LXPs" -Name "LXPsTipsWarning" -ErrorAction SilentlyContinue) {
 			"True" {
 				$UI_Main_Tips_Mask.Visible = 0
 				$UI_Main_Tips_Mask_DoNot.Checked = $True

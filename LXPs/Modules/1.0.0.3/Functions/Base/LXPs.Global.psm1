@@ -13,7 +13,7 @@ Function Save_Dynamic
 		[switch]$String
 	)
 
-	$Path = "HKCU:\SOFTWARE\$($Global:UniqueID)\$($regkey)"
+	$Path = "HKCU:\SOFTWARE\$((Get-Module -Name LXPs).Author)\$($regkey)"
 
 	if (-not (Test-Path $Path)) {
 		New-Item -Path $Path -Force -ErrorAction SilentlyContinue | Out-Null
