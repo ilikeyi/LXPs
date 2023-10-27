@@ -35,7 +35,7 @@ Main functions:
 
   c. Re-specify the upgrade server and modify the URL connection:
      Open it: Modules\1.0.0.0\Functions\Base\Update\LXPs.Update.psm1, Change: 
-     c.1  To modify the minimum required version number: $Global:ChkLocalver, If the glide upgrade is supported starting at 1.0.0.0, if the script requires a minimum of 2.0.0.0, change to 2.0.0.0;
+     c.1  To modify the minimum required version number: LXPs.psd1 ( MinimumVersion ), If the glide upgrade is supported starting at 1.0.0.0, if the script requires a minimum of 2.0.0.0, change to 2.0.0.0;
      c.2  To reassign the update server: $PreServerList。
 ```
 </details>
@@ -67,7 +67,7 @@ Main functions:
 
   c、重新指定升级服务器，修改 URL 连接：
      打开：Modules\1.0.0.0\Functions\Base\Update\LXPs.Update.psm1，更改：
-     c.1  修改最低要求版本号：$Global:ChkLocalver，如果支持滑行升级可从 1.0.0.0 开始，如果脚本最低要求 2.0.0.0 开始，请更改为 2.0.0.0；
+     c.1  修改最低要求版本号：LXPs.psd1 ( MinimumVersion )，如果支持滑行升级可从 1.0.0.0 开始，如果脚本最低要求 2.0.0.0 开始，请更改为 2.0.0.0；
      c.2  重新指定更新服务器：$PreServerList。
 
   d、运行：

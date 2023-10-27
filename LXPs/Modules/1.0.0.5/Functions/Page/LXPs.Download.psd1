@@ -1,7 +1,7 @@
 ﻿@{
-	RootModule        = 'LXPs.psm1'
-	ModuleVersion     = '1.0.0.5'
-	GUID              = 'f80caca0-10a7-453c-91f9-ea04f4f32f92'
+	RootModule        = 'LXPs.Download.psm1'
+	ModuleVersion     = '1.0.0.1'
+	GUID              = 'ff5dc303-4b29-4f4d-a6b3-617b43420483'
 	Author            = 'Yi'
 	Copyright         = 'FengYi, Inc. All rights reserved.'
 	Description       = ''
@@ -14,12 +14,11 @@
 
 	PrivateData = @{
 		PSData = @{
-			Tags = @("LXPs")
+			# Tags = @()
 			# LicenseUri   = ''
 			ProjectUri   = 'https://github.com/ilikeyi/LXPs'
 			# IconUri      = ''
 			# ReleaseNotes = ''
-			MinimumVersion = '1.0.0.0'
 		}
 	}
 	HelpInfoURI = 'https://fengyi.tel'
