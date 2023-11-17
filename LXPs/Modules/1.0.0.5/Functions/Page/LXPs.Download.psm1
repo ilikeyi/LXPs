@@ -124,7 +124,7 @@ Function LXPs_Download
 		$InitalReportSources = $UI_Main_Mask_Report_Sources_Path.Text
 		$DesktopOldpath = [Environment]::GetFolderPath("Desktop")
 
-		if (Test-Path -Path "$($InitalReportSources)" -PathType Container) {
+		if (Test-Path -Path $InitalReportSources -PathType Container) {
 			if (Test_Available_Disk -Path $InitalReportSources) {
 				$UI_Main_Mask_Report_Sources_Open_Folder.Enabled = $True
 				$UI_Main_Mask_Report_Sources_Paste.Enabled = $True
@@ -532,13 +532,13 @@ Function LXPs_Download
 						#>
 						$UI_Main_Sync_Some_Location.Checked = $False
 					} else {
-						$UI_Main_Error.Text = "$($lang.Inoperable)"
+						$UI_Main_Error.Text = $lang.Inoperable
 					}
 				} else {
-					$UI_Main_Error.Text = "$($lang.Inoperable)"
+					$UI_Main_Error.Text = $lang.Inoperable
 				}
 			} else {
-				$UI_Main_Error.Text = "$($lang.UserCancel)"
+				$UI_Main_Error.Text = $lang.UserCancel
 			}
 
 			LXPs_Refresh_Sources_To_Event
@@ -758,7 +758,7 @@ Function LXPs_Download
 				$InitalReportSources = (Join_MainFolder -Path $FolderBrowser.SelectedPath)
 				$UI_Main_Mask_Report_Sources_Path.Text = $InitalReportSources
 
-				if (Test-Path -Path "$($InitalReportSources)" -PathType Container) {
+				if (Test-Path -Path $InitalReportSources -PathType Container) {
 					if (Test_Available_Disk -Path $InitalReportSources) {
 						$UI_Main_Mask_Report_Save_To.Text = "$($InitalReportSources)Report.$($RandomGuid).csv"
 					} else {
@@ -770,7 +770,7 @@ Function LXPs_Download
 					$UI_Main_Mask_Report_Save_To.Text = "$($DesktopOldpath)\Report.$($RandomGuid).csv"
 				}
 			} else {
-				$UI_Main_Mask_Report_Error.Text = "$($lang.UserCancel)"
+				$UI_Main_Mask_Report_Error.Text = $lang.UserCancel
 			}
 		}
 	}
@@ -821,7 +821,7 @@ Function LXPs_Download
 			if (-not [string]::IsNullOrEmpty($InitalReportSources)) {
 				$UI_Main_Mask_Report_Sources_Path.Text = $InitalReportSources
 
-				if (Test-Path -Path "$($InitalReportSources)" -PathType Container) {
+				if (Test-Path -Path $InitalReportSources -PathType Container) {
 					if (Test_Available_Disk -Path $InitalReportSources) {
 						$UI_Main_Mask_Report_Save_To.Text = "$($InitalReportSources)Report.$($RandomGuid).csv"
 					} else {
@@ -906,7 +906,7 @@ Function LXPs_Download
 			$MarkVerifyWrite = $False
 			$InitalReportSources = $UI_Main_Mask_Report_Sources_Path.Text
 			if (-not [string]::IsNullOrEmpty($InitalReportSources)) {
-				if (Test-Path -Path "$($InitalReportSources)" -PathType Container) {
+				if (Test-Path -Path $InitalReportSources -PathType Container) {
 					$MarkVerifyWrite = $True
 				}
 			}
@@ -1272,7 +1272,7 @@ Function LXPs_Download
 			Height    = 40
 			Width     = 310
 			Text      = "$($Global:OSCodename[$i][0])`n$($Global:OSCodename[$i][1])"
-			Tag       = $($Global:OSCodename[$i][1])
+			Tag       = $Global:OSCodename[$i][1]
 			add_Click = {
 				$UI_Main_Download_Match_Version.Controls | ForEach-Object {
 					if ($_ -is [System.Windows.Forms.RadioButton]) {
@@ -1401,7 +1401,7 @@ Function LXPs_Download_Report_Process
 
 				$QueueSelectLXPsReport += [PSCustomObject]@{
 					FileName           = "LanguageExperiencePack.$($itemRegion.Region).Neutral.appx"
-					MatchLanguage      = "$($itemRegion.Region)"
+					MatchLanguage      = $itemRegion.Region
 					LXPsDisplayName    = $Xml.Package.Properties.DisplayName
 					LXPsLanguage       = $Xml.Package.Resources.Resource.Language
 					LXPsVersion        = $Xml.Package.Identity.Version
@@ -1413,7 +1413,7 @@ Function LXPs_Download_Report_Process
 		} else {
 			$QueueSelectLXPsReport += [PSCustomObject]@{
 				FileName           = "LanguageExperiencePack.$($itemRegion.Region).Neutral.appx"
-				MatchLanguage      = "$($itemRegion.Region)"
+				MatchLanguage      = $itemRegion.Region
 				LXPsDisplayName    = ""
 				LXPsLanguage       = ""
 				LXPsVersion        = ""
@@ -1424,7 +1424,7 @@ Function LXPs_Download_Report_Process
 		}
 	}
 
-	$QueueSelectLXPsReport | Export-CSV -NoTypeInformation -Path "$($SaveTo)" -Encoding UTF8
+	$QueueSelectLXPsReport | Export-CSV -NoTypeInformation -Path $SaveTo -Encoding UTF8
 
 	Remove_Tree $ISOTestFolderMain
 }
@@ -1453,7 +1453,7 @@ Function LXPs_Download_Licence_Process
 
 		if (Test-Path -Path $TempNewFileFullPath -PathType Leaf) {
 			$QueueLXPsLicenceSelect += @{
-				Language = "$($itemRegion.Region)"
+				Language = $itemRegion.Region
 				FileName = "LanguageExperiencePack.$($itemRegion.Region).Neutral.appx"
 				OrgPath  = $TempNewFileFolderPath
 			}
@@ -1469,7 +1469,7 @@ Function LXPs_Download_Licence_Process
 		Write-Host "`n   $($lang.AddSources)`n   $('-' * 80)"
 		ForEach ($item in $QueueLXPsLicenceSelect) {
 			Write-Host "   $($item.Language)".PadRight(28) -NoNewline
-			write-host " $($item.FileName)"
+			write-host $item.FileName
 		}
 
 		Write-Host "`n   $($lang.AddQueue)`n   $('-' * 80)"

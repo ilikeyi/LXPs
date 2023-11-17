@@ -11,19 +11,19 @@ Function Requirements
 
 	Write-Host -NoNewline "   Checking PS version 5.1 and above".PadRight(75)
 	if ($PSVersionTable.PSVersion.major -ge "5") {
-		Write-Host -ForegroundColor Green "OK".PadLeft(8)
+		Write-Host "OK".PadLeft(8) -ForegroundColor Green
 	} else {
-		Write-Host -ForegroundColor Red " Failed".PadLeft(8)
+		Write-Host " Failed".PadLeft(8) -ForegroundColor Red
 	}
 
 	Write-Host -NoNewline "   Checking Windows version > 10.0.16299.0".PadRight(75)
 	$OSVer = [System.Environment]::OSVersion.Version;
 	if (($OSVer.Major -eq 10 -and $OSVer.Minor -eq 0 -and $OSVer.Build -ge 16299)) {
-		Write-Host -ForegroundColor Green "OK".PadLeft(8)
+		Write-Host "OK".PadLeft(8) -ForegroundColor Green
 	} else {
-		Write-Host -ForegroundColor Red "Failed".PadLeft(8)
+		Write-Host "Failed".PadLeft(8) -ForegroundColor Red
 	}
 
-	Write-Host "`n   Congratulations, passing the prerequisites.`n   About to go to the next step." -ForegroundColor Green
+	Write-Host "`n   Congratulations, it has passed." -ForegroundColor Green
 	Start-Sleep -s 2
 }

@@ -364,8 +364,8 @@ $($getSerVer.changelog.log)`n"
 				If ($FlagsCheckForceUpdate) {
 					Update_And_Download -url $url
 				} else {
-					$title = "$($lang.UpdateInstall)"
-					$message = "$($lang.UpdateInstallSel)"
+					$title = $lang.UpdateInstall
+					$message = $lang.UpdateInstallSel
 					$yes = New-Object System.Management.Automation.Host.ChoiceDescription "&Yes", "Yes"
 					$no = New-Object System.Management.Automation.Host.ChoiceDescription "&No", "No"
 					$options = [System.Management.Automation.Host.ChoiceDescription[]]($yes, $no)

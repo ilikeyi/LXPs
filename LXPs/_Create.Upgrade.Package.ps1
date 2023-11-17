@@ -547,7 +547,7 @@ Function Update_Create_ASC
 Function Update_Create_SHA256
 {
 	Get-ChildItem $TempFolderUpdate -Include ($UpASType) -Recurse -ErrorAction SilentlyContinue | ForEach-Object {
-		$fullnewpathFU = "$($_.FullName)"
+		$fullnewpathFU = $_.FullName
 		$fullnewpath = "$($_.FullName).sha256"
 
 		Write-Host "   * $($lang.Uping) $($_.FullName).sha256"
