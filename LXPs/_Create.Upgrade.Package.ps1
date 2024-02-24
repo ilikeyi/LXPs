@@ -56,7 +56,7 @@ Language -Auto
 	.Prerequisites
 	.先决条件
 #>
-Requirements
+Prerequisite
 
 <#
 	.启用日志记录并将其保存在脚本文件夹中。
@@ -201,6 +201,7 @@ Function Update_Create_UI
 		MinimizeBox    = $False
 		ControlBox     = $False
 		BackColor      = "#ffffff"
+		FormBorderStyle = "Fixed3D"
 	}
 	$GUIUpdateVersion  = New-Object system.Windows.Forms.Label -Property @{
 		Location       = "12,15"
@@ -425,7 +426,6 @@ Function Update_Create_UI
 		}
 	}
 
-	$GUIUpdate.FormBorderStyle = 'Fixed3D'
 	$GUIUpdate.ShowDialog() | Out-Null
 }
 
