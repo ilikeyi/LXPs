@@ -1,7 +1,7 @@
 Available languages
 -
  * United States - English
- * 简体中文 - 中国
+ * [简体中文 - 中国](https://github.com/ilikeyi/LXPs/blob/main/README.zh-CN.md)
 
 <br>
 Local Experience Packs (LXPs)
