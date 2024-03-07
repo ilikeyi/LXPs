@@ -1,6 +1,6 @@
 Available languages
 -
- * United States - English
+ * [United States - English](https://github.com/ilikeyi/LXPs/tree/main)
  * 简体中文 - 中国
 
 <br>
