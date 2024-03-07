@@ -4,8 +4,9 @@ Available languages
  * [简体中文 - 中国](https://github.com/ilikeyi/LXPs/blob/main/README.zh-CN.md)
 
 <br>
-Local Experience Packs (LXPs)
+Windows Local Language Experience Packs (LXPs) Downloader
 
+<br>
 <h4><pre>Main functions: </pre></h4>
 <ul>1. Support online upgrade, please understand "how to customize the creation of upgrade package";</ul>
 <ul>2. Support hot refresh, hot loading, modify the code, press R on the main interface to complete;</ul>
