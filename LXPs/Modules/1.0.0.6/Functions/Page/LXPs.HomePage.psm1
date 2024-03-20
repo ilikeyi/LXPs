@@ -13,7 +13,7 @@ Function Logo
 	Write-Host "`n   Author: $((Get-Module -Name LXPs).Author) ( $((Get-Module -Name LXPs).HelpInfoURI) )
 
    From: $((Get-Module -Name LXPs).Author)'s Solutions
-   buildstring: $((Get-Module -Name LXPs).Version.ToString()).bs_release.230429-1208`n"
+   buildstring: $((Get-Module -Name LXPs).Version.ToString()).bs_release.2024.04.18`n"
 }
 
 <#

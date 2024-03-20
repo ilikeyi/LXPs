@@ -24,6 +24,30 @@ Function Prerequisite
 		Write-Host "Failed".PadLeft(8) -ForegroundColor Red
 	}
 
+	Write-Host -NoNewline "   Check execution strategy".PadRight(75)
+	switch (Get-ExecutionPolicy) {
+		"Bypass" {
+			Write-Host "Pass".PadLeft(8) -ForegroundColor Green
+		}
+		"RemoteSigned" {
+			Write-Host "Pass".PadLeft(8) -ForegroundColor Green
+		}
+		"Unrestricted" {
+			Write-Host "Pass".PadLeft(8) -ForegroundColor Green
+		}
+		default {
+			Write-Host "Did not pass".PadLeft(8) -ForegroundColor Red
+
+			Write-host "`n   How to solve: " -ForegroundColor Yellow
+			Write-host "   $('-' * 80)"	
+			Write-host "     1. Open ""Terminal"" or ""PowerShell ISE"" as an administrator, "
+			Write-host "        set PowerShell execution policy: Bypass, PS command line: `n"
+			Write-host "        Set-ExecutionPolicy -ExecutionPolicy Bypass -Force" -ForegroundColor Green
+			Write-host "`n     2. Once resolved, rerun the command`n"
+			return
+		}
+	}
+
 	Write-Host "`n   Congratulations, it has passed." -ForegroundColor Green
 	Start-Sleep -s 2
 }
