@@ -26,6 +26,8 @@ irm https://fengyi.tel/download/solutions/update/LXPs/get.ps1 | iex
 
 <p>无法下载时，自动从其它节点下载，下载完成后自动运行。</p>
 
+<br>
+
 Available languages
 -
  * [United States - English](https://github.com/ilikeyi/LXPs/tree/main)
