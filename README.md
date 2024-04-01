@@ -1,7 +1,37 @@
+QUICK DOWNLOAD GUIDE
+-
+
+Open "Terminal" or "PowerShell ISE" as an administrator, paste the following command line into the "Terminal" dialog box, and press Enter to start running;
+
+<br>
+
+Open "Terminal" or "PowerShell ISE" as an administrator, set PowerShell execution policy: Bypass, PS command line:
+```
+Set-ExecutionPolicy -ExecutionPolicy Bypass -Force
+```
+
+<br>
+
+a) Prioritize downloading from Github node
+```
+irm https://github.com/ilikeyi/LXPs/raw/main/get.ps1 | iex
+```
+
+<br>
+
+b) Prioritize downloading from Yi node
+```
+irm https://fengyi.tel/download/solutions/update/LXPs/get.ps1 | iex
+```
+
+<p>When it cannot be downloaded, it will be automatically downloaded from other nodes and run automatically after the download is completed.</p>
+
+<br>
+
 Available languages
 -
  * United States - English
- * [简体中文 - 中国](https://github.com/ilikeyi/LXPs/blob/main/README.zh-CN.md)
+ * [简体中文 - 中国](https://github.com/ilikeyi/LXPs/blob/main/_Learn/README.zh-CN.md)
 
 <br>
 Windows Local Language Experience Packs (LXPs) Downloader
