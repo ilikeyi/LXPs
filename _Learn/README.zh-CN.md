@@ -1,3 +1,31 @@
+快速下载指南
+-
+
+以管理员身份打开“Terminal”或“PowerShell ISE”，将以下命令行粘贴到“Terminal”对话框，按回车键（Enter）后开始运行；
+
+<br>
+
+以管理员身份打开“Terminal”或“PowerShell ISE”，设置 PowerShell 执行策略：绕过，PS 命令行：
+```
+Set-ExecutionPolicy -ExecutionPolicy Bypass -Force
+```
+
+<br>
+
+a) 优先从 Github 节点下载
+```
+irm https://github.com/ilikeyi/LXPs/raw/main/get.ps1 | iex
+```
+
+<br>
+
+b) 优先从 Yi 节点下载
+```
+irm https://fengyi.tel/download/solutions/update/LXPs/get.ps1 | iex
+```
+
+<p>无法下载时，自动从其它节点下载，下载完成后自动运行。</p>
+
 Available languages
 -
  * [United States - English](https://github.com/ilikeyi/LXPs/tree/main)
