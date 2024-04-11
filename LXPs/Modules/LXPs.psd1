@@ -14,12 +14,16 @@
 
 	PrivateData = @{
 		PSData = @{
-			Tags = @("LXPs")
-			# LicenseUri   = ''
+			Tags           = @("LXPs")
+			LicenseUri   = 'https://opensource.org/license/mit'
 			ProjectUri   = 'https://github.com/ilikeyi/LXPs'
 			# IconUri      = ''
 			# ReleaseNotes = ''
 			MinimumVersion = '1.0.0.0'
+			UpdateServer = @(
+				"https://fengyi.tel/download/solutions/update/LXPs/latest.json"
+				"https://github.com/ilikeyi/LXPs/raw/main/update/latest.json"
+			)
 		}
 	}
 	HelpInfoURI = 'https://fengyi.tel'

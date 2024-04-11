@@ -15,7 +15,7 @@
 	PrivateData = @{
 		PSData = @{
 			# Tags = @()
-			# LicenseUri   = ''
+			LicenseUri   = 'https://opensource.org/license/mit'
 			ProjectUri   = 'https://github.com/ilikeyi/LXPs'
 			# IconUri      = ''
 			# ReleaseNotes = ''

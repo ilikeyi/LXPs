@@ -588,7 +588,7 @@ Function Update_Create_Version
 		"minau":       "$($LowVer)"
 	},
 	"changelog": {
-		"title": "$((Get-Module -Name LXPs).Author)'s Solutions - new autoupdate system",
+		"title": "$((Get-Module -Name LXPs).Author)'s Solutions - Change log",
 		"log":   "   1.0.0.2  Fixed a list that did not display all languages. * Fix"
 	},
 	"url": "$((Get-Module -Name LXPs).HelpInfoURI)/download/solutions/update/LXPs/latest.zip"
