@@ -15,7 +15,7 @@ Set-ExecutionPolicy -ExecutionPolicy Bypass -Force
 a) 优先从 Github 节点下载
 ```
 curl https://github.com/ilikeyi/LXPs/raw/main/get.ps1 -o get.ps1; .\get.ps1;
-wget https://github.com/ilikeyi/LXPs/raw/main/get.ps1 -o get.ps1; .\get.ps1;
+wget https://github.com/ilikeyi/LXPs/raw/main/get.ps1 -O get.ps1; .\get.ps1;
 iwr https://github.com/ilikeyi/LXPs/raw/main/get.ps1 -out get.ps1; .\get.ps1;
 Invoke-WebRequest https://github.com/ilikeyi/LXPs/raw/main/get.ps1 -OutFile get.ps1; .\get.ps1;
 ```
@@ -25,7 +25,7 @@ Invoke-WebRequest https://github.com/ilikeyi/LXPs/raw/main/get.ps1 -OutFile get.
 b) 优先从 Yi 节点下载
 ```
 curl https://fengyi.tel/lxps -o get.ps1; .\get.ps1;
-wget https://fengyi.tel/lxps -o get.ps1; .\get.ps1;
+wget https://fengyi.tel/lxps -O get.ps1; .\get.ps1;
 iwr https://fengyi.tel/lxps -out get.ps1; .\get.ps1;
 Invoke-WebRequest https://fengyi.tel/lxps -OutFile get.ps1; .\get.ps1;
 ```
