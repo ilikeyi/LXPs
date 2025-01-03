@@ -1633,7 +1633,7 @@ Function LXPs_Download_Licence_Process
 			if (Test-Path -Path $TempNewFileFullPath -PathType Leaf) {
 				$Wait_Remove_Temp_File = Join-Path -Path $item.OrgPath -ChildPath "License.xml"
 
-				write-host "  $($item.Language): ".PadRight(28) -NoNewline
+				write-host "  $($item.Language): " -NoNewline
 				Remove-Item -Path $Wait_Remove_Temp_File -ErrorAction SilentlyContinue
 
 				Add-Type -AssemblyName System.IO.Compression.FileSystem
@@ -1644,9 +1644,9 @@ Function LXPs_Download_Licence_Process
 				$zipFile.Dispose()
 
 				if (Test-Path -Path $Wait_Remove_Temp_File -PathType Leaf) {
-					write-host "  $($lang.Done)" -ForegroundColor Green
+					Write-Host " $($lang.Done) " -BackgroundColor DarkGreen -ForegroundColor White
 				} else {
-					write-host "  $($lang.Failed)" -ForegroundColor Red
+					Write-Host " $($lang.Failed) " -BackgroundColor DarkRed -ForegroundColor White
 				}
 			}
 		}
