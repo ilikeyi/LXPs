@@ -738,10 +738,10 @@ Function LXPs_Download
 					Start-Process $UI_Main_Save_To.Text
 
 					$UI_Main_Error_Icon.Image = [System.Drawing.Image]::Fromfile("$($PSScriptRoot)\..\..\Assets\icon\Success.ico")
-					$UI_Main_Error.Text = "$($lang.OpenFolder): $($UI_Main_Save_To.Text), $($lang.Done)"
+					$UI_Main_Error.Text = "$($lang.OpenFolder), $($lang.Done)"
 				} else {
 					$UI_Main_Error_Icon.Image = [System.Drawing.Image]::Fromfile("$($PSScriptRoot)\..\..\Assets\icon\Error.ico")
-					$UI_Main_Error.Text = "$($lang.OpenFolder): $($UI_Main_Save_To.Text), $($lang.Inoperable)"
+					$UI_Main_Error.Text = "$($lang.OpenFolder), $($lang.Inoperable)"
 				}
 			}
 		}
@@ -942,10 +942,10 @@ Function LXPs_Download
 					Start-Process $UI_Main_Mask_Report_Sources_Path.Text
 
 					$UI_Main_Mask_Report_Error_Icon.Image = [System.Drawing.Image]::Fromfile("$($PSScriptRoot)\..\..\Assets\icon\Success.ico")
-					$UI_Main_Mask_Report_Error.Text = "$($lang.OpenFolder): $($UI_Main_Mask_Report_Sources_Path.Text), $($lang.Done)"
+					$UI_Main_Mask_Report_Error.Text = "$($lang.OpenFolder), $($lang.Done)"
 				} else {
 					$UI_Main_Mask_Report_Error_Icon.Image = [System.Drawing.Image]::Fromfile("$($PSScriptRoot)\..\..\Assets\icon\Error.ico")
-					$UI_Main_Mask_Report_Error.Text = "$($lang.OpenFolder): $($UI_Main_Mask_Report_Sources_Path.Text), $($lang.Inoperable)"
+					$UI_Main_Mask_Report_Error.Text = "$($lang.OpenFolder), $($lang.Inoperable)"
 				}
 			}
 		}
