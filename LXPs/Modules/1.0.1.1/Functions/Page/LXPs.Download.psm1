@@ -1480,7 +1480,7 @@ Function LXPs_Download
 	if (-not (Get-ItemProperty -Path  "HKCU:\SOFTWARE\$((Get-Module -Name LXPs).Author)\LXPs" -Name 'Select_Download_Language' -ErrorAction SilentlyContinue)) {
 		Save_Dynamic -regkey "LXPs" -name "Select_Download_Language" -value "" -Multi
 	}
-	$GetSelectLXPsLanguageRemove = Get-ItemPropertyValue -Path "HKCU:\SOFTWARE\$((Get-Module -Name LXPs).Author)\LXPs" -Name "Select_Download_Language"
+	$GetSelectLXPsLanguageRemove = Get-ItemPropertyValue -Path "HKCU:\SOFTWARE\$((Get-Module -Name LXPs).Author)\LXPs" -Name "Select_Download_Language" -ErrorAction SilentlyContinue
 
 	$SelectLXPsLanguageRemove = @()
 	ForEach ($item in $GetSelectLXPsLanguageRemove) {

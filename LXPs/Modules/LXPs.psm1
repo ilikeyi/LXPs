@@ -1751,7 +1751,7 @@ Function Language
 		$Global:IsLang = $null
 	} else {
 		if (Get-ItemProperty -Path "HKCU:\SOFTWARE\$((Get-Module -Name LXPs).Author)\LXPs" -Name "LanguagePrompt" -ErrorAction SilentlyContinue) {
-			$GetLanguagePrompt = Get-ItemPropertyValue -Path "HKCU:\SOFTWARE\$((Get-Module -Name LXPs).Author)\LXPs" -Name "LanguagePrompt"
+			$GetLanguagePrompt = Get-ItemPropertyValue -Path "HKCU:\SOFTWARE\$((Get-Module -Name LXPs).Author)\LXPs" -Name "LanguagePrompt" -ErrorAction SilentlyContinue
 			if ($GetLanguagePrompt -eq "True") {
 				if (Get-ItemProperty -Path "HKCU:\SOFTWARE\$((Get-Module -Name LXPs).Author)\LXPs" -Name "Language" -ErrorAction SilentlyContinue) {
 					$GetLanguage = Get-ItemPropertyValue -Path "HKCU:\SOFTWARE\$((Get-Module -Name LXPs).Author)\LXPs" -Name "Language"
@@ -1982,7 +1982,7 @@ Function Language_Select_GUI
 		}
 	}
 	if (Get-ItemProperty -Path "HKCU:\SOFTWARE\$((Get-Module -Name LXPs).Author)\LXPs" -Name "LanguagePrompt" -ErrorAction SilentlyContinue) {
-		$GetLanguagePrompt = Get-ItemPropertyValue -Path "HKCU:\SOFTWARE\$((Get-Module -Name LXPs).Author)\LXPs" -Name "LanguagePrompt"
+		$GetLanguagePrompt = Get-ItemPropertyValue -Path "HKCU:\SOFTWARE\$((Get-Module -Name LXPs).Author)\LXPs" -Name "LanguagePrompt" -ErrorAction SilentlyContinue
 		switch ($GetLanguagePrompt) {
 			"True" { $UI_Main_Dont_Prompt.Checked = $True }
 			"False" { $UI_Main_Dont_Prompt.Checked = $False }
