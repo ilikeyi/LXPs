@@ -166,10 +166,16 @@ Function LXPs_Download
 		Font           = New-Object System.Drawing.Font($lang.FontsUI, 9, [System.Drawing.FontStyle]::Regular)
 		StartPosition  = "CenterScreen"
 		MaximizeBox    = $False
-		MinimizeBox    = $False
-		ControlBox     = $False
+		MinimizeBox    = $True
+		ControlBox     = $True
 		BackColor      = "#ffffff"
 		FormBorderStyle = "Fixed3D"
+		Add_FormClosed = {
+			write-host "  $($lang.UserCancel)" -ForegroundColor Red
+			$Script:Queue_Language_Download_Select = @()
+			$UI_Main.Close()
+		}
+		Icon = [System.Drawing.Icon]::ExtractAssociatedIcon("$($PSScriptRoot)\..\..\Assets\icon\Yi.ico")
 	}
 
 	$UI_Main_Menu      = New-Object system.Windows.Forms.FlowLayoutPanel -Property @{
@@ -1239,7 +1245,7 @@ Function LXPs_Download
 	}
 	$UI_Main_OK        = New-Object system.Windows.Forms.Button -Property @{
 		UseVisualStyleBackColor = $True
-		Location       = "620,595"
+		Location       = "620,635"
 		Height         = 36
 		Width          = 280
 		Text           = $lang.StartVerify
@@ -1291,18 +1297,6 @@ Function LXPs_Download
 			$UI_Main.Close()
 		}
 	}
-	$UI_Main_Canel     = New-Object system.Windows.Forms.Button -Property @{
-		UseVisualStyleBackColor = $True
-		Location       = "620,635"
-		Height         = 36
-		Width          = 280
-		Text           = $lang.Cancel
-		add_Click      = {
-			write-host "  $($lang.UserCancel)" -ForegroundColor Red
-			$Script:Queue_Language_Download_Select = @()
-			$UI_Main.Close()
-		}
-	}
 	$UI_Main.controls.AddRange((
 		$UI_Main_Languages_Detailed_View_Mask,
 		$UI_Main_Tips_Mask,
@@ -1313,8 +1307,7 @@ Function LXPs_Download
 		$UI_Main_Tips_Mask_View,
 		$UI_Main_Error_Icon,
 		$UI_Main_Error,
-		$UI_Main_OK,
-		$UI_Main_Canel
+		$UI_Main_OK
 	))
 
 	<#
