@@ -171,7 +171,7 @@ Function Prerequisite
 					Write-Host $GetAuto_Update_Last_status -ForegroundColor Green
 
 					if ($timeDiff.TotalSeconds -ge $WaitSecoundsTime) {
-						write-host "  $($lang.FirstExpUpdate)" -ForegroundColor Green
+						write-host "  $($lang.Auto_Update_Allow)" -ForegroundColor Green
 						Start-Process "powershell" -ArgumentList $arguments -Verb RunAs -WindowStyle Hidden -ErrorAction SilentlyContinue
 					} else {
 						$nextRunTime = $restoredDate.AddSeconds($WaitSecoundsTime)
