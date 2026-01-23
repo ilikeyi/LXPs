@@ -3046,6 +3046,7 @@ Function Installation_interface_UI
 		Height         = 30
 		Width          = 435
 		Margin         = "25,5,0,20"
+		BackColor      = "#FFFFFF"
 		Text           = ""
 		Enabled        = $False
 	}
