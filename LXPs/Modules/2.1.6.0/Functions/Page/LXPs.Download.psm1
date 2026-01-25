@@ -168,7 +168,7 @@ Function LXPs_Download
 		MaximizeBox    = $False
 		MinimizeBox    = $True
 		ControlBox     = $True
-		BackColor      = "#ffffff"
+		BackColor      = "#FFFFFF"
 		FormBorderStyle = "Fixed3D"
 		Icon = [System.Drawing.Icon]::ExtractAssociatedIcon("$($PSScriptRoot)\..\..\..\Assets\icon\Yi.ico")
 	}
@@ -196,8 +196,8 @@ Function LXPs_Download
 		Width          = 495
 		Padding        = "16,0,0,0"
 		Text           = $lang.Detailed
-		LinkColor      = "GREEN"
-		ActiveLinkColor = "RED"
+		LinkColor      = "#008000"
+		ActiveLinkColor = "#FF0000"
 		LinkBehavior   = "NeverUnderline"
 		add_Click      = {
 			$UI_Main_Languages_Detailed_View_Mask.Visible = $True
@@ -536,8 +536,8 @@ Function LXPs_Download
 		Width          = 450
 		Padding        = "16,0,0,0"
 		Text           = ""
-		LinkColor      = "GREEN"
-		ActiveLinkColor = "RED"
+		LinkColor      = "#008000"
+		ActiveLinkColor = "#FF0000"
 		LinkBehavior   = "NeverUnderline"
 		add_Click      = $UI_Main_Download_Match_Filter_Setting_Click
 	}
@@ -546,8 +546,8 @@ Function LXPs_Download
 		Width          = 450
 		Padding        = "16,0,0,0"
 		Text           = $lang.OSVersion
-		LinkColor      = "GREEN"
-		ActiveLinkColor = "RED"
+		LinkColor      = "#008000"
+		ActiveLinkColor = "#FF0000"
 		LinkBehavior   = "NeverUnderline"
 		add_Click      = $UI_Main_Download_Match_Filter_Setting_Click
 	}
@@ -611,8 +611,8 @@ Function LXPs_Download
 		Width          = 455
 		margin         = "22,5,0,0"
 		Text           = $lang.SelectFolder
-		LinkColor      = "GREEN"
-		ActiveLinkColor = "RED"
+		LinkColor      = "#008000"
+		ActiveLinkColor = "#FF0000"
 		LinkBehavior   = "NeverUnderline"
 		add_Click      = {
 			$UI_Main_Error.Text = ""
@@ -705,8 +705,8 @@ Function LXPs_Download
 		Width          = 455
 		margin         = "22,5,0,0"
 		Text           = $lang.LicenseCreate
-		LinkColor      = "GREEN"
-		ActiveLinkColor = "RED"
+		LinkColor      = "#008000"
+		ActiveLinkColor = "#FF0000"
 		LinkBehavior   = "NeverUnderline"
 		add_Click      = {
 			$UI_Main.Hide()
@@ -726,8 +726,8 @@ Function LXPs_Download
 		Width          = 455
 		margin         = "22,5,0,0"
 		Text           = $lang.OpenFolder
-		LinkColor      = "GREEN"
-		ActiveLinkColor = "RED"
+		LinkColor      = "#008000"
+		ActiveLinkColor = "#FF0000"
 		LinkBehavior   = "NeverUnderline"
 		add_Click      = {
 			$UI_Main_Error.Text = ""
@@ -754,8 +754,8 @@ Function LXPs_Download
 		Width          = 455
 		margin         = "22,5,0,0"
 		Text           = $lang.Paste
-		LinkColor      = "GREEN"
-		ActiveLinkColor = "RED"
+		LinkColor      = "#008000"
+		ActiveLinkColor = "#FF0000"
 		LinkBehavior   = "NeverUnderline"
 		add_Click      = {
 			$UI_Main_Error.Text = ""
@@ -782,8 +782,8 @@ Function LXPs_Download
 		Width          = 455
 		margin         = "22,5,0,0"
 		Text           = $lang.MatchNoDownloadItem
-		LinkColor      = "GREEN"
-		ActiveLinkColor = "RED"
+		LinkColor      = "#008000"
+		ActiveLinkColor = "#FF0000"
 		LinkBehavior   = "NeverUnderline"
 		add_Click      = {
 			$UI_Main_Error.Text = ""
@@ -901,8 +901,8 @@ Function LXPs_Download
 		Width          = 480
 		Padding        = "16,0,0,0"
 		Text           = $lang.SelectFolder
-		LinkColor      = "GREEN"
-		ActiveLinkColor = "RED"
+		LinkColor      = "#008000"
+		ActiveLinkColor = "#FF0000"
 		LinkBehavior   = "NeverUnderline"
 		add_Click      = {
 			$RandomGuid = New-Guid
@@ -943,8 +943,8 @@ Function LXPs_Download
 		Width          = 480
 		Padding        = "16,0,0,0"
 		Text           = $lang.OpenFolder
-		LinkColor      = "GREEN"
-		ActiveLinkColor = "RED"
+		LinkColor      = "#008000"
+		ActiveLinkColor = "#FF0000"
 		LinkBehavior   = "NeverUnderline"
 		add_Click      = {
 			$UI_Main_Mask_Report_Error.Text = ""
@@ -971,8 +971,8 @@ Function LXPs_Download
 		Width          = 480
 		Padding        = "16,0,0,0"
 		Text           = $lang.Paste
-		LinkColor      = "GREEN"
-		ActiveLinkColor = "RED"
+		LinkColor      = "#008000"
+		ActiveLinkColor = "#FF0000"
 		LinkBehavior   = "NeverUnderline"
 		add_Click      = {
 			$UI_Main_Mask_Report_Error.Text = ""
@@ -995,8 +995,8 @@ Function LXPs_Download
 		Width          = 480
 		Padding        = "16,0,0,0"
 		Text           = $lang.SaveToSync
-		LinkColor      = "GREEN"
-		ActiveLinkColor = "RED"
+		LinkColor      = "#008000"
+		ActiveLinkColor = "#FF0000"
 		LinkBehavior   = "NeverUnderline"
 		add_Click      = {
 			$UI_Main_Mask_Report_Error.Text = ""
@@ -1057,8 +1057,8 @@ Function LXPs_Download
 		Width          = 480
 		Padding        = "16,0,0,0"
 		Text           = $lang.SelectFolder
-		LinkColor      = "GREEN"
-		ActiveLinkColor = "RED"
+		LinkColor      = "#008000"
+		ActiveLinkColor = "#FF0000"
 		LinkBehavior   = "NeverUnderline"
 		add_Click      = {
 			$UI_Main_Mask_Report_Error.Text = ""
@@ -1087,8 +1087,8 @@ Function LXPs_Download
 		Width          = 480
 		Padding        = "16,0,0,0"
 		Text           = $lang.Paste
-		LinkColor      = "GREEN"
-		ActiveLinkColor = "RED"
+		LinkColor      = "#008000"
+		ActiveLinkColor = "#FF0000"
 		LinkBehavior   = "NeverUnderline"
 		add_Click      = {
 			$UI_Main_Mask_Report_Error.Text = ""
@@ -1234,8 +1234,8 @@ Function LXPs_Download
 		Width          = 280
 		Text           = $lang.LXPsAddDelTipsView
 		Location       = "620,500"
-		LinkColor      = "GREEN"
-		ActiveLinkColor = "RED"
+		LinkColor      = "#008000"
+		ActiveLinkColor = "#FF0000"
 		LinkBehavior   = "NeverUnderline"
 		add_Click      = {
 			$UI_Main_Tips_Mask.Visible = $True
