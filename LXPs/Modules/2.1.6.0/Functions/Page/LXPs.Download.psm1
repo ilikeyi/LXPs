@@ -1739,7 +1739,7 @@ Function LXPs_Download_Licence_Process
 		$TempNewFileFullPath = Join-Path -Path $FolderDirect -ChildPath "$($itemRegion.Region)\LanguageExperiencePack.$($itemRegion.Region).Neutral.appx"
 
 		if (Test-Path -Path $TempNewFileFullPath -PathType Leaf) {
-			$QueueLXPsLicenceSelect += @{
+			$QueueLXPsLicenceSelect += [pscustomobject]@{
 				Language = $itemRegion.Region
 				FileName = "LanguageExperiencePack.$($itemRegion.Region).Neutral.appx"
 				OrgPath  = $TempNewFileFolderPath
