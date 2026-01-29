@@ -56,7 +56,7 @@ param
 
 $Default_directory_name = "LXPs"
 $Update_Server = @(
-	"https://fengyi.tel/download/solutions/update/LXPs/latest.zip"
+	"https://fengyi.tel/solutions/update/LXPs/latest.zip"
 	"https://github.com/ilikeyi/LXPs/raw/main/update/latest.zip"
 )
 
@@ -3526,7 +3526,7 @@ Function Download_Process
 		if (Test_URI $item) {
 			$PreServerVersion = $item
 			$ServerTest = $true
-			Write-Host "  $($lang.UpdateAvailable)" -ForegroundColor Green
+			Write-Host "    $($lang.UpdateAvailable)" -ForegroundColor Green
 			break
 		} else {
 			write-host "    $($lang.UpdateUnavailable)`n" -ForegroundColor Red
