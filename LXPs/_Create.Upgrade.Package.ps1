@@ -739,7 +739,7 @@ Function Update_Create_Version
 		"title": "$($Global:Author)'s Solutions - Change log",
 		"log":   "   - Latest *Update\n  - Allows automatic background update checks, new feature. *New"
 	},
-	"url": "$((Get-Module -Name LXPs).HelpInfoURI)/download/solutions/update/LXPs/latest.zip"
+	"url": "$((Get-Module -Name LXPs).HelpInfoURI)/solutions/update/LXPs/latest.zip"
 }
 "@ | Out-File -FilePath "$($SaveTo)\latest.json" -Encoding Ascii
 }

@@ -1,6 +1,6 @@
 ﻿@{
 	RootModule        = 'LXPs.psm1'
-	ModuleVersion     = '2.1.8.0'
+	ModuleVersion     = '2.1.9.0'
 	GUID              = 'f80caca0-10a7-453c-91f9-ea04f4f32f92'
 	Author            = 'Yi'
 	Copyright         = 'FengYi, Inc. All rights reserved.'
@@ -24,7 +24,7 @@
 			Buildstring    = 'yi_release.1.26.2026'
 			MinimumVersion = '1.0.0.0'
 			UpdateServer = @(
-				"https://fengyi.tel/download/solutions/update/LXPs/latest.json"
+				"https://fengyi.tel/solutions/update/LXPs/latest.json"
 				"https://github.com/ilikeyi/LXPs/raw/main/update/latest.json"
 			)
 		}
