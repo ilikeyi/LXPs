@@ -45,7 +45,7 @@ Function LXPs_Download
 	Function LXPs_Refresh_Sources_To_Event
 	{
 		$GetCurrentDisk = Convert-Path -Path "$($PSScriptRoot)\..\..\..\..\" -ErrorAction SilentlyContinue
-		$RandomGuid = (New-Guid).Guid
+		$RandomGuid = [guid]::NewGuid()
 
 		if ($UI_Main_Download.Checked) {
 			$UI_Main_Sync_Some_Location.Enabled = $False
@@ -138,7 +138,7 @@ Function LXPs_Download
 		$UI_Main_Mask_Report_Error.Text = ""
 		$UI_Main_Mask_Report_Error_Icon.Image = $null
 
-		$RandomGuid = (New-Guid).Guid
+		$RandomGuid = [guid]::NewGuid()
 		$DesktopOldpath = [Environment]::GetFolderPath("Desktop")
 
 		if (Test-Path -Path $UI_Main_Mask_Report_Sources_Path.Text -PathType Container) {
@@ -905,7 +905,7 @@ Function LXPs_Download
 		ActiveLinkColor = "#FF0000"
 		LinkBehavior   = "NeverUnderline"
 		add_Click      = {
-			$RandomGuid = (New-Guid).Guid
+			$RandomGuid = [guid]::NewGuid()
 			$DesktopOldpath = [Environment]::GetFolderPath("Desktop")
 
 			$UI_Main_Mask_Report_Error_Icon.Image = $null
@@ -1002,7 +1002,7 @@ Function LXPs_Download
 			$UI_Main_Mask_Report_Error.Text = ""
 			$UI_Main_Mask_Report_Error_Icon.Image = $null
 
-			$RandomGuid = (New-Guid).Guid
+			$RandomGuid = [guid]::NewGuid()
 			$DesktopOldpath = [Environment]::GetFolderPath("Desktop")
 
 			if (-not [string]::IsNullOrEmpty($UI_Main_Save_To.Text)) {
@@ -1064,7 +1064,7 @@ Function LXPs_Download
 			$UI_Main_Mask_Report_Error.Text = ""
 			$UI_Main_Mask_Report_Error_Icon.Image = $null
 
-			$RandomGuid = (New-Guid).Guid
+			$RandomGuid = [guid]::NewGuid()
 
 			$FileBrowser = New-Object System.Windows.Forms.SaveFileDialog -Property @{ 
 				FileName = "Report.$($RandomGuid).csv"
@@ -1213,7 +1213,7 @@ Function LXPs_Download
 			$UI_Main_Mask_Report_Error_Icon.Image = $null
 			$UI_Main_Mask_Report_Error.Text = ""
 
-			$RandomGuid = (New-Guid).Guid
+			$RandomGuid = [guid]::NewGuid()
 
 			<#
 				.Determine whether the save to is empty, if not, randomly generate a new save path
@@ -1637,7 +1637,7 @@ Function LXPs_Download_Report_Process
 
 	write-host "`n  $($lang.AdvAppsDetailed)"
 	$QueueSelectLXPsReport = @()
-	$RandomGuid = (New-Guid).Guid
+	$RandomGuid = [guid]::NewGuid()
 	$ISOTestFolderMain = Join-Path -Path $env:userprofile -ChildPath "AppData\Local\Temp\$($RandomGuid)"
 	Check_Folder -chkpath $ISOTestFolderMain
 
