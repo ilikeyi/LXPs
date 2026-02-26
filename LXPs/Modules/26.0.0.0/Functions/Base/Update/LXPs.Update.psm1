@@ -315,7 +315,7 @@ Function Update_Process
 		write-host "`n  $($lang.UpdateMinimumVersion -f $((Get-Module -Name LXPs).PrivateData.PSData.MinimumVersion))"
 		$IsUpdateAvailable = $false
 
-		if ($getSerVer.version.version.Replace('.', '') -ge (Get-Module -Name LXPs).Version.ToString().Replace('.', '')) {
+		if ($getSerVer.version.version.Replace('.', '') -gt (Get-Module -Name LXPs).Version.ToString().Replace('.', '')) {
 			$IsUpdateAvailable = $true
 		} else {
 			$IsUpdateAvailable = $false
